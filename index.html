@@ -124,12 +124,7 @@
             <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <div id="management-controls" class="mb-6">
                     <h2 class="text-2xl font-semibold text-slate-900">Seus Agendamentos</h2>
-                    <p class="text-slate-600 mt-1">Selecione seu nome e filtre por data para gerenciar seus agendamentos.</p>
-                    <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center bg-slate-50 p-4 rounded-lg">
-                        <label for="date-filter" class="font-semibold text-slate-700 whitespace-nowrap">Filtrar por data:</label>
-                        <input type="date" id="date-filter" class="w-full sm:w-auto p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500">
-                        <button id="clear-filter-btn" class="w-full sm:w-auto text-sm text-indigo-600 hover:underline font-semibold">Limpar filtro</button>
-                    </div>
+                    <p class="text-slate-600 mt-1">Selecione seu nome no topo para carregar e gerenciar seus agendamentos.</p>
                 </div>
                 <div id="management-list" class="space-y-4">
                     <div id="loader" class="text-center py-12 hidden">
@@ -148,7 +143,7 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfrml00-hrFMBeQ_xHLWY8RssI15Y5skL114mTZnBMyx52MlgYwky4RSroCXB1XdW1qA/exec;
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfrml00-hrFMBeQ_xHLWY8RssI15Y5skL114mTZnBMyx52MlgYwky4RSroCXB1XdW1qA/exec';
 
         // --- Seletores Globais ---
         const assistantSelect = document.getElementById('assistant-name');
@@ -166,8 +161,6 @@
         const managementList = document.getElementById('management-list');
         const loader = document.getElementById('loader');
         const managementEmptyState = document.getElementById('management-empty-state');
-        const dateFilterInput = document.getElementById('date-filter');
-        const clearFilterBtn = document.getElementById('clear-filter-btn');
 
         let recipients = [];
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
@@ -193,8 +186,6 @@
         // --- Lógica de Gerenciamento ---
         const fetchAppointments = async () => {
             const assistantName = assistantSelect.value;
-            const dateFilter = dateFilterInput.value;
-
             if (!assistantName) {
                 managementEmptyState.style.display = 'none';
                 managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos.</p>';
@@ -205,13 +196,8 @@
             managementEmptyState.style.display = 'none';
             managementList.innerHTML = '';
 
-            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}`;
-            if(dateFilter) {
-                fetchUrl += `&date=${dateFilter}`;
-            }
-
             try {
-                const response = await fetch(fetchUrl);
+                const response = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const result = await response.json();
 
@@ -226,13 +212,6 @@
                 loader.style.display = 'none';
             }
         };
-        
-        dateFilterInput.addEventListener('change', fetchAppointments);
-        clearFilterBtn.addEventListener('click', () => {
-            dateFilterInput.value = '';
-            fetchAppointments();
-        });
-
 
         const renderAppointments = (appointments) => {
             managementList.innerHTML = '';
