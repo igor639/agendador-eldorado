@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendador PRO - Unidade Eldorado</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .btn-saving { cursor: wait; background-color: #fbbf24 !important; }
+        .btn-saved { background-color: #22c55e !important; }
+        .btn-error { background-color: #ef4444 !important; }
+        .tab-active { border-color: #4f46e5; color: #4f46e5; background-color: #eef2ff; }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.25em 1.25em;
+            padding-right: 2.5rem;
+        }
+        .status-updated {
+            transition: background-color 0.3s;
+            background-color: #dcfce7 !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Agendador PRO (Eldorado)</h1>
+            <p class="text-slate-600 mt-2 max-w-2xl mx-auto">Sua Central de Comando para agendamentos.</p>
+        </header>
+
+        <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
+            <div class="border-b border-slate-200">
+                <nav class="-mb-px flex space-x-2" aria-label="Tabs">
+                    <button id="tab-agendar" class="tab-active whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Agendar Novo</button>
+                    <button id="tab-gerenciar" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Gerenciar Agendamentos</button>
+                </nav>
+            </div>
+        </div>
+
+        <main id="agendar-section" class="space-y-8 fade-in">
+            <!-- SEÇÃO DE AGENDAMENTO (EXISTENTE) -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">Seu Nome (Assistente)</label>
+                    <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                         <option value="">-- Escolha seu nome --</option>
+                        <option value="IGOR">Igor</option>
+                        <option value="DIANA">Diana</option>
+                        <option value="TATIANA">Tatiana</option>
+                        <option value="TREINNE">Treinne</option>
+                        <option value="CAMILE">Camile</option>
+                        <option value="MARIA">Maria</option>
+                        <option value="DAYANE">Dayane</option>
+                        <option value="LUANNE">Luanne</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="location-select" class="block text-lg font-semibold text-slate-800 mb-2">Local do Agendamento</label>
+                    <select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                        <option value="Eldorado" selected>Eldorado</option>
+                        <option value="Centro">Centro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-slate-900 mb-2 sm:mb-0">Destinatários</h2>
+                    <button id="add-recipient-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                        <span>Adicionar Destinatário</span>
+                    </button>
+                </div>
+                <div id="recipients-list" class="space-y-6">
+                     <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
+                        <p class="text-slate-500">Nenhum destinatário adicionado.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="generate-messages-btn" class="w-full md:w-auto flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 disabled:bg-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span>Gerar e Salvar Mensagens</span>
+                </button>
+            </div>
+
+            <div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
+                <h2 class="text-2xl font-semibold text-slate-900 mb-6">Ações de Envio</h2>
+                <div id="messages-list" class="space-y-6"></div>
+            </div>
+        </main>
+        
+        <section id="gerenciar-section" class="hidden fade-in">
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                <div id="management-controls" class="mb-6">
+                    <h2 class="text-2xl font-semibold text-slate-900">Seus Agendamentos</h2>
+                    <p class="text-slate-600 mt-1">Selecione seu nome e filtre por data para gerenciar seus agendamentos.</p>
+                    <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center bg-slate-50 p-4 rounded-lg">
+                        <label for="date-filter" class="font-semibold text-slate-700 whitespace-nowrap">Filtrar por data:</label>
+                        <input type="date" id="date-filter" class="w-full sm:w-auto p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500">
+                        <button id="clear-filter-btn" class="w-full sm:w-auto text-sm text-indigo-600 hover:underline font-semibold">Limpar filtro</button>
+                    </div>
+                </div>
+                <div id="management-list" class="space-y-4">
+                    <div id="loader" class="text-center py-12 hidden">
+                        <div class="loader mx-auto"></div>
+                        <p class="mt-4 text-slate-500 font-medium">Buscando seus dados na planilha...</p>
+                    </div>
+                     <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
+                        <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado.</p>
+                        <p class="text-sm text-slate-400 mt-1">Quando você agendar, seus registros aparecerão aqui.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfrml00-hrFMBeQ_xHLWY8RssI15Y5skL114mTZnBMyx52MlgYwky4RSroCXB1XdW1qA/exec';
+
+        // --- Seletores Globais ---
+        const assistantSelect = document.getElementById('assistant-name');
+        const locationSelect = document.getElementById('location-select');
+        const addRecipientBtn = document.getElementById('add-recipient-btn');
+        const recipientsList = document.getElementById('recipients-list');
+        const generateMessagesBtn = document.getElementById('generate-messages-btn');
+        const messagesSection = document.getElementById('messages-section');
+        const messagesList = document.getElementById('messages-list');
+        const emptyState = document.getElementById('empty-state');
+        const tabAgendar = document.getElementById('tab-agendar');
+        const tabGerenciar = document.getElementById('tab-gerenciar');
+        const agendarSection = document.getElementById('agendar-section');
+        const gerenciarSection = document.getElementById('gerenciar-section');
+        const managementList = document.getElementById('management-list');
+        const loader = document.getElementById('loader');
+        const managementEmptyState = document.getElementById('management-empty-state');
+        const dateFilterInput = document.getElementById('date-filter');
+        const clearFilterBtn = document.getElementById('clear-filter-btn');
+
+        let recipients = [];
+        const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
+        
+        // --- Lógica de Tabs ---
+        const switchTab = (activeTab) => {
+            if (activeTab === 'agendar') {
+                tabAgendar.classList.add('tab-active');
+                tabGerenciar.classList.remove('tab-active');
+                agendarSection.style.display = 'block';
+                gerenciarSection.style.display = 'none';
+            } else {
+                tabGerenciar.classList.add('tab-active');
+                tabAgendar.classList.remove('tab-active');
+                agendarSection.style.display = 'none';
+                gerenciarSection.style.display = 'block';
+                fetchAppointments();
+            }
+        };
+        tabAgendar.addEventListener('click', () => switchTab('agendar'));
+        tabGerenciar.addEventListener('click', () => switchTab('gerenciar'));
+
+        // --- Lógica de Gerenciamento ---
+        const fetchAppointments = async () => {
+            const assistantName = assistantSelect.value;
+            const dateFilter = dateFilterInput.value;
+
+            if (!assistantName) {
+                managementEmptyState.style.display = 'none';
+                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos.</p>';
+                return;
+            }
+
+            loader.style.display = 'block';
+            managementEmptyState.style.display = 'none';
+            managementList.innerHTML = '';
+
+            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}`;
+            if(dateFilter) {
+                fetchUrl += `&date=${dateFilter}`;
+            }
+
+            try {
+                const response = await fetch(fetchUrl);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    renderAppointments(result.data);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">Erro ao buscar dados: ${error.message}. Verifique a URL do Script e a sua conexão.</p>`;
+            } finally {
+                loader.style.display = 'none';
+            }
+        };
+        
+        dateFilterInput.addEventListener('change', fetchAppointments);
+        clearFilterBtn.addEventListener('click', () => {
+            dateFilterInput.value = '';
+            fetchAppointments();
+        });
+
+
+        const renderAppointments = (appointments) => {
+            managementList.innerHTML = '';
+            if (appointments.length === 0) {
+                managementEmptyState.style.display = 'block';
+                return;
+            }
+
+            appointments.sort((a, b) => b.rowId - a.rowId);
+
+            appointments.forEach(appt => {
+                const apptCard = document.createElement('div');
+                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
+                apptCard.id = `appt-${appt.rowId}`;
+
+                const statusOptions = ['SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+                const selectOptions = statusOptions.map(status => 
+                    `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
+                ).join('');
+
+                apptCard.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-start">
+                        <div class="mb-4 sm:mb-0">
+                            <p class="font-bold text-slate-800">${appt.jovem}</p>
+                            <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
+                            <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
+                                <span>🗓️ ${appt.data}</span>
+                                <span>⏰ ${appt.horario}</span>
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                                <option value="">Pendente</option>
+                                ${selectOptions}
+                            </select>
+                        </div>
+                    </div>
+                `;
+                managementList.appendChild(apptCard);
+            });
+        };
+
+        const updateAppointmentStatus = async (selectElement) => {
+            const rowId = selectElement.dataset.rowId;
+            const sheetName = selectElement.dataset.sheetName;
+            const newStatus = selectElement.value;
+            
+            selectElement.disabled = true;
+            const originalBg = selectElement.style.backgroundColor;
+            selectElement.style.backgroundColor = '#fef3c7';
+
+            try {
+                const payload = {
+                    action: 'updateStatus',
+                    rowId: rowId,
+                    sheetName: sheetName,
+                    newStatus: newStatus
+                };
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    const card = document.getElementById(`appt-${rowId}`);
+                    card.classList.add('status-updated');
+                    setTimeout(() => card.classList.remove('status-updated'), 1500);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                alert(`Erro ao atualizar status: ${error.message}`);
+                selectElement.style.backgroundColor = '#fee2e2';
+            } finally {
+                selectElement.disabled = false;
+                setTimeout(() => { selectElement.style.backgroundColor = originalBg; }, 1500);
+            }
+        };
+        
+        managementList.addEventListener('change', (e) => {
+            if (e.target.classList.contains('status-select')) {
+                updateAppointmentStatus(e.target);
+            }
+        });
+        
+        assistantSelect.addEventListener('change', () => {
+            if (tabGerenciar.classList.contains('tab-active')) {
+                fetchAppointments();
+            }
+            updateGenerateButtonState();
+        });
+
+        // --- Lógica de Agendamento (COMPLETA) ---
+        const messageTemplates = {
+            title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
+            scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
+            locations: {
+                Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
+                Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
+            },
+            footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
+        };
+
+        const getTomorrowDateString = () => {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const day = String(tomorrow.getDate()).padStart(2, '0');
+            const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${tomorrow.getFullYear()}`;
+        };
+
+        const getDayOfWeek = (dateString) => {
+            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
+            const parts = dateString.split('/');
+            const date = new Date(parts[2], parts[1] - 1, parts[0]);
+            if (isNaN(date)) return '';
+            const options = { weekday: 'long' };
+            let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
+            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        };
+
+        const calculateAge = (birthDateString) => {
+            if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
+            const parts = birthDateString.split('/');
+            const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            if (isNaN(birthDate.getTime())) return null;
+            
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        };
+
+        const generateCode = (jovem) => {
+            const words = jovem.split(' ').filter(w => w);
+            let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+            return initials + Math.floor(100 + Math.random() * 900);
+        };
+
+        const saveToLocalStorage = () => {
+            const dataToSave = {
+                timestamp: new Date().getTime(),
+                recipients: recipients
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+        };
+
+        const loadFromLocalStorage = () => {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+                if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
+                    recipients = parsedData.recipients || [];
+                } else {
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                }
+            }
+        };
+
+        const renderRecipients = () => {
+            recipientsList.innerHTML = '';
+            if (recipients.length === 0) {
+                recipientsList.appendChild(emptyState);
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                recipients.forEach((recipient, index) => {
+                    recipientsList.appendChild(createRecipientForm(recipient, index));
+                });
+            }
+            updateGenerateButtonState();
+        };
+
+        const createRecipientForm = (recipient, index) => {
+            const form = document.createElement('div');
+            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in';
+            form.dataset.id = recipient.id;
+            form.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
+                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label><input type="text" placeholder="Nome completo do jovem" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento (Opcional)</label><input type="text" placeholder="DD/MM/AAAA" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label><input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável (para envio)</label><input type="tel" placeholder="55319..." data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem (opcional)</label><input type="tel" placeholder="55319..." data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label><input type="text" placeholder="DD/MM/AAAA" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Horário</label><input type="text" placeholder="HH:MM" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label><input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                </div>`;
+            return form;
+        };
+
+        const renderMessages = (generatedMessages) => {
+            messagesList.innerHTML = '';
+            if (generatedMessages.length > 0) {
+                messagesSection.classList.remove('hidden');
+                generatedMessages.forEach(msgData => {
+                    const messageItem = document.createElement('div');
+                    messageItem.className = 'p-5 border border-slate-200 rounded-xl';
+                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
+                    const encodedMessage = encodeURIComponent(msgData.message);
+
+                    messageItem.innerHTML = `
+                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed">${msgData.message}</pre>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"><span>WhatsApp</span></a>
+                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"><span>Salvar na Planilha</span></button>
+                        </div>`;
+                    messagesList.appendChild(messageItem);
+                });
+            } else {
+                messagesSection.classList.add('hidden');
+            }
+        };
+
+        const handleAddRecipient = () => {
+            recipients.push({ 
+                id: Date.now().toString(), jovem: '', responsavel: '', data: getTomorrowDateString(), 
+                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '' 
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+
+        const handleRemoveRecipient = (id) => {
+            recipients = recipients.filter(r => r.id !== id);
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleUpdateRecipient = (id, field, value) => {
+            const recipient = recipients.find(r => r.id === id);
+            if (recipient) {
+                recipient[field] = value;
+                saveToLocalStorage();
+            }
+        };
+
+        const handleGenerateMessages = () => {
+            const assistantName = assistantSelect.options[assistantSelect.selectedIndex].text;
+            const assistantValue = assistantSelect.value;
+            const location = locationSelect.value;
+
+            if (!assistantValue) {
+                alert('Por favor, selecione seu nome antes de gerar as mensagens.');
+                return;
+            }
+
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
+                    const idade = calculateAge(r.data_nascimento);
+                    const diaDaSemana = getDayOfWeek(r.data);
+                    const codigo = generateCode(r.jovem);
+                    
+                    let jovemInfo = `*Jovem Convocado:* ${r.jovem}`;
+                    if (idade !== null) {
+                        jovemInfo += ` (${idade} anos)`;
+                    }
+
+                    let personalInfo = `${jovemInfo}\n*Responsável:* ${r.responsavel}`;
+
+                    if (r.irmaos && r.irmaos.trim() !== '') {
+                        personalInfo += `\n*Irmãos:* ${r.irmaos}`;
+                    }
+
+                    const schedulingInfo = messageTemplates.scheduling_info
+                        .replace(/{diaDaSemana}/g, diaDaSemana)
+                        .replace(/{data}/g, r.data)
+                        .replace(/{horario}/g, r.horario);
+                    
+                    const locationText = messageTemplates.locations[location] || messageTemplates.locations.Eldorado;
+                    
+                    const footer = messageTemplates.footer
+                        .replace(/{codigo}/g, codigo)
+                        .replace(/{assistente}/g, assistantName);
+
+                    const message = [
+                        messageTemplates.title,
+                        personalInfo,
+                        schedulingInfo,
+                        locationText,
+                        footer
+                    ].join('\n---\n');
+                    
+                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: location };
+                    return { message, originalData };
+                });
+            renderMessages(generatedMessages);
+            if (generatedMessages.length > 0) messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        const handleSaveToSheet = async (button) => {
+            if (SCRIPT_URL === 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI' || !SCRIPT_URL) {
+                alert("ERRO: A URL do App Script não foi configurada!");
+                return;
+            }
+            const messageItem = button.closest('[data-recipient-data]');
+            const data = JSON.parse(messageItem.dataset.recipientData);
+            
+            button.disabled = true;
+            button.innerHTML = '<span>Salvando...</span>';
+            button.classList.add('btn-saving');
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    button.innerHTML = '<span>Salvo ✔</span>';
+                    button.classList.remove('btn-saving');
+                    button.classList.add('btn-saved');
+                } else { throw new Error(result.message); }
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                button.innerHTML = '<span>Erro ❌</span>';
+                button.classList.remove('btn-saving');
+                button.classList.add('btn-error');
+            }
+        };
+
+        const updateGenerateButtonState = () => {
+            generateMessagesBtn.disabled = (assistantSelect.value === '' || recipients.length === 0);
+        };
+        
+        // --- INICIALIZAÇÃO ---
+        addRecipientBtn.addEventListener('click', handleAddRecipient);
+        recipientsList.addEventListener('click', (e) => {
+             if (e.target.closest('.remove-recipient-btn')) {
+                handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id)
+             }
+        });
+        recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
+        generateMessagesBtn.addEventListener('click', handleGenerateMessages);
+        messagesList.addEventListener('click', (e) => e.target.closest('.save-btn') && handleSaveToSheet(e.target.closest('.save-btn')));
+        
+        loadFromLocalStorage();
+        renderRecipients();
+    });
+    </script>
+</body>
+</html>
+
