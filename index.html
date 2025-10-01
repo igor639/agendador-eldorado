@@ -78,8 +78,6 @@
                         <option value="TREINNE">Treinne</option>
                         <option value="CAMILE">Camile</option>
                         <option value="MARIA">Maria</option>
-                        <option value="DAYANE">Dayane</option>
-                        <option value="LUANNE">Luanne</option>
                     </select>
                 </div>
                 <div>
@@ -94,10 +92,16 @@
             <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                     <h2 class="text-2xl font-semibold text-slate-900 mb-2 sm:mb-0">Destinatários</h2>
-                    <button id="add-recipient-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
-                        <span>Adicionar Destinatário</span>
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 w-full sm:w-auto">
+                        <button id="add-recipient-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                            <span>Adicionar (Amanhã)</span>
+                        </button>
+                        <button id="add-puxada-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-amber-600 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" "><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                            <span>Adicionar Puxada (Hoje)</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="recipients-list" class="space-y-6">
                      <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
@@ -153,6 +157,7 @@
         const assistantSelect = document.getElementById('assistant-name');
         const locationSelect = document.getElementById('location-select');
         const addRecipientBtn = document.getElementById('add-recipient-btn');
+        const addPuxadaBtn = document.getElementById('add-puxada-btn');
         const recipientsList = document.getElementById('recipients-list');
         const generateMessagesBtn = document.getElementById('generate-messages-btn');
         const messagesSection = document.getElementById('messages-section');
@@ -247,7 +252,7 @@
                 apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
                 apptCard.id = `appt-${appt.rowId}`;
 
-                const statusOptions = ['SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+                const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
                 const selectOptions = statusOptions.map(status => 
                     `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
                 ).join('');
@@ -329,6 +334,15 @@
         });
 
         // --- Lógica de Agendamento (COMPLETA) ---
+        const assistantFullNameMap = {
+            'IGOR': 'Igor Araújo de Alencar',
+            'MARIA': 'Maria L. Bellini',
+            'DIANA': 'Diana D´Ávila Fagundes',
+            'TATIANA': 'Tatiana F. Moretti',
+            'CAMILE': 'Camile da Cruz Monteiro',
+            'TREINNE': 'Treinee'
+        };
+        
         const messageTemplates = {
             title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
             scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
@@ -339,9 +353,21 @@
             footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
         };
 
+        const getTodayDateString = () => {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${today.getFullYear()}`;
+        };
+
         const getTomorrowDateString = () => {
+            const today = new Date();
             const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
+            if (today.getDay() === 6) {
+                tomorrow.setDate(today.getDate() + 2);
+            } else {
+                tomorrow.setDate(today.getDate() + 1);
+            }
             const day = String(tomorrow.getDate()).padStart(2, '0');
             const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
             return `${day}/${month}/${tomorrow.getFullYear()}`;
@@ -462,7 +488,16 @@
         const handleAddRecipient = () => {
             recipients.push({ 
                 id: Date.now().toString(), jovem: '', responsavel: '', data: getTomorrowDateString(), 
-                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '' 
+                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: false
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleAddPuxada = () => {
+            recipients.push({ 
+                id: Date.now().toString(), jovem: '', responsavel: '', data: getTodayDateString(), 
+                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: true
             });
             renderRecipients();
             saveToLocalStorage();
@@ -483,8 +518,8 @@
         };
 
         const handleGenerateMessages = () => {
-            const assistantName = assistantSelect.options[assistantSelect.selectedIndex].text;
             const assistantValue = assistantSelect.value;
+            const assistantDisplayName = assistantFullNameMap[assistantValue] || assistantSelect.options[assistantSelect.selectedIndex].text;
             const location = locationSelect.value;
 
             if (!assistantValue) {
@@ -519,7 +554,7 @@
                     
                     const footer = messageTemplates.footer
                         .replace(/{codigo}/g, codigo)
-                        .replace(/{assistente}/g, assistantName);
+                        .replace(/{assistente}/g, assistantDisplayName);
 
                     const message = [
                         messageTemplates.title,
@@ -576,6 +611,7 @@
         
         // --- INICIALIZAÇÃO ---
         addRecipientBtn.addEventListener('click', handleAddRecipient);
+        addPuxadaBtn.addEventListener('click', handleAddPuxada);
         recipientsList.addEventListener('click', (e) => {
              if (e.target.closest('.remove-recipient-btn')) {
                 handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id)
