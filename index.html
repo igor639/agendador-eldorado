@@ -78,7 +78,6 @@
                         <option value="TREINNE">Treinne</option>
                         <option value="CAMILE">Camile</option>
                         <option value="MARIA">Maria</option>
-                        <option value="WELKER">Welker</option>
                     </select>
                 </div>
                 <div>
@@ -114,7 +113,7 @@
             <div class="flex justify-end">
                 <button id="generate-messages-btn" class="w-full md:w-auto flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 disabled:bg-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                    <span>Gerar Mensagens</span>
+                    <span>Gerar e Salvar Mensagens</span>
                 </button>
             </div>
 
@@ -341,21 +340,17 @@
             'DIANA': 'Diana D´Ávila Fagundes',
             'TATIANA': 'Tatiana F. Moretti',
             'CAMILE': 'Camile da Cruz Monteiro',
-            'WELKER': 'Welker Pablo Zanetti',
             'TREINNE': 'Treinee'
         };
-
+        
         const messageTemplates = {
-            long: {
-                title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
-                scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
-                locations: {
-                    Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
-                    Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
-                },
-                footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
+            title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
+            scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
+            locations: {
+                Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
+                Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
             },
-            short: `Prezado(a) *{responsavel}*, confirmamos o agendamento do jovem *{jovem}* para o dia *{diaDaSemana}, {data}, às {horario}* em nossa sede ({local}). É *indispensável a presença de um responsável* com o *documento do jovem* e um *comprovante de residência* para a validação do processo. A ausência resultará no *bloqueio de futuras oportunidades*. *Código de Confirmação: {codigo}*. Att, *{assistente}*.`
+            footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
         };
 
         const getTodayDateString = () => {
@@ -474,12 +469,14 @@
                     const messageItem = document.createElement('div');
                     messageItem.className = 'p-5 border border-slate-200 rounded-xl';
                     messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-                    
+                    const encodedMessage = encodeURIComponent(msgData.message);
+
                     messageItem.innerHTML = `
                         <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed">${msgData.message}</pre>
                         <div class="mt-4 flex flex-wrap gap-3">
-                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors" data-message-type="long"><span>Enviar Msg Completa</span></button>
-                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-sky-500 text-white font-semibold rounded-lg hover:bg-sky-600 transition-colors" data-message-type="short"><span>Enviar Msg Curta</span></button>
+                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"><span>WhatsApp</span></a>
+                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"><span>Salvar na Planilha</span></button>
                         </div>`;
                     messagesList.appendChild(messageItem);
                 });
@@ -522,6 +519,9 @@
 
         const handleGenerateMessages = () => {
             const assistantValue = assistantSelect.value;
+            const assistantDisplayName = assistantFullNameMap[assistantValue] || assistantSelect.options[assistantSelect.selectedIndex].text;
+            const location = locationSelect.value;
+
             if (!assistantValue) {
                 alert('Por favor, selecione seu nome antes de gerar as mensagens.');
                 return;
@@ -531,86 +531,77 @@
                 .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
                 .map(r => {
                     const idade = calculateAge(r.data_nascimento);
+                    const diaDaSemana = getDayOfWeek(r.data);
                     const codigo = generateCode(r.jovem);
-                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: locationSelect.value };
-                    return { originalData };
+                    
+                    let jovemInfo = `*Jovem Convocado:* ${r.jovem}`;
+                    if (idade !== null) {
+                        jovemInfo += ` (${idade} anos)`;
+                    }
+
+                    let personalInfo = `${jovemInfo}\n*Responsável:* ${r.responsavel}`;
+
+                    if (r.irmaos && r.irmaos.trim() !== '') {
+                        personalInfo += `\n*Irmãos:* ${r.irmaos}`;
+                    }
+
+                    const schedulingInfo = messageTemplates.scheduling_info
+                        .replace(/{diaDaSemana}/g, diaDaSemana)
+                        .replace(/{data}/g, r.data)
+                        .replace(/{horario}/g, r.horario);
+                    
+                    const locationText = messageTemplates.locations[location] || messageTemplates.locations.Eldorado;
+                    
+                    const footer = messageTemplates.footer
+                        .replace(/{codigo}/g, codigo)
+                        .replace(/{assistente}/g, assistantDisplayName);
+
+                    const message = [
+                        messageTemplates.title,
+                        personalInfo,
+                        schedulingInfo,
+                        locationText,
+                        footer
+                    ].join('\n---\n');
+                    
+                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: location };
+                    return { message, originalData };
                 });
             renderMessages(generatedMessages);
             if (generatedMessages.length > 0) messagesSection.scrollIntoView({ behavior: 'smooth' });
         };
-        
-        const generateMessageText = (type, data) => {
-            const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
-            const diaDaSemana = getDayOfWeek(data.data);
-            
-            if (type === 'long') {
-                let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
-                if (data.idade !== null) {
-                    jovemInfo += ` (${data.idade} anos)`;
-                }
 
-                let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
-                if (data.irmaos && data.irmaos.trim() !== '') {
-                    personalInfo += `\n*Irmãos:* ${data.irmaos}`;
-                }
-
-                const schedulingInfo = messageTemplates.long.scheduling_info.replace(/{diaDaSemana}/g, diaDaSemana).replace(/{data}/g, data.data).replace(/{horario}/g, data.horario);
-                const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
-                const footer = messageTemplates.long.footer.replace(/{codigo}/g, data.codigo).replace(/{assistente}/g, assistantDisplayName);
-
-                return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+        const handleSaveToSheet = async (button) => {
+            if (SCRIPT_URL === 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI' || !SCRIPT_URL) {
+                alert("ERRO: A URL do App Script não foi configurada!");
+                return;
             }
-            
-            if (type === 'short') {
-                const shortLocation = data.local === 'Centro' ? 'Rua Curitiba, 656, 11° andar - Centro' : 'Av. João César de Oliveira, 953, Sl. 202, Eldorado';
-                return messageTemplates.short
-                    .replace(/{responsavel}/g, data.responsavel)
-                    .replace(/{jovem}/g, data.jovem)
-                    .replace(/{diaDaSemana}/g, diaDaSemana)
-                    .replace(/{data}/g, data.data)
-                    .replace(/{horario}/g, data.horario)
-                    .replace(/{local}/g, shortLocation)
-                    .replace(/{codigo}/g, data.codigo)
-                    .replace(/{assistente}/g, assistantDisplayName);
-            }
-            return '';
-        };
-
-        const handleSaveAndSend = async (button) => {
-            const messageType = button.dataset.messageType;
             const messageItem = button.closest('[data-recipient-data]');
             const data = JSON.parse(messageItem.dataset.recipientData);
-
+            
             button.disabled = true;
             button.innerHTML = '<span>Salvando...</span>';
             button.classList.add('btn-saving');
 
             try {
-                 const response = await fetch(SCRIPT_URL, {
-                    method: 'POST', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(data)
                 });
                 const result = await response.json();
-
                 if (result.status === 'success') {
-                    button.innerHTML = `<span>Salvo ✔</span>`;
+                    button.innerHTML = '<span>Salvo ✔</span>';
                     button.classList.remove('btn-saving');
                     button.classList.add('btn-saved');
-
-                    const messageText = generateMessageText(messageType, data);
-                    const encodedMessage = encodeURIComponent(messageText);
-                    const whatsappUrl = `https://wa.me/${data.numero_responsavel}?text=${encodedMessage}`;
-                    window.open(whatsappUrl, '_blank');
-                } else { 
-                    throw new Error(result.message); 
-                }
+                } else { throw new Error(result.message); }
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                button.innerHTML = `<span>Erro ❌</span>`;
+                button.innerHTML = '<span>Erro ❌</span>';
                 button.classList.remove('btn-saving');
                 button.classList.add('btn-error');
-                 alert(`Falha ao salvar na planilha: ${error.message}. A mensagem NÃO foi enviada.`);
-                button.disabled = false;
             }
         };
 
@@ -628,11 +619,7 @@
         });
         recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
-        messagesList.addEventListener('click', (e) => {
-            if(e.target.closest('.save-send-btn')) {
-                handleSaveAndSend(e.target.closest('.save-send-btn'));
-            }
-        });
+        messagesList.addEventListener('click', (e) => e.target.closest('.save-btn') && handleSaveToSheet(e.target.closest('.save-btn')));
         
         loadFromLocalStorage();
         renderRecipients();
