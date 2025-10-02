@@ -78,6 +78,8 @@
                         <option value="TREINNE">Treinne</option>
                         <option value="CAMILE">Camile</option>
                         <option value="MARIA">Maria</option>
+                        <option value="DAYANE">Dayane</option>
+                        <option value="LUANNE">Luanne</option>
                     </select>
                 </div>
                 <div>
@@ -151,7 +153,7 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfrml00-hrFMBeQ_xHLWY8RssI15Y5skL114mTZnBMyx52MlgYwky4RSroCXB1XdW1qA/exec';
+        const SCRIPT_URL = 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI';
 
         // --- Seletores Globais ---
         const assistantSelect = document.getElementById('assistant-name');
@@ -341,7 +343,8 @@
             'TATIANA': 'Tatiana F. Moretti',
             'CAMILE': 'Camile da Cruz Monteiro',
             'WELKER': 'Welker Pablo Zanetti',
-            'TREINNE': 'Treinee'
+            'TREINNE': 'Treinee',
+            'LUANNE': 'Luanne'
         };
         
         const messageTemplates = {
@@ -354,4 +357,290 @@
                 },
                 footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
             },
-            short: `Prezado(a) *{responsavel}*, confirmamos o agendamento do jovem *{jovem}* para o dia *{diaDaSemana}, {data}, às {horario}* em nossa sede ({local}). É *indispensável a presença de um responsável* com o *documento do jovem* e um
+            short: `Prezado(a) *{responsavel}*, confirmamos o agendamento do jovem *{jovem}* para o dia *{diaDaSemana}, {data}, às {horario}* em nossa sede ({local}). É *indispensável a presença de um responsável* com o *documento do jovem* e um *comprovante de residência* para a validação do processo. A ausência resultará no *bloqueio de futuras oportunidades*. *Código de Confirmação: {codigo}*. Att, *{assistente}*.`
+        };
+
+        const getTodayDateString = () => {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${today.getFullYear()}`;
+        };
+
+        const getTomorrowDateString = () => {
+            const today = new Date();
+            const tomorrow = new Date();
+            if (today.getDay() === 6) {
+                tomorrow.setDate(today.getDate() + 2);
+            } else {
+                tomorrow.setDate(today.getDate() + 1);
+            }
+            const day = String(tomorrow.getDate()).padStart(2, '0');
+            const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${tomorrow.getFullYear()}`;
+        };
+
+        const getDayOfWeek = (dateString) => {
+            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
+            const parts = dateString.split('/');
+            const date = new Date(parts[2], parts[1] - 1, parts[0]);
+            if (isNaN(date)) return '';
+            const options = { weekday: 'long' };
+            let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
+            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        };
+
+        const calculateAge = (birthDateString) => {
+            if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
+            const parts = birthDateString.split('/');
+            const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            if (isNaN(birthDate.getTime())) return null;
+            
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        };
+
+        const generateCode = (jovem) => {
+            const words = jovem.split(' ').filter(w => w);
+            let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+            return initials + Math.floor(100 + Math.random() * 900);
+        };
+
+        const saveToLocalStorage = () => {
+            const dataToSave = {
+                timestamp: new Date().getTime(),
+                recipients: recipients
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+        };
+
+        const loadFromLocalStorage = () => {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+                if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
+                    recipients = parsedData.recipients || [];
+                } else {
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                }
+            }
+        };
+
+        const renderRecipients = () => {
+            recipientsList.innerHTML = '';
+            if (recipients.length === 0) {
+                recipientsList.appendChild(emptyState);
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                recipients.forEach((recipient, index) => {
+                    recipientsList.appendChild(createRecipientForm(recipient, index));
+                });
+            }
+            updateGenerateButtonState();
+        };
+
+        const createRecipientForm = (recipient, index) => {
+            const form = document.createElement('div');
+            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in';
+            form.dataset.id = recipient.id;
+            form.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
+                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label><input type="text" placeholder="Nome completo do jovem" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento (Opcional)</label><input type="text" placeholder="DD/MM/AAAA" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label><input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável (para envio)</label><input type="tel" placeholder="55319..." data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem (opcional)</label><input type="tel" placeholder="55319..." data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label><input type="text" placeholder="DD/MM/AAAA" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Horário</label><input type="text" placeholder="HH:MM" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label><input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                </div>`;
+            return form;
+        };
+
+        const renderMessages = (generatedMessages) => {
+            messagesList.innerHTML = '';
+            if (generatedMessages.length > 0) {
+                messagesSection.classList.remove('hidden');
+                generatedMessages.forEach(msgData => {
+                    const messageItem = document.createElement('div');
+                    messageItem.className = 'p-5 border border-slate-200 rounded-xl';
+                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
+                    
+                    messageItem.innerHTML = `
+                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors" data-message-type="long"><span>Enviar Msg Completa</span></button>
+                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-sky-500 text-white font-semibold rounded-lg hover:bg-sky-600 transition-colors" data-message-type="short"><span>Enviar Msg Curta</span></button>
+                        </div>`;
+                    messagesList.appendChild(messageItem);
+                });
+            } else {
+                messagesSection.classList.add('hidden');
+            }
+        };
+
+        const handleAddRecipient = () => {
+            recipients.push({ 
+                id: Date.now().toString(), jovem: '', responsavel: '', data: getTomorrowDateString(), 
+                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: false
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleAddPuxada = () => {
+            recipients.push({ 
+                id: Date.now().toString(), jovem: '', responsavel: '', data: getTodayDateString(), 
+                horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: true
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+
+        const handleRemoveRecipient = (id) => {
+            recipients = recipients.filter(r => r.id !== id);
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleUpdateRecipient = (id, field, value) => {
+            const recipient = recipients.find(r => r.id === id);
+            if (recipient) {
+                recipient[field] = value;
+                saveToLocalStorage();
+            }
+        };
+
+        const handleGenerateMessages = () => {
+            const assistantValue = assistantSelect.value;
+            if (!assistantValue) {
+                alert('Por favor, selecione seu nome antes de gerar as mensagens.');
+                return;
+            }
+
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
+                    const idade = calculateAge(r.data_nascimento);
+                    const codigo = generateCode(r.jovem);
+                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: locationSelect.value };
+                    return { originalData };
+                });
+            renderMessages(generatedMessages);
+            if (generatedMessages.length > 0) messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
+        
+        const generateMessageText = (type, data) => {
+            const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
+            const diaDaSemana = getDayOfWeek(data.data);
+            
+            if (type === 'long') {
+                let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
+                if (data.idade !== null) {
+                    jovemInfo += ` (${data.idade} anos)`;
+                }
+
+                let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+                if (data.irmaos && data.irmaos.trim() !== '') {
+                    personalInfo += `\n*Irmãos:* ${data.irmaos}`;
+                }
+
+                const schedulingInfo = messageTemplates.long.scheduling_info.replace(/{diaDaSemana}/g, diaDaSemana).replace(/{data}/g, data.data).replace(/{horario}/g, data.horario);
+                const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
+                const footer = messageTemplates.long.footer.replace(/{codigo}/g, data.codigo).replace(/{assistente}/g, assistantDisplayName);
+
+                return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+            }
+            
+            if (type === 'short') {
+                const shortLocation = data.local === 'Centro' ? 'Rua Curitiba, 656, 11° andar - Centro' : 'Av. João César de Oliveira, 953, Sl. 202, Eldorado';
+                return messageTemplates.short
+                    .replace(/{responsavel}/g, data.responsavel)
+                    .replace(/{jovem}/g, data.jovem)
+                    .replace(/{diaDaSemana}/g, diaDaSemana)
+                    .replace(/{data}/g, data.data)
+                    .replace(/{horario}/g, data.horario)
+                    .replace(/{local}/g, shortLocation)
+                    .replace(/{codigo}/g, data.codigo)
+                    .replace(/{assistente}/g, assistantDisplayName);
+            }
+            return '';
+        };
+
+        const handleSaveAndSend = async (button) => {
+            const messageType = button.dataset.messageType;
+            const messageItem = button.closest('[data-recipient-data]');
+            const data = JSON.parse(messageItem.dataset.recipientData);
+
+            button.disabled = true;
+            button.innerHTML = '<span>Salvando...</span>';
+            button.classList.add('btn-saving');
+
+            try {
+                 const response = await fetch(SCRIPT_URL, {
+                    method: 'POST', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    button.innerHTML = `<span>Salvo ✔</span>`;
+                    button.classList.remove('btn-saving');
+                    button.classList.add('btn-saved');
+
+                    const messageText = generateMessageText(messageType, data);
+                    const encodedMessage = encodeURIComponent(messageText);
+                    const whatsappUrl = `https://wa.me/${data.numero_responsavel}?text=${encodedMessage}`;
+                    window.open(whatsappUrl, '_blank');
+                } else { 
+                    throw new Error(result.message); 
+                }
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                button.innerHTML = `<span>Erro ❌</span>`;
+                button.classList.remove('btn-saving');
+                button.classList.add('btn-error');
+                 alert(`Falha ao salvar na planilha: ${error.message}. A mensagem NÃO foi enviada.`);
+                button.disabled = false;
+            }
+        };
+
+        const updateGenerateButtonState = () => {
+            generateMessagesBtn.disabled = (assistantSelect.value === '' || recipients.length === 0);
+        };
+        
+        // --- INICIALIZAÇÃO ---
+        addRecipientBtn.addEventListener('click', handleAddRecipient);
+        addPuxadaBtn.addEventListener('click', handleAddPuxada);
+        recipientsList.addEventListener('click', (e) => {
+             if (e.target.closest('.remove-recipient-btn')) {
+                handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id)
+             }
+        });
+        recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
+        generateMessagesBtn.addEventListener('click', handleGenerateMessages);
+        messagesList.addEventListener('click', (e) => {
+            if(e.target.closest('.save-send-btn')) {
+                handleSaveAndSend(e.target.closest('.save-send-btn'));
+            }
+        });
+        
+        loadFromLocalStorage();
+        renderRecipients();
+    });
+    </script>
+</body>
+</html>
+
+
