@@ -18,33 +18,6 @@
         .btn-saving { cursor: wait; background-color: #fbbf24 !important; }
         .btn-saved { background-color: #22c55e !important; }
         .btn-error { background-color: #ef4444 !important; }
-        .tab-active { border-color: #4f46e5; color: #4f46e5; background-color: #eef2ff; }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4f46e5;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .status-select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>');
-            background-repeat: no-repeat;
-            background-position: right 0.5rem center;
-            background-size: 1.25em 1.25em;
-            padding-right: 2.5rem;
-        }
-        .status-updated {
-            transition: background-color 0.3s;
-            background-color: #dcfce7 !important;
-        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
@@ -53,20 +26,11 @@
         
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Agendador PRO (Eldorado)</h1>
-            <p class="text-slate-600 mt-2 max-w-2xl mx-auto">Sua Central de Comando para agendamentos.</p>
+            <p class="text-slate-600 mt-2 max-w-2xl mx-auto">Crie, gerencie e salve convocações com cálculo de idade e múltiplos locais.</p>
         </header>
 
-        <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
-            <div class="border-b border-slate-200">
-                <nav class="-mb-px flex space-x-2" aria-label="Tabs">
-                    <button id="tab-agendar" class="tab-active whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Agendar Novo</button>
-                    <button id="tab-gerenciar" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Gerenciar Agendamentos</button>
-                </nav>
-            </div>
-        </div>
-
         <main id="agendar-section" class="space-y-8 fade-in">
-            <!-- SEÇÃO DE AGENDAMENTO (EXISTENTE) -->
+            <!-- SEÇÃO DE AGENDAMENTO -->
             <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">Seu Nome (Assistente)</label>
@@ -77,9 +41,6 @@
                         <option value="TATIANA">Tatiana</option>
                         <option value="TREINNE">Treinne</option>
                         <option value="CAMILE">Camile</option>
-                        <option value="MARIA">Maria</option>
-                        <option value="DAYANE">Dayane</option>
-                        <option value="LUANNE">Luanne</option>
                     </select>
                 </div>
                 <div>
@@ -125,30 +86,6 @@
             </div>
         </main>
         
-        <section id="gerenciar-section" class="hidden fade-in">
-            <div class="bg-white p-6 rounded-2xl shadow-lg">
-                <div id="management-controls" class="mb-6">
-                    <h2 class="text-2xl font-semibold text-slate-900">Seus Agendamentos</h2>
-                    <p class="text-slate-600 mt-1">Selecione seu nome e filtre por data para gerenciar seus agendamentos.</p>
-                    <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center bg-slate-50 p-4 rounded-lg">
-                        <label for="date-filter" class="font-semibold text-slate-700 whitespace-nowrap">Filtrar por data:</label>
-                        <input type="date" id="date-filter" class="w-full sm:w-auto p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500">
-                        <button id="clear-filter-btn" class="w-full sm:w-auto text-sm text-indigo-600 hover:underline font-semibold">Limpar filtro</button>
-                    </div>
-                </div>
-                <div id="management-list" class="space-y-4">
-                    <div id="loader" class="text-center py-12 hidden">
-                        <div class="loader mx-auto"></div>
-                        <p class="mt-4 text-slate-500 font-medium">Buscando seus dados na planilha...</p>
-                    </div>
-                     <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
-                        <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado.</p>
-                        <p class="text-sm text-slate-400 mt-1">Quando você agendar, seus registros aparecerão aqui.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </div>
     
     <script>
@@ -165,199 +102,28 @@
         const messagesSection = document.getElementById('messages-section');
         const messagesList = document.getElementById('messages-list');
         const emptyState = document.getElementById('empty-state');
-        const tabAgendar = document.getElementById('tab-agendar');
-        const tabGerenciar = document.getElementById('tab-gerenciar');
-        const agendarSection = document.getElementById('agendar-section');
-        const gerenciarSection = document.getElementById('gerenciar-section');
-        const managementList = document.getElementById('management-list');
-        const loader = document.getElementById('loader');
-        const managementEmptyState = document.getElementById('management-empty-state');
-        const dateFilterInput = document.getElementById('date-filter');
-        const clearFilterBtn = document.getElementById('clear-filter-btn');
 
         let recipients = [];
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         
-        // --- Lógica de Tabs ---
-        const switchTab = (activeTab) => {
-            if (activeTab === 'agendar') {
-                tabAgendar.classList.add('tab-active');
-                tabGerenciar.classList.remove('tab-active');
-                agendarSection.style.display = 'block';
-                gerenciarSection.style.display = 'none';
-            } else {
-                tabGerenciar.classList.add('tab-active');
-                tabAgendar.classList.remove('tab-active');
-                agendarSection.style.display = 'none';
-                gerenciarSection.style.display = 'block';
-                fetchAppointments();
-            }
-        };
-        tabAgendar.addEventListener('click', () => switchTab('agendar'));
-        tabGerenciar.addEventListener('click', () => switchTab('gerenciar'));
-
-        // --- Lógica de Gerenciamento ---
-        const fetchAppointments = async () => {
-            const assistantName = assistantSelect.value;
-            const dateFilter = dateFilterInput.value;
-
-            if (!assistantName) {
-                managementEmptyState.style.display = 'none';
-                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos.</p>';
-                return;
-            }
-
-            loader.style.display = 'block';
-            managementEmptyState.style.display = 'none';
-            managementList.innerHTML = '';
-
-            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}`;
-            if(dateFilter) {
-                fetchUrl += `&date=${dateFilter}`;
-            }
-
-            try {
-                const response = await fetch(fetchUrl);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    renderAppointments(result.data);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">Erro ao buscar dados: ${error.message}. Verifique a URL do Script e a sua conexão.</p>`;
-            } finally {
-                loader.style.display = 'none';
-            }
-        };
-        
-        dateFilterInput.addEventListener('change', fetchAppointments);
-        clearFilterBtn.addEventListener('click', () => {
-            dateFilterInput.value = '';
-            fetchAppointments();
-        });
-
-
-        const renderAppointments = (appointments) => {
-            managementList.innerHTML = '';
-            if (appointments.length === 0) {
-                managementEmptyState.style.display = 'block';
-                return;
-            }
-
-            appointments.sort((a, b) => b.rowId - a.rowId);
-
-            appointments.forEach(appt => {
-                const apptCard = document.createElement('div');
-                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
-                apptCard.id = `appt-${appt.rowId}`;
-
-                const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
-                const selectOptions = statusOptions.map(status => 
-                    `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
-                ).join('');
-
-                apptCard.innerHTML = `
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-start">
-                        <div class="mb-4 sm:mb-0">
-                            <p class="font-bold text-slate-800">${appt.jovem}</p>
-                            <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
-                            <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
-                                <span>🗓️ ${appt.data}</span>
-                                <span>⏰ ${appt.horario}</span>
-                            </div>
-                        </div>
-                        <div class="w-full sm:w-auto">
-                            <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
-                                <option value="">Pendente</option>
-                                ${selectOptions}
-                            </select>
-                        </div>
-                    </div>
-                `;
-                managementList.appendChild(apptCard);
-            });
-        };
-
-        const updateAppointmentStatus = async (selectElement) => {
-            const rowId = selectElement.dataset.rowId;
-            const sheetName = selectElement.dataset.sheetName;
-            const newStatus = selectElement.value;
-            
-            selectElement.disabled = true;
-            const originalBg = selectElement.style.backgroundColor;
-            selectElement.style.backgroundColor = '#fef3c7';
-
-            try {
-                const payload = {
-                    action: 'updateStatus',
-                    rowId: rowId,
-                    sheetName: sheetName,
-                    newStatus: newStatus
-                };
-
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    const card = document.getElementById(`appt-${rowId}`);
-                    card.classList.add('status-updated');
-                    setTimeout(() => card.classList.remove('status-updated'), 1500);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                alert(`Erro ao atualizar status: ${error.message}`);
-                selectElement.style.backgroundColor = '#fee2e2';
-            } finally {
-                selectElement.disabled = false;
-                setTimeout(() => { selectElement.style.backgroundColor = originalBg; }, 1500);
-            }
-        };
-        
-        managementList.addEventListener('change', (e) => {
-            if (e.target.classList.contains('status-select')) {
-                updateAppointmentStatus(e.target);
-            }
-        });
-        
-        assistantSelect.addEventListener('change', () => {
-            if (tabGerenciar.classList.contains('tab-active')) {
-                fetchAppointments();
-            }
-            updateGenerateButtonState();
-        });
-
-        // --- Lógica de Agendamento (COMPLETA) ---
+        // --- Lógica de Agendamento ---
         const assistantFullNameMap = {
             'IGOR': 'Igor Araújo de Alencar',
-            'MARIA': 'Maria L. Bellini',
             'DIANA': 'Diana D´Ávila Fagundes',
             'TATIANA': 'Tatiana F. Moretti',
+            'TREINNE': 'Treinne',
             'CAMILE': 'Camile da Cruz Monteiro',
-            'WELKER': 'Welker Pablo Zanetti',
-            'TREINNE': 'Treinee',
-            'LUANNE': 'Luanne'
+            'WELKER': 'Welker Pablo Zanetti'
         };
-        
+
         const messageTemplates = {
-            long: {
-                title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
-                scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
-                locations: {
-                    Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
-                    Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
-                },
-                footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
+            title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
+            scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
+            locations: {
+                Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
+                Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
             },
-            short: `Prezado(a) *{responsavel}*, confirmamos o agendamento do jovem *{jovem}* para o dia *{diaDaSemana}, {data}, às {horario}* em nossa sede ({local}). É *indispensável a presença de um responsável* com o *documento do jovem* e um *comprovante de residência* para a validação do processo. A ausência resultará no *bloqueio de futuras oportunidades*. *Código de Confirmação: {codigo}*. Att, *{assistente}*.`
+            footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
         };
 
         const getTodayDateString = () => {
@@ -477,11 +243,15 @@
                     messageItem.className = 'p-5 border border-slate-200 rounded-xl';
                     messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
                     
+                    const messageText = generateMessageText(msgData.originalData);
+                    const encodedMessage = encodeURIComponent(messageText);
+
                     messageItem.innerHTML = `
                         <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed">${messageText}</pre>
                         <div class="mt-4 flex flex-wrap gap-3">
-                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors" data-message-type="long"><span>Enviar Msg Completa</span></button>
-                            <button class="save-send-btn flex items-center gap-2 py-2 px-4 bg-sky-500 text-white font-semibold rounded-lg hover:bg-sky-600 transition-colors" data-message-type="short"><span>Enviar Msg Curta</span></button>
+                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"><span>Enviar WhatsApp</span></a>
+                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"><span>Salvar na Planilha</span></button>
                         </div>`;
                     messagesList.appendChild(messageItem);
                 });
@@ -541,78 +311,58 @@
             if (generatedMessages.length > 0) messagesSection.scrollIntoView({ behavior: 'smooth' });
         };
         
-        const generateMessageText = (type, data) => {
+        const generateMessageText = (data) => {
             const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
             const diaDaSemana = getDayOfWeek(data.data);
             
-            if (type === 'long') {
-                let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
-                if (data.idade !== null) {
-                    jovemInfo += ` (${data.idade} anos)`;
-                }
-
-                let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
-                if (data.irmaos && data.irmaos.trim() !== '') {
-                    personalInfo += `\n*Irmãos:* ${data.irmaos}`;
-                }
-
-                const schedulingInfo = messageTemplates.long.scheduling_info.replace(/{diaDaSemana}/g, diaDaSemana).replace(/{data}/g, data.data).replace(/{horario}/g, data.horario);
-                const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
-                const footer = messageTemplates.long.footer.replace(/{codigo}/g, data.codigo).replace(/{assistente}/g, assistantDisplayName);
-
-                return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+            let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
+            if (data.idade !== null) {
+                jovemInfo += ` (${data.idade} anos)`;
             }
-            
-            if (type === 'short') {
-                const shortLocation = data.local === 'Centro' ? 'Rua Curitiba, 656, 11° andar - Centro' : 'Av. João César de Oliveira, 953, Sl. 202, Eldorado';
-                return messageTemplates.short
-                    .replace(/{responsavel}/g, data.responsavel)
-                    .replace(/{jovem}/g, data.jovem)
-                    .replace(/{diaDaSemana}/g, diaDaSemana)
-                    .replace(/{data}/g, data.data)
-                    .replace(/{horario}/g, data.horario)
-                    .replace(/{local}/g, shortLocation)
-                    .replace(/{codigo}/g, data.codigo)
-                    .replace(/{assistente}/g, assistantDisplayName);
+
+            let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+            if (data.irmaos && data.irmaos.trim() !== '') {
+                personalInfo += `\n*Irmãos:* ${data.irmaos}`;
             }
-            return '';
+
+            const schedulingInfo = messageTemplates.scheduling_info.replace(/{diaDaSemana}/g, diaDaSemana).replace(/{data}/g, data.data).replace(/{horario}/g, data.horario);
+            const locationText = messageTemplates.locations[data.local] || messageTemplates.locations.Eldorado;
+            const footer = messageTemplates.footer.replace(/{codigo}/g, data.codigo).replace(/{assistente}/g, assistantDisplayName);
+
+            return [messageTemplates.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
         };
 
-        const handleSaveAndSend = async (button) => {
-            const messageType = button.dataset.messageType;
+        const handleSaveToSheet = async (button) => {
+            if (SCRIPT_URL === 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI' || !SCRIPT_URL) {
+                alert("ERRO: A URL do App Script não foi configurada!");
+                return;
+            }
             const messageItem = button.closest('[data-recipient-data]');
             const data = JSON.parse(messageItem.dataset.recipientData);
-
+            
             button.disabled = true;
             button.innerHTML = '<span>Salvando...</span>';
             button.classList.add('btn-saving');
 
             try {
-                 const response = await fetch(SCRIPT_URL, {
-                    method: 'POST', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(data)
                 });
                 const result = await response.json();
-
                 if (result.status === 'success') {
-                    button.innerHTML = `<span>Salvo ✔</span>`;
+                    button.innerHTML = '<span>Salvo ✔</span>';
                     button.classList.remove('btn-saving');
                     button.classList.add('btn-saved');
-
-                    const messageText = generateMessageText(messageType, data);
-                    const encodedMessage = encodeURIComponent(messageText);
-                    const whatsappUrl = `https://wa.me/${data.numero_responsavel}?text=${encodedMessage}`;
-                    window.open(whatsappUrl, '_blank');
-                } else { 
-                    throw new Error(result.message); 
-                }
+                } else { throw new Error(result.message); }
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                button.innerHTML = `<span>Erro ❌</span>`;
+                button.innerHTML = '<span>Erro ❌</span>';
                 button.classList.remove('btn-saving');
                 button.classList.add('btn-error');
-                 alert(`Falha ao salvar na planilha: ${error.message}. A mensagem NÃO foi enviada.`);
-                button.disabled = false;
             }
         };
 
@@ -630,11 +380,8 @@
         });
         recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
-        messagesList.addEventListener('click', (e) => {
-            if(e.target.closest('.save-send-btn')) {
-                handleSaveAndSend(e.target.closest('.save-send-btn'));
-            }
-        });
+        messagesList.addEventListener('click', (e) => e.target.closest('.save-btn') && handleSaveToSheet(e.target.closest('.save-btn')));
+        assistantSelect.addEventListener('change', updateGenerateButtonState);
         
         loadFromLocalStorage();
         renderRecipients();
@@ -642,5 +389,4 @@
     </script>
 </body>
 </html>
-
 
