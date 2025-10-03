@@ -66,7 +66,7 @@
         </div>
 
         <main id="agendar-section" class="space-y-8 fade-in">
-            <!-- SEÇÃO DE AGENDAMENTO (EXISTENTE) -->
+            <!-- SEÇÃO DE AGENDAMENTO -->
             <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">Seu Nome (Assistente)</label>
@@ -77,9 +77,7 @@
                         <option value="TATIANA">Tatiana</option>
                         <option value="TREINNE">Treinne</option>
                         <option value="CAMILE">Camile</option>
-                        <option value="MARIA">Maria</option>
-                        <option value="DAYANE">Dayane</option>
-                        <option value="LUANNE">Luanne</option>
+                        <option value="WELKER">Welker</option>
                     </select>
                 </div>
                 <div>
@@ -128,13 +126,8 @@
         <section id="gerenciar-section" class="hidden fade-in">
             <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <div id="management-controls" class="mb-6">
-                    <h2 class="text-2xl font-semibold text-slate-900">Seus Agendamentos</h2>
-                    <p class="text-slate-600 mt-1">Selecione seu nome e filtre por data para gerenciar seus agendamentos.</p>
-                    <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center bg-slate-50 p-4 rounded-lg">
-                        <label for="date-filter" class="font-semibold text-slate-700 whitespace-nowrap">Filtrar por data:</label>
-                        <input type="date" id="date-filter" class="w-full sm:w-auto p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500">
-                        <button id="clear-filter-btn" class="w-full sm:w-auto text-sm text-indigo-600 hover:underline font-semibold">Limpar filtro</button>
-                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-900">Agendamentos de Hoje</h2>
+                    <p class="text-slate-600 mt-1">Selecione seu nome para ver e gerenciar os agendamentos do dia.</p>
                 </div>
                 <div id="management-list" class="space-y-4">
                     <div id="loader" class="text-center py-12 hidden">
@@ -142,8 +135,8 @@
                         <p class="mt-4 text-slate-500 font-medium">Buscando seus dados na planilha...</p>
                     </div>
                      <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
-                        <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado.</p>
-                        <p class="text-sm text-slate-400 mt-1">Quando você agendar, seus registros aparecerão aqui.</p>
+                        <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
+                        <p class="text-sm text-slate-400 mt-1">Quando você agendar para hoje, seus registros aparecerão aqui.</p>
                     </div>
                 </div>
             </div>
@@ -153,7 +146,7 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDXDWoGYLrm4EUAbW0MyjRVxhAkW32Ml5ogOC2fKdsrLBYfdDVwF7-qAwIUtg1Og_Ogw/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZyCl9RiZZJGH8dYRSufHPh8NMC6mvVmzybPn1A5PhFgsfFL48O350-99RtuURM30IPQ/exec';
 
         // --- Seletores Globais ---
         const assistantSelect = document.getElementById('assistant-name');
@@ -172,9 +165,7 @@
         const managementList = document.getElementById('management-list');
         const loader = document.getElementById('loader');
         const managementEmptyState = document.getElementById('management-empty-state');
-        const dateFilterInput = document.getElementById('date-filter');
-        const clearFilterBtn = document.getElementById('clear-filter-btn');
-
+        
         let recipients = [];
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         
@@ -199,11 +190,10 @@
         // --- Lógica de Gerenciamento ---
         const fetchAppointments = async () => {
             const assistantName = assistantSelect.value;
-            const dateFilter = dateFilterInput.value;
-
+            
             if (!assistantName) {
                 managementEmptyState.style.display = 'none';
-                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos.</p>';
+                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos de hoje.</p>';
                 return;
             }
 
@@ -211,10 +201,13 @@
             managementEmptyState.style.display = 'none';
             managementList.innerHTML = '';
 
-            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}`;
-            if(dateFilter) {
-                fetchUrl += `&date=${dateFilter}`;
-            }
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const dateFilter = `${year}-${month}-${day}`;
+            
+            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
 
             try {
                 const response = await fetch(fetchUrl);
@@ -232,13 +225,6 @@
                 loader.style.display = 'none';
             }
         };
-        
-        dateFilterInput.addEventListener('change', fetchAppointments);
-        clearFilterBtn.addEventListener('click', () => {
-            dateFilterInput.value = '';
-            fetchAppointments();
-        });
-
 
         const renderAppointments = (appointments) => {
             managementList.innerHTML = '';
@@ -247,7 +233,7 @@
                 return;
             }
 
-            appointments.sort((a, b) => b.rowId - a.rowId);
+            appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
 
             appointments.forEach(appt => {
                 const apptCard = document.createElement('div');
@@ -264,9 +250,10 @@
                         <div class="mb-4 sm:mb-0">
                             <p class="font-bold text-slate-800">${appt.jovem}</p>
                             <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
+                            <p class="text-sm text-slate-500 mt-1">Contato: <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
                             <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
                                 <span>🗓️ ${appt.data}</span>
-                                <span>⏰ ${appt.horario}</span>
+                                <span>⏰ ${appt.horario || 'N/D'}</span>
                             </div>
                         </div>
                         <div class="w-full sm:w-auto">
@@ -338,14 +325,11 @@
         // --- Lógica de Agendamento (COMPLETA) ---
         const assistantFullNameMap = {
             'IGOR': 'Igor Araújo de Alencar',
-            'MARIA': 'Maria L. Bellini',
             'DIANA': 'Diana D´Ávila Fagundes',
             'TATIANA': 'Tatiana F. Moretti',
+            'TREINNE': 'Treinne',
             'CAMILE': 'Camile da Cruz Monteiro',
-            'WELKER': 'Welker Pablo Zanetti',
-            'TREINNE': 'Treinee',
-            'LUANNE': 'Luanne',
-            'DAYANE': 'Dayane'
+            'WELKER': 'Welker Pablo Zanetti'
         };
         
         const messageTemplates = {
@@ -357,8 +341,7 @@
                     Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
                 },
                 footer: `*Documentos Necessários:*\n \n* RG, CPF ou Certidão de Nascimento do jovem.\n* Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
-            },
-            short: `Prezado(a) *{responsavel}*, confirmamos o agendamento do jovem *{jovem}* para o dia *{diaDaSemana}, {data}, às {horario}* em nossa sede ({local}). É *indispensável a presença de um responsável* com o *documento do jovem* e um *comprovante de residência* para a validação do processo. A ausência resultará no *bloqueio de futuras oportunidades*. *Código de Confirmação: {codigo}*. Att, *{assistente}*.`
+            }
         };
 
         const getTodayDateString = () => {
