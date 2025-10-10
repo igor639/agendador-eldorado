@@ -10,39 +10,15 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
-        /* Animações */
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .slide-in { animation: slideIn 0.3s ease-out forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        
-        .shake { animation: shake 0.3s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        
-        /* Estados de botão */
         .btn-saving { cursor: wait; background-color: #fbbf24 !important; }
         .btn-saved { background-color: #22c55e !important; }
         .btn-error { background-color: #ef4444 !important; }
-        
-        /* Tabs */
-        .tab-active { 
-            border-color: #4f46e5; 
-            color: #4f46e5; 
-            background-color: #eef2ff; 
-        }
-        
-        /* Loader */
+        .tab-active { border-color: #4f46e5; color: #4f46e5; background-color: #eef2ff; }
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #4f46e5;
@@ -55,8 +31,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Select customizado */
         .status-select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -67,201 +41,37 @@
             background-size: 1.25em 1.25em;
             padding-right: 2.5rem;
         }
-        
         .status-updated {
             transition: background-color 0.3s;
             background-color: #dcfce7 !important;
-        }
-        
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            min-width: 300px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            z-index: 9999;
-            animation: slideInRight 0.3s ease-out;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        @keyframes slideInRight {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .toast-success { background: #10b981; color: white; }
-        .toast-error { background: #ef4444; color: white; }
-        .toast-info { background: #3b82f6; color: white; }
-        .toast-warning { background: #f59e0b; color: white; }
-        
-        /* Input com validação */
-        .input-error {
-            border-color: #ef4444 !important;
-            background-color: #fef2f2 !important;
-        }
-        .input-success {
-            border-color: #10b981 !important;
-        }
-        
-        /* Badge */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        /* Auto-save indicator */
-        .auto-save-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 999;
-        }
-        .auto-save-indicator.show { opacity: 1; }
-        
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-        }
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 12px;
-            background: #1e293b;
-            color: white;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            margin-bottom: 5px;
-            z-index: 1000;
-        }
-        
-        /* Stats Card */
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 20px;
-            color: white;
-            transition: transform 0.2s;
-        }
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-        
-        /* Checkbox customizado */
-        .custom-checkbox {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #cbd5e1;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .custom-checkbox:checked {
-            background: #4f46e5;
-            border-color: #4f46e5;
-            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>');
-            background-size: 16px;
-            background-position: center;
-            background-repeat: no-repeat;
         }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
 
-    <!-- Auto-save Indicator -->
-    <div id="auto-save-indicator" class="auto-save-indicator">
-        <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span id="auto-save-text">Salvando...</span>
-    </div>
-
-    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
         
-        <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
-                🎯 Agendador PRO
-                <span class="text-indigo-600">Eldorado</span>
-            </h1>
-            <p class="text-slate-600 max-w-2xl mx-auto">
-                Sua Central de Comando para agendamentos profissionais
-            </p>
-            
-            <!-- Atalhos de teclado -->
-            <div class="mt-4 text-xs text-slate-500">
-                💡 <kbd class="px-2 py-1 bg-slate-200 rounded">Ctrl+S</kbd> Salvar rascunho
-                · <kbd class="px-2 py-1 bg-slate-200 rounded">Esc</kbd> Limpar seleção
-            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Agendador PRO (Eldorado)</h1>
+            <p class="text-slate-600 mt-2 max-w-2xl mx-auto">Sua Central de Comando para agendamentos.</p>
         </header>
 
-        <!-- Dashboard Stats (novo) -->
-        <div id="stats-section" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="stat-card">
-                <div class="text-sm opacity-90">Hoje</div>
-                <div class="text-3xl font-bold mt-1" id="stat-today">0</div>
-            </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <div class="text-sm opacity-90">Confirmados</div>
-                <div class="text-3xl font-bold mt-1" id="stat-confirmed">0</div>
-            </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="text-sm opacity-90">Pendentes</div>
-                <div class="text-3xl font-bold mt-1" id="stat-pending">0</div>
-            </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                <div class="text-sm opacity-90">Taxa Sucesso</div>
-                <div class="text-3xl font-bold mt-1" id="stat-success">0%</div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
         <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
             <div class="border-b border-slate-200">
                 <nav class="-mb-px flex space-x-2" aria-label="Tabs">
-                    <button id="tab-agendar" class="tab-active whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg transition-all" aria-selected="true">
-                        📅 Agendar Novo
-                    </button>
-                    <button id="tab-gerenciar" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg transition-all" aria-selected="false">
-                        📋 Gerenciar
-                        <span id="badge-count" class="badge bg-indigo-600 text-white ml-2 hidden">0</span>
-                    </button>
+                    <button id="tab-agendar" class="tab-active whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Agendar Novo</button>
+                    <button id="tab-gerenciar" class="border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 px-4 border-b-2 font-semibold text-sm rounded-t-lg">Gerenciar Agendamentos</button>
                 </nav>
             </div>
         </div>
 
-        <!-- SEÇÃO AGENDAR -->
         <main id="agendar-section" class="space-y-8 fade-in">
-            
-            <!-- Configuração inicial -->
+            <!-- SEÇÃO DE AGENDAMENTO -->
             <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">
-                        👤 Seu Nome (Assistente)
-                    </label>
-                    <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition" required aria-label="Selecione seu nome">
-                        <option value="">-- Escolha seu nome --</option>
+                    <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">Seu Nome (Assistente)</label>
+                    <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                         <option value="">-- Escolha seu nome --</option>
                         <option value="IGOR">Igor</option>
                         <option value="DIANA">Diana</option>
                         <option value="TATIANA">Tatiana</option>
@@ -273,129 +83,62 @@
                     </select>
                 </div>
                 <div>
-                    <label for="location-select" class="block text-lg font-semibold text-slate-800 mb-2">
-                        📍 Local do Agendamento
-                    </label>
-                    <select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition" aria-label="Selecione o local">
+                    <label for="location-select" class="block text-lg font-semibold text-slate-800 mb-2">Local do Agendamento</label>
+                    <select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
                         <option value="Eldorado" selected>Eldorado</option>
                         <option value="Centro">Centro</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Destinatários -->
             <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-slate-900">👥 Destinatários</h2>
-                        <p class="text-sm text-slate-500 mt-1">
-                            <span id="recipient-counter">0 destinatários</span>
-                        </p>
-                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-900 mb-2 sm:mb-0">Destinatários</h2>
                     <div class="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 w-full sm:w-auto">
-                        <button id="add-recipient-btn" class="tooltip w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300 hover:scale-105" data-tooltip="Agendamento para amanhã" aria-label="Adicionar destinatário para amanhã">
+                        <button id="add-recipient-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
                             <span>Adicionar (Amanhã)</span>
                         </button>
-                        <button id="add-puxada-btn" class="tooltip w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-amber-600 transition-all duration-300 hover:scale-105" data-tooltip="Agendamento urgente para hoje" aria-label="Adicionar puxada para hoje">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-                            <span>Puxada (Hoje)</span>
+                        <button id="add-puxada-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-amber-600 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" "><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                            <span>Adicionar Puxada (Hoje)</span>
                         </button>
                     </div>
                 </div>
                 <div id="recipients-list" class="space-y-6">
-                    <div id="empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg">
-                        <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                        <p class="text-slate-500 mt-4 font-medium">Nenhum destinatário adicionado</p>
-                        <p class="text-sm text-slate-400 mt-1">Clique em "Adicionar" para começar</p>
+                     <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
+                        <p class="text-slate-500">Nenhum destinatário adicionado.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Botão Gerar -->
-            <div class="flex justify-end gap-3">
-                <button id="clear-all-btn" class="flex items-center gap-2 bg-slate-200 text-slate-700 font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-slate-300 transition-all duration-300 hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    <span>Limpar Tudo</span>
-                </button>
-                <button id="generate-messages-btn" class="w-full md:w-auto flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed hover:scale-105" disabled>
+            <div class="flex justify-end">
+                <button id="generate-messages-btn" class="w-full md:w-auto flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 disabled:bg-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     <span>Gerar Mensagens</span>
                 </button>
             </div>
 
-            <!-- Mensagens Geradas -->
             <div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
-                <h2 class="text-2xl font-semibold text-slate-900 mb-6">📬 Mensagens Prontas</h2>
+                <h2 class="text-2xl font-semibold text-slate-900 mb-6">Ações de Envio</h2>
                 <div id="messages-list" class="space-y-6"></div>
             </div>
         </main>
         
-        <!-- SEÇÃO GERENCIAR -->
         <section id="gerenciar-section" class="hidden fade-in">
             <div class="bg-white p-6 rounded-2xl shadow-lg">
-                
-                <!-- Controles de Gerenciamento -->
                 <div id="management-controls" class="mb-6">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                            <h2 class="text-2xl font-semibold text-slate-900">📋 Agendamentos de Hoje</h2>
-                            <p class="text-slate-600 mt-1">Gerencie seus agendamentos em tempo real</p>
-                        </div>
-                        
-                        <!-- Busca e Filtros -->
-                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                            <div class="relative">
-                                <input 
-                                    type="text" 
-                                    id="search-appointments" 
-                                    placeholder="🔍 Buscar por nome..."
-                                    class="w-full sm:w-64 pl-4 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition"
-                                    aria-label="Buscar agendamentos"
-                                />
-                            </div>
-                            <button id="export-csv-btn" class="tooltip flex items-center gap-2 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition" data-tooltip="Exportar para Excel" aria-label="Exportar para CSV">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                <span class="hidden sm:inline">Exportar</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Bulk Actions -->
-                    <div id="bulk-actions" class="mt-4 p-4 bg-indigo-50 rounded-lg hidden">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-indigo-900">
-                                <span id="selected-count">0</span> selecionados
-                            </span>
-                            <div class="flex gap-2">
-                                <select id="bulk-status-select" class="text-sm p-2 border border-indigo-300 rounded-md bg-white">
-                                    <option value="">Alterar status...</option>
-                                    <option value="CONFIRMADA">✅ Confirmar todos</option>
-                                    <option value="CANCELADA">❌ Cancelar todos</option>
-                                    <option value="REAGENDAR">🔄 Reagendar todos</option>
-                                </select>
-                                <button id="bulk-apply-btn" class="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-md hover:bg-indigo-700 transition">
-                                    Aplicar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-900">Agendamentos de Hoje</h2>
+                    <p class="text-slate-600 mt-1">Selecione seu nome para ver e gerenciar os agendamentos do dia.</p>
                 </div>
-                
-                <!-- Lista de Agendamentos -->
                 <div id="management-list" class="space-y-4">
                     <div id="loader" class="text-center py-12 hidden">
                         <div class="loader mx-auto"></div>
-                        <p class="mt-4 text-slate-500 font-medium">Buscando agendamentos...</p>
+                        <p class="mt-4 text-slate-500 font-medium">Buscando seus dados na planilha...</p>
                     </div>
-                    <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
-                        <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                        <p class="text-slate-500 font-semibold mt-4">Nenhum agendamento encontrado</p>
-                        <p class="text-sm text-slate-400 mt-1">Seus registros aparecerão aqui</p>
+                     <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
+                        <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
+                        <p class="text-sm text-slate-400 mt-1">Quando você agendar para hoje, seus registros aparecerão aqui.</p>
                     </div>
                 </div>
             </div>
@@ -407,147 +150,16 @@
     document.addEventListener('DOMContentLoaded', () => {
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZyCl9RiZZJGH8dYRSufHPh8NMC6mvVmzybPn1A5PhFgsfFL48O350-99RtuURM30IPQ/exec';
 
-        // ===========================================
-        // UTILIDADES E HELPERS
-        // ===========================================
-        
-        // Toast Notifications
-        const showToast = (message, type = 'info') => {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            
-            const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️',
-                warning: '⚠️'
-            };
-            
-            toast.innerHTML = `
-                <span class="text-2xl">${icons[type]}</span>
-                <span class="flex-1">${message}</span>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        };
-        
-        // Auto-save indicator
-        const showAutoSave = (text = 'Salvando...') => {
-            const indicator = document.getElementById('auto-save-indicator');
-            const textEl = document.getElementById('auto-save-text');
-            textEl.textContent = text;
-            indicator.classList.add('show');
-            setTimeout(() => indicator.classList.remove('show'), 2000);
-        };
-        
-        // Máscaras de Input
-        const maskPhone = (value) => value.replace(/\D/g, '').slice(0, 13);
-        
-        const maskDate = (value) => {
-            let v = value.replace(/\D/g, '').slice(0, 8);
-            if (v.length >= 5) {
-                return `${v.slice(0,2)}/${v.slice(2,4)}/${v.slice(4)}`;
-            } else if (v.length >= 3) {
-                return `${v.slice(0,2)}/${v.slice(2)}`;
-            }
-            return v;
-        };
-        
-        const maskTime = (value) => {
-            let v = value.replace(/\D/g, '').slice(0, 4);
-            if (v.length >= 3) {
-                return `${v.slice(0,2)}:${v.slice(2)}`;
-            }
-            return v;
-        };
-        
-        // Validações
-        const validatePhone = (phone) => {
-            const cleaned = phone.replace(/\D/g, '');
-            return cleaned.length >= 10 && cleaned.length <= 13;
-        };
-        
-        const validateDate = (date) => /^\d{2}\/\d{2}\/\d{4}$/.test(date);
-        
-        const validateTime = (time) => {
-            if (!/^\d{2}:\d{2}$/.test(time)) return false;
-            const [h, m] = time.split(':').map(Number);
-            return h >= 0 && h < 24 && m >= 0 && m < 60;
-        };
-        
-        // Debounce
-        const debounce = (func, wait) => {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        };
-        
-        // Copiar para clipboard
-        const copyToClipboard = async (text) => {
-            try {
-                await navigator.clipboard.writeText(text);
-                showToast('Mensagem copiada!', 'success');
-            } catch (err) {
-                showToast('Erro ao copiar', 'error');
-            }
-        };
-        
-        // Confirmação
-        const confirm = (message) => {
-            return new Promise((resolve) => {
-                const modal = document.createElement('div');
-                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-                modal.innerHTML = `
-                    <div class="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-2xl slide-in">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Confirmar ação</h3>
-                        <p class="text-slate-600 mb-6">${message}</p>
-                        <div class="flex gap-3 justify-end">
-                            <button class="cancel-btn px-4 py-2 bg-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-300 transition">Cancelar</button>
-                            <button class="confirm-btn px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">Confirmar</button>
-                        </div>
-                    </div>
-                `;
-                
-                document.body.appendChild(modal);
-                
-                modal.querySelector('.cancel-btn').onclick = () => {
-                    modal.remove();
-                    resolve(false);
-                };
-                
-                modal.querySelector('.confirm-btn').onclick = () => {
-                    modal.remove();
-                    resolve(true);
-                };
-            });
-        };
-
-        // ===========================================
-        // SELETORES GLOBAIS
-        // ===========================================
+        // --- Seletores Globais ---
         const assistantSelect = document.getElementById('assistant-name');
         const locationSelect = document.getElementById('location-select');
         const addRecipientBtn = document.getElementById('add-recipient-btn');
         const addPuxadaBtn = document.getElementById('add-puxada-btn');
         const recipientsList = document.getElementById('recipients-list');
         const generateMessagesBtn = document.getElementById('generate-messages-btn');
-        const clearAllBtn = document.getElementById('clear-all-btn');
         const messagesSection = document.getElementById('messages-section');
         const messagesList = document.getElementById('messages-list');
         const emptyState = document.getElementById('empty-state');
-        const recipientCounter = document.getElementById('recipient-counter');
-        
         const tabAgendar = document.getElementById('tab-agendar');
         const tabGerenciar = document.getElementById('tab-gerenciar');
         const agendarSection = document.getElementById('agendar-section');
@@ -555,55 +167,35 @@
         const managementList = document.getElementById('management-list');
         const loader = document.getElementById('loader');
         const managementEmptyState = document.getElementById('management-empty-state');
-        const searchAppointments = document.getElementById('search-appointments');
-        const exportCsvBtn = document.getElementById('export-csv-btn');
-        const badgeCount = document.getElementById('badge-count');
-        
-        const bulkActions = document.getElementById('bulk-actions');
-        const selectedCount = document.getElementById('selected-count');
-        const bulkStatusSelect = document.getElementById('bulk-status-select');
-        const bulkApplyBtn = document.getElementById('bulk-apply-btn');
         
         let recipients = [];
-        let allAppointments = [];
-        let selectedAppointments = new Set();
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         
-        // ===========================================
-        // LÓGICA DE TABS
-        // ===========================================
+        // --- Lógica de Tabs ---
         const switchTab = (activeTab) => {
             if (activeTab === 'agendar') {
                 tabAgendar.classList.add('tab-active');
-                tabAgendar.setAttribute('aria-selected', 'true');
                 tabGerenciar.classList.remove('tab-active');
-                tabGerenciar.setAttribute('aria-selected', 'false');
                 agendarSection.style.display = 'block';
                 gerenciarSection.style.display = 'none';
             } else {
                 tabGerenciar.classList.add('tab-active');
-                tabGerenciar.setAttribute('aria-selected', 'true');
                 tabAgendar.classList.remove('tab-active');
-                tabAgendar.setAttribute('aria-selected', 'false');
                 agendarSection.style.display = 'none';
                 gerenciarSection.style.display = 'block';
                 fetchAppointments();
             }
         };
-        
         tabAgendar.addEventListener('click', () => switchTab('agendar'));
         tabGerenciar.addEventListener('click', () => switchTab('gerenciar'));
 
-        // ===========================================
-        // GERENCIAMENTO DE AGENDAMENTOS
-        // ===========================================
-        
+        // --- Lógica de Gerenciamento ---
         const fetchAppointments = async () => {
             const assistantName = assistantSelect.value;
             
             if (!assistantName) {
                 managementEmptyState.style.display = 'none';
-                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos.</p>';
+                managementList.innerHTML = '<p class="text-center text-slate-500 py-8 font-medium">Por favor, selecione seu nome para ver os agendamentos de hoje.</p>';
                 return;
             }
 
@@ -612,23 +204,25 @@
             managementList.innerHTML = '';
 
             const today = new Date();
-            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const dateFilter = `${year}-${month}-${day}`;
             
+            let fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
+
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`);
+                const response = await fetch(fetchUrl);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    allAppointments = result.data;
-                    renderAppointments(allAppointments);
-                    updateStats(allAppointments);
+                    renderAppointments(result.data);
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
-                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">❌ Erro: ${error.message}</p>`;
-                showToast('Erro ao carregar agendamentos', 'error');
+                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">Erro ao buscar dados: ${error.message}. Verifique a URL do Script e a sua conexão.</p>`;
             } finally {
                 loader.style.display = 'none';
             }
@@ -636,92 +230,44 @@
 
         const renderAppointments = (appointments) => {
             managementList.innerHTML = '';
-            
             if (appointments.length === 0) {
                 managementEmptyState.style.display = 'block';
-                badgeCount.classList.add('hidden');
                 return;
             }
-            
-            badgeCount.textContent = appointments.length;
-            badgeCount.classList.remove('hidden');
-            managementEmptyState.style.display = 'none';
 
             appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
 
             appointments.forEach(appt => {
                 const apptCard = document.createElement('div');
-                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-all duration-300 hover:shadow-md slide-in';
+                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
                 apptCard.id = `appt-${appt.rowId}`;
 
                 const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
-                const statusColors = {
-                    'CONFIRMADA': 'bg-green-100 text-green-800',
-                    'CANCELADA': 'bg-red-100 text-red-800',
-                    'PUXADA': 'bg-amber-100 text-amber-800',
-                    'JÁ VEIO': 'bg-blue-100 text-blue-800',
-                    'MATRICULA': 'bg-purple-100 text-purple-800'
-                };
-                
                 const selectOptions = statusOptions.map(status => 
                     `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
                 ).join('');
 
                 apptCard.innerHTML = `
-                    <div class="flex items-start gap-4">
-                        <input 
-                            type="checkbox" 
-                            class="custom-checkbox mt-1 bulk-checkbox" 
-                            data-row-id="${appt.rowId}"
-                            aria-label="Selecionar ${appt.jovem}"
-                        />
-                        <div class="flex-1">
-                            <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
-                                <div class="flex-1">
-                                    <p class="font-bold text-slate-800 text-lg">${appt.jovem}</p>
-                                    <p class="text-sm text-slate-500 mt-1">👤 ${appt.responsavel}</p>
-                                    <p class="text-sm text-slate-500">
-                                        📞 <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a>
-                                    </p>
-                                    <div class="mt-2 flex flex-wrap gap-3 text-sm text-slate-600">
-                                        <span class="flex items-center gap-1">
-                                            🗓️ ${appt.data}
-                                        </span>
-                                        <span class="flex items-center gap-1">
-                                            ⏰ ${appt.horario || 'N/D'}
-                                        </span>
-                                        ${appt.situacao ? `<span class="badge ${statusColors[appt.situacao] || 'bg-slate-100 text-slate-800'}">${appt.situacao}</span>` : ''}
-                                    </div>
-                                </div>
-                                <div class="w-full sm:w-auto">
-                                    <select 
-                                        class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 transition" 
-                                        data-row-id="${appt.rowId}" 
-                                        data-sheet-name="${appt.sheetName}"
-                                        aria-label="Status de ${appt.jovem}"
-                                    >
-                                        <option value="">Pendente</option>
-                                        ${selectOptions}
-                                    </select>
-                                </div>
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-start">
+                        <div class="mb-4 sm:mb-0">
+                            <p class="font-bold text-slate-800">${appt.jovem}</p>
+                            <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
+                            <p class="text-sm text-slate-500 mt-1">Contato: <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
+                            <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
+                                <span>🗓️ ${appt.data}</span>
+                                <span>⏰ ${appt.horario || 'N/D'}</span>
                             </div>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                                <option value="">Pendente</option>
+                                ${selectOptions}
+                            </select>
                         </div>
                     </div>
                 `;
                 managementList.appendChild(apptCard);
             });
-        };
-        
-        const updateStats = (appointments) => {
-            const today = appointments.length;
-            const confirmed = appointments.filter(a => a.situacao === 'CONFIRMADA').length;
-            const pending = appointments.filter(a => !a.situacao || a.situacao === '').length;
-            const success = today > 0 ? Math.round((confirmed / today) * 100) : 0;
-            
-            document.getElementById('stat-today').textContent = today;
-            document.getElementById('stat-confirmed').textContent = confirmed;
-            document.getElementById('stat-pending').textContent = pending;
-            document.getElementById('stat-success').textContent = success + '%';
         };
 
         const updateAppointmentStatus = async (selectElement) => {
@@ -730,6 +276,8 @@
             const newStatus = selectElement.value;
             
             selectElement.disabled = true;
+            const originalBg = selectElement.style.backgroundColor;
+            selectElement.style.backgroundColor = '#fef3c7';
 
             try {
                 const payload = {
@@ -751,116 +299,22 @@
                     const card = document.getElementById(`appt-${rowId}`);
                     card.classList.add('status-updated');
                     setTimeout(() => card.classList.remove('status-updated'), 1500);
-                    showToast('Status atualizado!', 'success');
-                    
-                    const apptIndex = allAppointments.findIndex(a => a.rowId == rowId);
-                    if (apptIndex !== -1) {
-                        allAppointments[apptIndex].situacao = newStatus;
-                        updateStats(allAppointments);
-                    }
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
-                showToast(`Erro: ${error.message}`, 'error');
-                selectElement.classList.add('shake');
-                setTimeout(() => selectElement.classList.remove('shake'), 300);
+                alert(`Erro ao atualizar status: ${error.message}`);
+                selectElement.style.backgroundColor = '#fee2e2';
             } finally {
                 selectElement.disabled = false;
+                setTimeout(() => { selectElement.style.backgroundColor = originalBg; }, 1500);
             }
         };
         
-        // Busca de agendamentos
-        const filterAppointments = debounce((searchTerm) => {
-            const filtered = allAppointments.filter(appt => {
-                const term = searchTerm.toLowerCase();
-                return appt.jovem.toLowerCase().includes(term) ||
-                       appt.responsavel.toLowerCase().includes(term) ||
-                       (appt.telefone_resp && appt.telefone_resp.includes(term));
-            });
-            renderAppointments(filtered);
-        }, 300);
-        
-        searchAppointments.addEventListener('input', (e) => {
-            filterAppointments(e.target.value);
-        });
-        
-        // Bulk actions
         managementList.addEventListener('change', (e) => {
-            if (e.target.classList.contains('bulk-checkbox')) {
-                const rowId = e.target.dataset.rowId;
-                if (e.target.checked) {
-                    selectedAppointments.add(rowId);
-                } else {
-                    selectedAppointments.delete(rowId);
-                }
-                updateBulkActions();
-            } else if (e.target.classList.contains('status-select')) {
+            if (e.target.classList.contains('status-select')) {
                 updateAppointmentStatus(e.target);
             }
-        });
-        
-        const updateBulkActions = () => {
-            const count = selectedAppointments.size;
-            selectedCount.textContent = count;
-            bulkActions.classList.toggle('hidden', count === 0);
-        };
-        
-        bulkApplyBtn.addEventListener('click', async () => {
-            const status = bulkStatusSelect.value;
-            if (!status) {
-                showToast('Selecione um status', 'warning');
-                return;
-            }
-            
-            const confirmed = await confirm(`Alterar ${selectedAppointments.size} agendamentos para "${status}"?`);
-            if (!confirmed) return;
-            
-            showToast(`Atualizando ${selectedAppointments.size} registros...`, 'info');
-            
-            for (const rowId of selectedAppointments) {
-                const selectEl = document.querySelector(`select[data-row-id="${rowId}"]`);
-                if (selectEl) {
-                    selectEl.value = status;
-                    await updateAppointmentStatus(selectEl);
-                }
-            }
-            
-            selectedAppointments.clear();
-            document.querySelectorAll('.bulk-checkbox').forEach(cb => cb.checked = false);
-            updateBulkActions();
-            showToast('Todos atualizados!', 'success');
-        });
-        
-        // Exportar CSV
-        exportCsvBtn.addEventListener('click', () => {
-            if (allAppointments.length === 0) {
-                showToast('Nenhum dado para exportar', 'warning');
-                return;
-            }
-            
-            const headers = ['Jovem', 'Responsável', 'Telefone', 'Data', 'Horário', 'Status'];
-            const rows = allAppointments.map(a => [
-                a.jovem,
-                a.responsavel,
-                a.telefone_resp || '',
-                a.data,
-                a.horario || '',
-                a.situacao || 'Pendente'
-            ]);
-            
-            const csv = [
-                headers.join(','),
-                ...rows.map(row => row.map(cell => `"${(cell || '').toString().replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-            
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `agendamentos_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            
-            showToast('Arquivo exportado!', 'success');
         });
         
         assistantSelect.addEventListener('change', () => {
@@ -870,10 +324,7 @@
             updateGenerateButtonState();
         });
 
-        // ===========================================
-        // LÓGICA DE AGENDAMENTO
-        // ===========================================
-        
+        // --- Lógica de Agendamento (COMPLETA) ---
         const assistantFullNameMap = {
             'IGOR': 'Igor Araújo de Alencar',
             'DIANA': 'Diana D´Ávila Fagundes',
@@ -899,18 +350,23 @@
 
         const getTodayDateString = () => {
             const today = new Date();
-            return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${today.getFullYear()}`;
         };
 
         const getTomorrowDateString = () => {
             const today = new Date();
             const tomorrow = new Date();
-            if (today.getDay() === 5 || today.getDay() === 6) { // Sexta ou Sábado
+            // Se hoje é Sexta (5) ou Sábado (6), pula para Segunda
+            if (today.getDay() === 5 || today.getDay() === 6) {
                 tomorrow.setDate(today.getDate() + (8 - today.getDay()));
             } else {
                 tomorrow.setDate(today.getDate() + 1);
             }
-            return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
+            const day = String(tomorrow.getDate()).padStart(2, '0');
+            const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            return `${day}/${month}/${tomorrow.getFullYear()}`;
         };
 
         const getDayOfWeek = (dateString) => {
@@ -944,14 +400,13 @@
             return initials + Math.floor(100 + Math.random() * 900);
         };
 
-        const saveToLocalStorage = debounce(() => {
+        const saveToLocalStorage = () => {
             const dataToSave = {
                 timestamp: new Date().getTime(),
                 recipients: recipients
             };
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
-            showAutoSave('Rascunho salvo ✓');
-        }, 1000);
+        };
 
         const loadFromLocalStorage = () => {
             const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -960,17 +415,10 @@
                 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
                 if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
                     recipients = parsedData.recipients || [];
-                    if (recipients.length > 0) showToast('Rascunho carregado', 'info');
                 } else {
                     localStorage.removeItem(LOCAL_STORAGE_KEY);
                 }
             }
-        };
-
-        const updateRecipientCounter = () => {
-            const count = recipients.length;
-            recipientCounter.textContent = `${count} ${count === 1 ? 'destinatário' : 'destinatários'}`;
-            clearAllBtn.classList.toggle('hidden', count === 0);
         };
 
         const renderRecipients = () => {
@@ -985,132 +433,27 @@
                 });
             }
             updateGenerateButtonState();
-            updateRecipientCounter();
         };
 
         const createRecipientForm = (recipient, index) => {
             const form = document.createElement('div');
-            form.className = 'p-5 border-2 border-slate-200 rounded-xl space-y-4 fade-in hover:border-indigo-300 transition-colors';
+            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in';
             form.dataset.id = recipient.id;
-            
-            const isPuxada = recipient.isPuxada;
-            
             form.innerHTML = `
                 <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
-                        ${isPuxada ? '<span class="badge bg-amber-500 text-white">⚡ PUXADA</span>' : '<span class="badge bg-indigo-500 text-white">📅 AMANHÃ</span>'}
-                    </div>
-                    <button 
-                        class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-all hover:scale-110" 
-                        data-id="${recipient.id}" 
-                        title="Remover"
-                        aria-label="Remover destinatário ${index + 1}"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                    </button>
+                    <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
+                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">👤 Jovem Convocado *</label>
-                        <input 
-                            type="text" 
-                            placeholder="Nome completo do jovem" 
-                            data-field="jovem" 
-                            value="${recipient.jovem || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            required
-                            aria-label="Nome do jovem"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">🎂 Data de Nascimento</label>
-                        <input 
-                            type="text" 
-                            placeholder="DD/MM/AAAA" 
-                            data-field="data_nascimento" 
-                            data-mask="date"
-                            value="${recipient.data_nascimento || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            aria-label="Data de nascimento"
-                        />
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-1">👨‍👩‍👦 Responsável *</label>
-                        <input 
-                            type="text" 
-                            placeholder="Nome do responsável" 
-                            data-field="responsavel" 
-                            value="${recipient.responsavel || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            required
-                            aria-label="Nome do responsável"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">📱 Telefone Responsável *</label>
-                        <input 
-                            type="tel" 
-                            placeholder="55319..." 
-                            data-field="numero_responsavel" 
-                            data-mask="phone"
-                            value="${recipient.numero_responsavel || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            required
-                            aria-label="Telefone do responsável"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">📞 Telefone Jovem</label>
-                        <input 
-                            type="tel" 
-                            placeholder="55319..." 
-                            data-field="numero_jovem" 
-                            data-mask="phone"
-                            value="${recipient.numero_jovem || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            aria-label="Telefone do jovem"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">📅 Data Agendamento *</label>
-                        <input 
-                            type="text" 
-                            placeholder="DD/MM/AAAA" 
-                            data-field="data" 
-                            data-mask="date"
-                            value="${recipient.data || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            required
-                            aria-label="Data do agendamento"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">⏰ Horário *</label>
-                        <input 
-                            type="text" 
-                            placeholder="HH:MM" 
-                            data-field="horario" 
-                            data-mask="time"
-                            value="${recipient.horario || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            required
-                            aria-label="Horário do agendamento"
-                        />
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-1">👨‍👩‍👧‍👦 Irmãos (opcional)</label>
-                        <input 
-                            type="text" 
-                            placeholder="Ex: João (12), Maria (10)" 
-                            data-field="irmaos" 
-                            value="${recipient.irmaos || ''}" 
-                            class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"
-                            aria-label="Irmãos do jovem"
-                        />
-                    </div>
-                </div>
-            `;
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label><input type="text" placeholder="Nome completo do jovem" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento (Opcional)</label><input type="text" placeholder="DD/MM/AAAA" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label><input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável (para envio)</label><input type="tel" placeholder="55319..." data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem (opcional)</label><input type="tel" placeholder="55319..." data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label><input type="text" placeholder="DD/MM/AAAA" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Horário</label><input type="text" placeholder="HH:MM" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label><input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                </div>`;
             return form;
         };
 
@@ -1120,33 +463,18 @@
                 messagesSection.classList.remove('hidden');
                 generatedMessages.forEach(msgData => {
                     const messageItem = document.createElement('div');
-                    messageItem.className = 'p-5 border-2 border-slate-200 rounded-xl hover:border-indigo-300 transition-colors slide-in';
+                    messageItem.className = 'p-5 border border-slate-200 rounded-xl';
                     messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
                     
                     const messageText = generateMessageText(msgData.originalData);
                     const encodedMessage = encodeURIComponent(messageText);
 
                     messageItem.innerHTML = `
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="font-semibold text-slate-800">
-                                Para: <span class="text-indigo-600">${msgData.originalData.jovem}</span>
-                            </p>
-                            <span class="badge bg-green-100 text-green-800">
-                                📱 ${msgData.originalData.numero_responsavel}
-                            </span>
-                        </div>
-                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed border border-slate-200">${messageText}</pre>
+                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed">${messageText}</pre>
                         <div class="mt-4 flex flex-wrap gap-3">
-                            <a 
-                                href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" 
-                                target="_blank" 
-                                class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all hover:scale-105"
-                                aria-label="Enviar via WhatsApp"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52s-.67-.15-.67-.15l-.297-.297c-.645-.272-1.396-.418-2.17-.418-1.41 0-2.7.56-3.66 1.52C2.56 8.44.02 10.59.02 12.98c0 2.39 2.54 4.54 3.66 5.5C4.78 19.54 6.07 20 7.48 20c.774 0 1.52-.146 2.17-.418l.297-.297s.67-.15.67-.15c.172-.05.346-.025.495-.025.198 0 .396.05.594.15.198.099.347.223.496.372.148.149.297.297.446.446.148.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.446.149.149.297.297.446.4-1.41z" clip-rule="evenodd"/></svg>
-                                <span>Enviar WhatsApp</span>
-                            </a>
-                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all hover:scale-105"><span>Salvar na Planilha</span></button>
+                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"><span>Enviar WhatsApp</span></a>
+                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"><span>Salvar na Planilha</span></button>
                         </div>`;
                     messagesList.appendChild(messageItem);
                 });
@@ -1190,20 +518,13 @@
         const handleGenerateMessages = () => {
             const assistantValue = assistantSelect.value;
             if (!assistantValue) {
-                showToast('Selecione seu nome para continuar', 'warning');
-                assistantSelect.classList.add('shake');
-                setTimeout(() => assistantSelect.classList.remove('shake'), 300);
+                alert('Por favor, selecione seu nome antes de gerar as mensagens.');
                 return;
             }
 
-            const validRecipients = recipients.filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel);
-
-            if(validRecipients.length !== recipients.length){
-                showToast('Preencha todos os campos obrigatórios (*)', 'error');
-                return;
-            }
-
-            const generatedMessages = validRecipients.map(r => {
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
                     const idade = calculateAge(r.data_nascimento);
                     const codigo = generateCode(r.jovem);
                     const originalData = { ...r, idade, codigo, assistente: assistantValue, local: locationSelect.value };
@@ -1236,7 +557,7 @@
 
         const handleSaveToSheet = async (button) => {
             if (SCRIPT_URL === 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI' || !SCRIPT_URL) {
-                showToast("ERRO: URL do App Script não configurada!", 'error');
+                alert("ERRO: A URL do App Script não foi configurada!");
                 return;
             }
             const messageItem = button.closest('[data-recipient-data]');
@@ -1251,11 +572,12 @@
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(data)
                 });
                 const result = await response.json();
                 if (result.status === 'success') {
-                    button.innerHTML = '<span>Salvo ✓</span>';
+                    button.innerHTML = '<span>Salvo ✔</span>';
                     button.classList.remove('btn-saving');
                     button.classList.add('btn-saved');
                 } else { throw new Error(result.message); }
@@ -1274,49 +596,15 @@
         // --- INICIALIZAÇÃO ---
         addRecipientBtn.addEventListener('click', handleAddRecipient);
         addPuxadaBtn.addEventListener('click', handleAddPuxada);
-        
         recipientsList.addEventListener('click', (e) => {
              if (e.target.closest('.remove-recipient-btn')) {
                 handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id)
              }
         });
-
-        recipientsList.addEventListener('input', (e) => {
-            if(e.target.dataset.field) {
-                handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value)
-            }
-            if(e.target.dataset.mask){
-                const mask = e.target.dataset.mask;
-                if(mask === 'date') e.target.value = maskDate(e.target.value);
-                if(mask === 'time') e.target.value = maskTime(e.target.value);
-                if(mask === 'phone') e.target.value = maskPhone(e.target.value);
-            }
-        });
-        
+        recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
         messagesList.addEventListener('click', (e) => e.target.closest('.save-btn') && handleSaveToSheet(e.target.closest('.save-btn')));
         assistantSelect.addEventListener('change', updateGenerateButtonState);
-        clearAllBtn.addEventListener('click', async () => {
-            if(await confirm('Você tem certeza que quer apagar todos os destinatários da lista?')) {
-                recipients = [];
-                renderRecipients();
-                saveToLocalStorage();
-                showToast('Lista limpa!', 'success');
-            }
-        });
-
-        // Atalhos de Teclado
-        document.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.key === 's'){
-                e.preventDefault();
-                saveToLocalStorage();
-            }
-            if(e.key === 'Escape'){
-                selectedAppointments.clear();
-                document.querySelectorAll('.bulk-checkbox').forEach(cb => cb.checked = false);
-                updateBulkActions();
-            }
-        });
         
         loadFromLocalStorage();
         renderRecipients();
