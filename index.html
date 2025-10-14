@@ -71,7 +71,7 @@
                 <div>
                     <label for="assistant-name" class="block text-lg font-semibold text-slate-800 mb-2">Seu Nome (Assistente)</label>
                     <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
-                        <option value="">-- Escolha seu nome --</option>
+                         <option value="">-- Escolha seu nome --</option>
                         <option value="IGOR">Igor</option>
                         <option value="DIANA">Diana</option>
                         <option value="TATIANA">Tatiana</option>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div id="recipients-list" class="space-y-6">
-                    <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
+                     <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
                         <p class="text-slate-500">Nenhum destinatário adicionado.</p>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                         <div class="loader mx-auto"></div>
                         <p class="mt-4 text-slate-500 font-medium">Buscando seus dados na planilha...</p>
                     </div>
-                    <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
+                     <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
                         <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
                         <p class="text-sm text-slate-400 mt-1">Quando você agendar para hoje, seus registros aparecerão aqui.</p>
                     </div>
@@ -235,12 +235,7 @@
                 return;
             }
 
-            // Correção da ordenação por horário
-            appointments.sort((a, b) => {
-                const timeA = a.horario || '00:00';
-                const timeB = b.horario || '00:00';
-                return timeA.localeCompare(timeB);
-            });
+            appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
 
             appointments.forEach(appt => {
                 const apptCard = document.createElement('div');
@@ -296,7 +291,6 @@
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 const result = await response.json();
@@ -364,17 +358,12 @@
         const getTomorrowDateString = () => {
             const today = new Date();
             const tomorrow = new Date();
-            const dayOfWeek = today.getDay();
-            
-            // Correção do cálculo para segunda-feira quando hoje é sexta ou sábado
-            if (dayOfWeek === 5) { // Sexta
-                tomorrow.setDate(today.getDate() + 3); // Adiciona 3 dias para segunda
-            } else if (dayOfWeek === 6) { // Sábado
-                tomorrow.setDate(today.getDate() + 2); // Adiciona 2 dias para segunda
+            // Se hoje é Sexta (5) ou Sábado (6), pula para Segunda
+            if (today.getDay() === 5 || today.getDay() === 6) {
+                tomorrow.setDate(today.getDate() + (8 - today.getDay()));
             } else {
                 tomorrow.setDate(today.getDate() + 1);
             }
-            
             const day = String(tomorrow.getDate()).padStart(2, '0');
             const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
             return `${day}/${month}/${tomorrow.getFullYear()}`;
@@ -384,17 +373,18 @@
             if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
             const parts = dateString.split('/');
             
+            // CORREÇÃO: Usamos parseInt e definimos a hora para o meio-dia (12)
+            // para evitar problemas de fuso horário na virada do dia.
             const year = parseInt(parts[2], 10);
-            const month = parseInt(parts[1], 10) - 1;
+            const month = parseInt(parts[1], 10) - 1; // Mês em JS é 0-11
             const day = parseInt(parts[0], 10);
-            const date = new Date(year, month, day, 12);
+            const date = new Date(year, month, day, 12); 
 
-            if (isNaN(date.getTime())) return '';
-            
+            if (isNaN(date.getTime())) return ''; // Verificação mais robusta
             const options = { weekday: 'long' };
             let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
             return dayName.charAt(0).toUpperCase() + dayName.slice(1);
-        };
+        }; // <-- FECHAMENTO ADICIONADO AQUI
 
         const calculateAge = (birthDateString) => {
             if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
@@ -573,6 +563,10 @@
         };
 
         const handleSaveToSheet = async (button) => {
+            if (SCRIPT_URL === 'COLE_A_URL_DO_SEU_APP_DA_WEB_AQUI' || !SCRIPT_URL) {
+                alert("ERRO: A URL do App Script não foi configurada!");
+                return;
+            }
             const messageItem = button.closest('[data-recipient-data]');
             const data = JSON.parse(messageItem.dataset.recipientData);
             
@@ -610,9 +604,9 @@
         addRecipientBtn.addEventListener('click', handleAddRecipient);
         addPuxadaBtn.addEventListener('click', handleAddPuxada);
         recipientsList.addEventListener('click', (e) => {
-            if (e.target.closest('.remove-recipient-btn')) {
+             if (e.target.closest('.remove-recipient-btn')) {
                 handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
-            }
+             }
         });
         recipientsList.addEventListener('input', (e) => e.target.dataset.field && handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value));
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
