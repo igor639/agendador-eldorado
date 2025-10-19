@@ -8,43 +8,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
-        .status-updated { transition: background-color 0.5s; background-color: #dcfce7 !important; }
-        .modal-backdrop { backdrop-filter: blur(5px); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+        }
+        .fade-in { 
+            animation: fadeIn 0.3s ease-out forwards; 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(-10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .loader { 
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #4f46e5; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        .status-select { 
+            -webkit-appearance: none; 
+            -moz-appearance: none; 
+            appearance: none; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+            background-repeat: no-repeat; 
+            background-position: right 0.5rem center; 
+            background-size: 1.5em 1.5em; 
+            padding-right: 2.5rem; 
+        }
+        .status-updated { 
+            transition: background-color 0.5s; 
+            background-color: #dcfce7 !important; 
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 antialiased min-h-screen">
 
     <div class="container mx-auto p-4 md:p-6 max-w-6xl">
         
+        <!-- HEADER -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">Agendador PRO</h1>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">📋 Agendador PRO</h1>
             <p class="text-slate-600 mt-2">Unidade Eldorado - Central de Comando</p>
         </header>
 
-        <!-- Abas de Navegação -->
+        <!-- TABS DE NAVEGAÇÃO -->
         <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
             <nav class="flex space-x-1" aria-label="Tabs">
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="agendar">Agendar</button>
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="gerenciar">Gerenciar</button>
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="dashboard">Dashboard</button>
+                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="agendar">📝 Agendar</button>
+                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="gerenciar">📊 Gerenciar</button>
+                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="dashboard">📈 Dashboard</button>
             </nav>
         </div>
 
-        <!-- Conteúdo Principal -->
+        <!-- CONTEÚDO PRINCIPAL -->
         <main id="content-area">
-            <!-- SEÇÃO AGENDAR -->
+            
+            <!-- ==================== SEÇÃO AGENDAR ==================== -->
             <section id="agendar-section" class="tab-content space-y-6 fade-in">
+                
+                <!-- SELEÇÃO DE ASSISTENTE E LOCAL -->
                 <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="assistant-name" class="block text-sm font-semibold text-slate-700 mb-2">Seu Nome</label>
+                        <label for="assistant-name" class="block text-sm font-semibold text-slate-700 mb-2">👤 Seu Nome</label>
                         <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                            <option value="">-- Escolha --</option>
+                            <option value="">-- Escolha seu nome --</option>
                             <option value="IGOR">Igor</option>
                             <option value="DIANA">Diana</option>
                             <option value="TATIANA">Tatiana</option>
@@ -54,7 +86,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="location-select" class="block text-sm font-semibold text-slate-700 mb-2">Local</label>
+                        <label for="location-select" class="block text-sm font-semibold text-slate-700 mb-2">📍 Local</label>
                         <select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
                             <option value="Eldorado" selected>Eldorado</option>
                             <option value="Centro">Centro</option>
@@ -62,54 +94,69 @@
                     </div>
                 </div>
 
+                <!-- LISTA DE DESTINATÁRIOS -->
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <h2 class="text-xl font-semibold text-slate-900">Destinatários</h2>
+                        <h2 class="text-xl font-semibold text-slate-900">👥 Destinatários</h2>
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <button id="add-recipient-btn" class="flex-1 sm:flex-none btn-indigo">+ Amanhã</button>
-                            <button id="add-puxada-btn" class="flex-1 sm:flex-none btn-amber">+ Hoje (Puxada)</button>
+                            <button id="add-recipient-btn" class="flex-1 sm:flex-none py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition">+ Amanhã</button>
+                            <button id="add-puxada-btn" class="flex-1 sm:flex-none py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 transition">+ Hoje (Puxada)</button>
                         </div>
                     </div>
                     <div id="recipients-list" class="space-y-4">
-                        <!-- O empty-state será inserido aqui via JavaScript -->
+                        <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
+                            <p class="text-slate-500">Nenhum destinatário adicionado.</p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- BOTÕES DE AÇÃO -->
                 <div class="flex justify-end gap-3">
-                    <button id="quick-message-btn" class="btn-green">📨 Mensagem Rápida</button>
-                    <button id="generate-messages-btn" class="btn-blue" disabled>📝 Gerar Mensagens Completas</button>
+                    <button id="quick-message-btn" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition">📨 Mensagem Rápida</button>
+                    <button id="generate-messages-btn" class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>📝 Gerar Mensagens Completas</button>
                 </div>
 
+                <!-- MENSAGENS GERADAS -->
                 <div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-4">Mensagens Geradas</h2>
+                    <h2 class="text-xl font-semibold text-slate-900 mb-4">💬 Mensagens Geradas</h2>
                     <div id="messages-list" class="space-y-4"></div>
                 </div>
             </section>
             
-            <!-- SEÇÃO GERENCIAR -->
+            <!-- ==================== SEÇÃO GERENCIAR ==================== -->
             <section id="gerenciar-section" class="tab-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-4">Agendamentos de Hoje</h2>
-                    <p class="text-sm text-slate-600 mb-4">Selecione seu nome para ver e gerenciar os agendamentos do dia.</p>
+                    <h2 class="text-xl font-semibold text-slate-900 mb-4">📋 Agendamentos de Hoje</h2>
+                    <p class="text-sm text-slate-600 mb-4">Selecione seu nome acima para ver e gerenciar os agendamentos do dia.</p>
                     <div id="management-list" class="space-y-3">
-                        <div id="loader" class="text-center py-12 hidden"><div class="loader mx-auto"></div><p class="mt-4 text-slate-500">Buscando...</p></div>
-                        <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden"><p class="text-slate-500">Nenhum agendamento encontrado para hoje.</p></div>
+                        <div id="loader" class="text-center py-12 hidden">
+                            <div class="loader mx-auto"></div>
+                            <p class="mt-4 text-slate-500">Buscando dados...</p>
+                        </div>
+                        <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
+                            <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- SEÇÃO DASHBOARD -->
+            <!-- ==================== SEÇÃO DASHBOARD ==================== -->
             <section id="dashboard-section" class="tab-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-6">Seu Desempenho Hoje</h2>
+                    <h2 class="text-xl font-semibold text-slate-900 mb-6">📈 Seu Desempenho Hoje</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-50 p-4 rounded-xl">
-                            <h3 class="text-lg font-semibold text-slate-700 mb-2">Resumo de Status</h3>
-                            <canvas id="statusChart"></canvas>
+                            <h3 class="text-lg font-semibold text-slate-700 mb-4">Status dos Agendamentos</h3>
+                            <canvas id="statusChart" width="400" height="300"></canvas>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl">
-                            <h3 class="text-lg font-semibold text-slate-700 mb-2">Totais do Dia</h3>
-                            <div id="dashboard-stats" class="space-y-2 mt-4"></div>
+                            <h3 class="text-lg font-semibold text-slate-700 mb-4">Resumo Numérico</h3>
+                            <div id="dashboard-stats" class="space-y-3 mt-4">
+                                <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                                    <span class="font-medium">Total de Agendamentos:</span>
+                                    <span class="font-bold text-lg">0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,50 +164,51 @@
         </main>
     </div>
 
-    <!-- Modal para Mensagem Rápida -->
-    <div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop bg-black bg-opacity-50">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 transform transition-all">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">Gerar Mensagem Rápida</h3>
-            <div class="space-y-4">
-                <div>
-                    <label for="quick-jovem" class="block text-sm font-medium text-slate-700">Nome do Jovem</label>
-                    <input type="text" id="quick-jovem" class="w-full mt-1 p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label for="quick-numero" class="block text-sm font-medium text-slate-700">Número (com DDD)</label>
-                    <input type="tel" id="quick-numero" placeholder="55319..." class="w-full mt-1 p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Escolha o Template</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="quick-template" value="variacao1" class="mr-3" checked>
-                            <span class="text-sm">VARIAÇÃO 1 (Retorno até amanhã)</span>
-                        </label>
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="quick-template" value="variacao2" class="mr-3">
-                            <span class="text-sm">VARIAÇÃO 2 (Retorno obrigatório)</span>
-                        </label>
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="quick-template" value="followup" class="mr-3">
-                            <span class="text-sm font-semibold text-red-600">FOLLOW-UP (Prazo encerra hoje)</span>
-                        </label>
-                    </div>
+<!-- ==================== MODAL MENSAGEM RÁPIDA ==================== -->
+<div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm" style="display: none;">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 transform transition-all">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">📨 Gerar Mensagem Rápida</h3>
+        <div class="space-y-4">
+            <div>
+                <label for="quick-jovem" class="block text-sm font-medium text-slate-700 mb-1">Nome do Jovem</label>
+                <input type="text" id="quick-jovem" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Ex: João Silva">
+            </div>
+            <div>
+                <label for="quick-numero" class="block text-sm font-medium text-slate-700 mb-1">Número (com DDD)</label>
+                <input type="tel" id="quick-numero" placeholder="55319..." maxlength="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Escolha o Template</label>
+                <div class="space-y-2">
+                    <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                        <input type="radio" name="quick-template" value="variacao1" class="mr-3" checked>
+                        <span class="text-sm">VARIAÇÃO 1 (Retorno até amanhã)</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                        <input type="radio" name="quick-template" value="variacao2" class="mr-3">
+                        <span class="text-sm">VARIAÇÃO 2 (Retorno obrigatório)</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition">
+                        <input type="radio" name="quick-template" value="followup" class="mr-3">
+                        <span class="text-sm font-semibold text-red-600">FOLLOW-UP (Urgente - Hoje)</span>
+                    </label>
                 </div>
             </div>
-            <div class="flex justify-end gap-3 mt-6">
-                <button id="quick-modal-cancel" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
-                <button id="quick-generate-btn" class="btn-green">Gerar e Enviar</button>
-            </div>
-            <div id="quick-message-result" class="mt-4 hidden"></div>
         </div>
+        <div class="flex justify-end gap-3 mt-6">
+            <button id="quick-modal-cancel" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
+            <button id="quick-generate-btn" class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">Gerar e Enviar</button>
+        </div>
+        <div id="quick-message-result" class="mt-4 hidden"></div>
     </div>
+</div>
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // ==================== CONFIGURAÇÃO ====================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
 
-        // --- Seletores Globais ---
+        // ==================== SELETORES ====================
         const assistantSelect = document.getElementById('assistant-name');
         const locationSelect = document.getElementById('location-select');
         const addRecipientBtn = document.getElementById('add-recipient-btn');
@@ -169,11 +217,12 @@
         const generateMessagesBtn = document.getElementById('generate-messages-btn');
         const messagesSection = document.getElementById('messages-section');
         const messagesList = document.getElementById('messages-list');
+        const emptyState = document.getElementById('empty-state');
         const managementList = document.getElementById('management-list');
         const loader = document.getElementById('loader');
         const managementEmptyState = document.getElementById('management-empty-state');
         
-        // Quick Message Modal
+        // Modal Mensagem Rápida
         const quickMessageBtn = document.getElementById('quick-message-btn');
         const quickMessageModal = document.getElementById('quick-message-modal');
         const quickModalCancel = document.getElementById('quick-modal-cancel');
@@ -186,14 +235,17 @@
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         let statusChartInstance = null;
 
-        // --- Classes de Botão (Tailwind) ---
-        const btnClasses = 'py-2 px-4 font-semibold rounded-lg shadow-md transition-all duration-300 focus:outline-none focus:ring-2';
-        document.querySelectorAll('.btn-indigo').forEach(el => el.className = `${btnClasses} bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500`);
-        document.querySelectorAll('.btn-amber').forEach(el => el.className = `${btnClasses} bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500`);
-        document.querySelectorAll('.btn-green').forEach(el => el.className = `${btnClasses} bg-green-600 text-white hover:bg-green-700 focus:ring-green-500`);
-        document.querySelectorAll('.btn-blue').forEach(el => el.className = `${btnClasses} bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500`);
+        // ==================== MAPEAMENTO DE NOMES ====================
+        const assistantFullNameMap = {
+            'IGOR': 'Igor Araújo de Alencar',
+            'DIANA': 'Diana D´Ávila Fagundes',
+            'TATIANA': 'Tatiana F. Moretti',
+            'CAMILE': 'Camile da Cruz Monteiro',
+            'ISABELLE': 'Isabelle Santos',
+            'WELKER': 'Welker Pablo Zanetti'
+        };
 
-        // --- Lógica de Tabs ---
+        // ==================== GERENCIAMENTO DE TABS ====================
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         
@@ -217,37 +269,91 @@
         tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
         switchTab('agendar');
 
-        // --- Lógica de Dashboard (sem mudanças) ---
-        const fetchDashboardData = async () => { /* ... */ };
-        const renderDashboard = (data) => { /* ... */ };
+        // ==================== FUNÇÕES DE DATA ====================
+        const getTodayDateString = () => {
+            const today = new Date();
+            return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        };
 
-        // --- Lógica de Gerenciamento (sem mudanças) ---
-        const fetchAppointments = async () => { /* ... */ };
-        const renderAppointments = (appointments) => { /* ... */ };
-        const updateAppointmentStatus = async (selectElement) => { /* ... */ };
-        managementList.addEventListener('change', (e) => { if (e.target.classList.contains('status-select')) updateAppointmentStatus(e.target); });
+        const getTomorrowDateString = () => {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            let daysToAdd = 1;
+            
+            if (today.getDay() === 5) daysToAdd = 3; // Sexta -> Segunda
+            if (today.getDay() === 6) daysToAdd = 2; // Sábado -> Segunda
+            
+            tomorrow.setDate(today.getDate() + daysToAdd);
+            return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
+        };
 
-        // --- Lógica de Agendamento ---
-        const assistantFullNameMap = { 'IGOR': 'Igor Araújo de Alencar', 'DIANA': 'Diana D´Ávila Fagundes', 'TATIANA': 'Tatiana F. Moretti', 'CAMILE': 'Camile da Cruz Monteiro', 'ISABELLE': 'Isabelle', 'WELKER': 'Welker Pablo Zanetti' };
-        const messageTemplates = { long: { title: `*CONVOCAÇÃO...*`, /* ... */ } };
-        
-        const getTodayDateString = () => { const today = new Date(); return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`; };
-        const getTomorrowDateString = () => { const today = new Date(); const tomorrow = new Date(today); let daysToAdd = 1; if (today.getDay() === 5) daysToAdd = 3; if (today.getDay() === 6) daysToAdd = 2; tomorrow.setDate(today.getDate() + daysToAdd); return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`; };
-        const getDayOfWeek = (dateString) => { /* ... */ };
-        const calculateAge = (birthDateString) => { /* ... */ };
-        const generateCode = (jovem) => { /* ... */ };
-        
-        const saveToLocalStorage = () => { /* ... */ };
-        const loadFromLocalStorage = () => { /* ... */ };
+        const getDayOfWeek = (dateString) => {
+            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
+            const parts = dateString.split('/');
+            const year = parseInt(parts[2], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const day = parseInt(parts[0], 10);
+            const date = new Date(year, month, day, 12);
+            
+            if (isNaN(date.getTime())) return '';
+            const options = { weekday: 'long' };
+            let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
+            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        };
 
-        // --- CORREÇÃO: renderRecipients ---
+        const calculateAge = (birthDateString) => {
+            if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
+            const parts = birthDateString.split('/');
+            const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            if (isNaN(birthDate.getTime())) return null;
+            
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        };
+
+        const generateCode = (jovem) => {
+            const words = jovem.split(' ').filter(w => w);
+            let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+            return initials + Math.floor(100 + Math.random() * 900);
+        };
+
+        // ==================== LOCAL STORAGE ====================
+        const saveToLocalStorage = () => {
+            const dataToSave = {
+                timestamp: new Date().getTime(),
+                recipients: recipients
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+        };
+
+        const loadFromLocalStorage = () => {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+                if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
+                    recipients = parsedData.recipients || [];
+                } else {
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                }
+            }
+        };
+
+        // ==================== RENDERIZAÇÃO DE DESTINATÁRIOS ====================
         const renderRecipients = () => {
-            recipientsList.innerHTML = '';
+            // Remove tudo exceto o empty-state
+            const forms = recipientsList.querySelectorAll('[data-id]');
+            forms.forEach(form => form.remove());
+            
             if (recipients.length === 0) {
-                // CORREÇÃO: Clona o empty-state para evitar problemas de referência de elemento
-                const emptyStateClone = document.getElementById('empty-state-template').content.cloneNode(true);
-                recipientsList.appendChild(emptyStateClone);
+                emptyState.style.display = 'block';
             } else {
+                emptyState.style.display = 'none';
                 recipients.forEach((recipient, index) => {
                     recipientsList.appendChild(createRecipientForm(recipient, index));
                 });
@@ -257,100 +363,675 @@
 
         const createRecipientForm = (recipient, index) => {
             const form = document.createElement('div');
-            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in';
+            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in bg-white';
             form.dataset.id = recipient.id;
             form.innerHTML = `
                 <div class="flex justify-between items-center">
                     <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
-                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button>
+                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                    </button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label><input type="text" placeholder="Nome completo do jovem" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento (Opcional)</label><input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask"></div>
-                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label><input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável</label><input type="tel" placeholder="55319..." maxlength="15" data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask"></div>
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem (opcional)</label><input type="tel" placeholder="55319..." maxlength="15" data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask"></div>
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label><input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask"></div>
-                    <div><label class="block text-sm font-medium text-slate-600 mb-1">Horário</label><input type="text" placeholder="HH:MM" maxlength="5" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition time-mask"></div>
-                    <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label><input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition"></div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label>
+                        <input type="text" placeholder="Nome completo" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento</label>
+                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label>
+                        <input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável</label>
+                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem</label>
+                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label>
+                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Horário</label>
+                        <input type="text" placeholder="HH:MM" maxlength="5" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition time-mask">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label>
+                        <input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                    </div>
                 </div>`;
             return form;
         };
-        
-        // --- NOVO: Lógica de Máscaras de Entrada ---
+
+        // ==================== MÁSCARAS DE ENTRADA ====================
         recipientsList.addEventListener('input', (e) => {
             if (!e.target.dataset.field) return;
-            let value = e.target.value;
-            let cursorPos = e.target.selectionStart;
+            
+            const input = e.target;
+            let value = input.value;
+            const field = input.dataset.field;
+            const id = input.closest('[data-id]').dataset.id;
 
-            // Máscara de Data
-            if (e.target.classList.contains('date-mask')) {
+            // Máscara de Data (DD/MM/AAAA)
+            if (input.classList.contains('date-mask')) {
                 value = value.replace(/\D/g, '');
                 if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
                 if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
                 if (value.length > 10) value = value.slice(0, 10);
+                input.value = value;
             }
-            // Máscara de Telefone
-            else if (e.target.classList.contains('phone-mask')) {
+            // Máscara de Telefone (55...)
+            else if (input.classList.contains('phone-mask')) {
                 value = value.replace(/\D/g, '');
                 if (value.length > 0 && !value.startsWith('55')) {
                     value = '55' + value;
                 }
                 if (value.length > 15) value = value.slice(0, 15);
+                input.value = value;
             }
-            // Máscara de Hora
-            else if (e.target.classList.contains('time-mask')) {
+            // Máscara de Hora (HH:MM)
+            else if (input.classList.contains('time-mask')) {
                 value = value.replace(/\D/g, '');
                 if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
                 if (value.length > 5) value = value.slice(0, 5);
+                input.value = value;
             }
-            // Se não for nenhum dos campos mascarados, apenas atualiza o valor
-            else {
-                handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, e.target.value);
+            
+            handleUpdateRecipient(id, field, input.value);
+        });
+
+        // ==================== HANDLERS DE DESTINATÁRIOS ====================
+        const handleAddRecipient = () => {
+            recipients.push({ 
+                id: Date.now().toString(), 
+                jovem: '', 
+                responsavel: '', 
+                data: getTomorrowDateString(), 
+                horario: '', 
+                numero_responsavel: '', 
+                numero_jovem: '', 
+                data_nascimento: '', 
+                irmaos: '', 
+                isPuxada: false
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleAddPuxada = () => {
+            recipients.push({ 
+                id: Date.now().toString(), 
+                jovem: '', 
+                responsavel: '', 
+                data: getTodayDateString(), 
+                horario: '', 
+                numero_responsavel: '', 
+                numero_jovem: '', 
+                data_nascimento: '', 
+                irmaos: '', 
+                isPuxada: true
+            });
+            renderRecipients();
+            saveToLocalStorage();
+        };
+
+        const handleRemoveRecipient = (id) => {
+            recipients = recipients.filter(r => r.id !== id);
+            renderRecipients();
+            saveToLocalStorage();
+        };
+        
+        const handleUpdateRecipient = (id, field, value) => {
+            const recipient = recipients.find(r => r.id === id);
+            if (recipient) {
+                recipient[field] = value;
+                saveToLocalStorage();
+            }
+        };
+
+        const updateGenerateButtonState = () => {
+            generateMessagesBtn.disabled = (assistantSelect.value === '' || recipients.length === 0);
+        };
+
+        // ==================== TEMPLATES DE MENSAGEM COMPLETA ====================
+        const messageTemplates = {
+            long: {
+                title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
+                scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
+                locations: {
+                    Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
+                    Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
+                },
+                footer: `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
+            }
+        };
+
+        const generateMessageText = (data) => {
+            const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
+            const diaDaSemana = getDayOfWeek(data.data);
+            
+            let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
+            if (data.idade !== null) {
+                jovemInfo += ` (${data.idade} anos)`;
+            }
+
+            let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+            if (data.irmaos && data.irmaos.trim() !== '') {
+                personalInfo += `\n*Irmãos:* ${data.irmaos}`;
+            }
+
+            const schedulingInfo = messageTemplates.long.scheduling_info
+                .replace(/{diaDaSemana}/g, diaDaSemana)
+                .replace(/{data}/g, data.data)
+                .replace(/{horario}/g, data.horario);
+            
+            const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
+            
+            const footer = messageTemplates.long.footer
+                .replace(/{codigo}/g, data.codigo)
+                .replace(/{assistente}/g, assistantDisplayName);
+
+            return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+        };
+
+        const handleGenerateMessages = () => {
+            const assistantValue = assistantSelect.value;
+            if (!assistantValue) {
+                alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
                 return;
             }
 
-            e.target.value = value;
-            // Ajusta a posição do cursor para não pular para o final
-            e.target.setSelectionRange(cursorPos, cursorPos);
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
+                    const idade = calculateAge(r.data_nascimento);
+                    const codigo = generateCode(r.jovem);
+                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: locationSelect.value };
+                    return { originalData };
+                });
             
-            handleUpdateRecipient(e.target.closest('[data-id]').dataset.id, e.target.dataset.field, value);
+            if (generatedMessages.length === 0) {
+                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
+                return;
+            }
+            
+            renderMessages(generatedMessages);
+            messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        const renderMessages = (generatedMessages) => {
+            messagesList.innerHTML = '';
+            if (generatedMessages.length > 0) {
+                messagesSection.classList.remove('hidden');
+                generatedMessages.forEach(msgData => {
+                    const messageItem = document.createElement('div');
+                    messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
+                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
+                    
+                    const messageText = generateMessageText(msgData.originalData);
+                    const encodedMessage = encodeURIComponent(messageText);
+
+                    messageItem.innerHTML = `
+                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
+                                <span>📱 Enviar WhatsApp</span>
+                            </a>
+                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                                <span>💾 Salvar na Planilha</span>
+                            </button>
+                        </div>`;
+                    messagesList.appendChild(messageItem);
+                });
+            } else {
+                messagesSection.classList.add('hidden');
+            }
+        };
+
+        const handleSaveToSheet = async (button) => {
+            const messageItem = button.closest('[data-recipient-data]');
+            const data = JSON.parse(messageItem.dataset.recipientData);
+            
+            button.disabled = true;
+            button.innerHTML = '<span>⏳ Salvando...</span>';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    button.innerHTML = '<span>✅ Salvo com Sucesso!</span>';
+                    button.style.backgroundColor = '#22c55e';
+                } else { 
+                    throw new Error(result.message); 
+                }
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                button.innerHTML = '<span>❌ Erro ao Salvar</span>';
+                button.style.backgroundColor = '#ef4444';
+                alert('Erro ao salvar: ' + error.message);
+                button.disabled = false;
+            }
+        };
+
+        // ==================== MENSAGEM RÁPIDA ====================
+        const quickMessageTemplates = {
+            variacao1: (jovem) => `CRESCER | Departamento de Orientação Profissional
+
+Ref.: ${jovem}
+
+Cadastro liberado para atendimento em:
+
+📌 Teste Vocacional (mapeamento de aptidões)
+📌 Cadastramento em base curricular regional
+
+Agendamento: retornar esta ligação
+Horário: 9h às 17h (dias úteis)
+
+⚠️ Prazo: até amanhã
+
+Informações apenas por contato telefônico.
+
+Att, Equipe de Cadastramento`,
+            
+            variacao2: (jovem) => `CRESCER | Departamento de Orientação Profissional
+
+Ref.: ${jovem}
+
+Cadastro liberado para:
+
+📌 Teste Vocacional (mapeamento de aptidões)
+📌 Cadastramento em base curricular regional
+
+🔔 Retorno obrigatório para agendamento
+Retornar ligação neste contato
+Horário: 9h às 17h
+
+⚠️ Prazo: amanhã
+
+Não responder por mensagem - apenas ligação.
+
+Equipe de Cadastramento`,
+            
+            followup: (jovem) => `⚠️ CRESCER - Lembrete Urgente
+
+Ref.: ${jovem}
+
+Prazo de confirmação encerra HOJE às 17h.
+
+Teste Vocacional + Cadastramento aguardando agendamento.
+
+Retornar esta ligação.
+
+Após 17h, cadastro retorna à lista de espera.
+
+Última chamada.`
+        };
+
+        quickMessageBtn.addEventListener('click', () => {
+            quickMessageModal.style.display = 'flex';
+            quickJovemInput.value = '';
+            quickNumeroInput.value = '';
+            quickMessageResult.classList.add('hidden');
         });
 
-        const renderMessages = (generatedMessages) => { /* ... */ };
-        const handleAddRecipient = () => { recipients.push({ id: Date.now().toString(), jovem: '', responsavel: '', data: getTomorrowDateString(), horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: false }); renderRecipients(); saveToLocalStorage(); };
-        const handleAddPuxada = () => { recipients.push({ id: Date.now().toString(), jovem: '', responsavel: '', data: getTodayDateString(), horario: '', numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '', isPuxada: true }); renderRecipients(); saveToLocalStorage(); };
-        const handleRemoveRecipient = (id) => { recipients = recipients.filter(r => r.id !== id); renderRecipients(); saveToLocalStorage(); };
-        const handleUpdateRecipient = (id, field, value) => { const recipient = recipients.find(r => r.id === id); if (recipient) { recipient[field] = value; saveToLocalStorage(); } };
-        const handleGenerateMessages = () => { /* ... */ };
-        const generateMessageText = (data) => { /* ... */ };
-        const handleSaveToSheet = async (button) => { /* ... */ };
-        const updateGenerateButtonState = () => { generateMessagesBtn.disabled = (assistantSelect.value === '' || recipients.length === 0); };
+        quickModalCancel.addEventListener('click', () => {
+            quickMessageModal.style.display = 'none';
+        });
 
-        // --- Lógica de Mensagem Rápida (sem mudanças) ---
-        const quickMessageTemplates = { variacao1: (jovem) => `...`, variacao2: (jovem) => `...`, followup: (jovem) => `...` };
-        quickMessageBtn.addEventListener('click', () => quickMessageModal.style.display = 'flex');
-        quickModalCancel.addEventListener('click', () => { quickMessageModal.style.display = 'none'; quickMessageResult.classList.add('hidden'); });
-        quickGenerateBtn.addEventListener('click', () => { /* ... */ });
+        quickNumeroInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0 && !value.startsWith('55')) {
+                value = '55' + value;
+            }
+            if (value.length > 15) value = value.slice(0, 15);
+            e.target.value = value;
+        });
+
+        quickGenerateBtn.addEventListener('click', () => {
+            const jovem = quickJovemInput.value.trim();
+            const numero = quickNumeroInput.value.trim();
+            const template = document.querySelector('input[name="quick-template"]:checked').value;
+
+            if (!jovem || !numero) {
+                alert('⚠️ Por favor, preencha nome e número!');
+                return;
+            }
+
+            const messageText = quickMessageTemplates[template](jovem);
+            const encodedMessage = encodeURIComponent(messageText);
+            const whatsappUrl = `https://wa.me/${numero}?text=${encodedMessage}`;
+
+            quickMessageResult.innerHTML = `
+                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p class="font-semibold text-green-800 mb-3">✅ Mensagem Gerada!</p>
+                    <pre class="whitespace-pre-wrap text-sm bg-white p-3 rounded border mb-3">${messageText}</pre>
+                    <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center gap-2 py-2 px-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition w-full justify-center">
+                        📱 Enviar WhatsApp
+                    </a>
+                </div>`;
+            quickMessageResult.classList.remove('hidden');
+        });
+
+        // ==================== GERENCIAMENTO DE AGENDAMENTOS ====================
+        const fetchAppointments = async () => {
+            const assistantName = assistantSelect.value;
+            
+            if (!assistantName) {
+                managementList.innerHTML = '<p class="text-center text-slate-500 py-8">⚠️ Selecione seu nome para ver os agendamentos de hoje.</p>';
+                return;
+            }
+
+            loader.style.display = 'block';
+            managementEmptyState.style.display = 'none';
+            managementList.innerHTML = '';
+            managementList.appendChild(loader);
+
+            const today = new Date();
+            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            
+            const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
+
+            try {
+                const response = await fetch(fetchUrl);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    renderAppointments(result.data);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">❌ Erro ao buscar dados: ${error.message}</p>`;
+            } finally {
+                loader.style.display = 'none';
+            }
+        };
+
+        const renderAppointments = (appointments) => {
+            managementList.innerHTML = '';
+            
+            if (appointments.length === 0) {
+                managementEmptyState.style.display = 'block';
+                managementList.appendChild(managementEmptyState);
+                return;
+            }
+
+            appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
+
+            appointments.forEach(appt => {
+                const apptCard = document.createElement('div');
+                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
+                apptCard.id = `appt-${appt.rowId}`;
+
+                const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+                const selectOptions = statusOptions.map(status => 
+                    `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
+                ).join('');
+
+                apptCard.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-800">${appt.jovem}</p>
+                            <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
+                            <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
+                            <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
+                                <span>🗓️ ${appt.data}</span>
+                                <span>⏰ ${appt.horario || 'N/D'}</span>
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                                <option value="">Pendente</option>
+                                ${selectOptions}
+                            </select>
+                        </div>
+                    </div>
+                `;
+                managementList.appendChild(apptCard);
+            });
+        };
+
+const updateAppointmentStatus = async (selectElement) => {
+    const rowId = selectElement.dataset.rowId;
+    const sheetName = selectElement.dataset.sheetName;
+    const newStatus = selectElement.value;
+    
+    console.log('🔄 Tentando atualizar status:', { rowId, sheetName, newStatus });
+    
+    selectElement.disabled = true;
+    const originalBg = selectElement.style.backgroundColor;
+    selectElement.style.backgroundColor = '#fef3c7';
+
+    try {
+        const payload = {
+            action: 'updateStatus',
+            rowId: rowId,
+            sheetName: sheetName,
+            newStatus: newStatus
+        };
+
+        console.log('📤 Enviando payload:', payload);
+
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // ← IMPORTANTE: Adiciona no-cors
+            cache: 'no-cache',
+            redirect: 'follow',
+            body: JSON.stringify(payload)
+        });
         
-        // --- INICIALIZAÇÃO ---
+        console.log('📥 Resposta recebida:', response);
+
+        // Com no-cors, não conseguimos ler a resposta, então assumimos sucesso
+        // se não houve erro de rede
+        const card = document.getElementById(`appt-${rowId}`);
+        card.classList.add('status-updated');
+        setTimeout(() => card.classList.remove('status-updated'), 1500);
+        
+        console.log('✅ Status atualizado com sucesso');
+        
+    } catch (error) {
+        console.error('❌ Erro ao atualizar status:', error);
+        alert(`❌ Erro ao atualizar status: ${error.message}`);
+        selectElement.style.backgroundColor = '#fee2e2';
+    } finally {
+        selectElement.disabled = false;
+        setTimeout(() => { 
+            selectElement.style.backgroundColor = originalBg; 
+        }, 1500);
+    }
+};
+
+        managementList.addEventListener('change', (e) => {
+            if (e.target.classList.contains('status-select')) {
+                updateAppointmentStatus(e.target);
+            }
+        });
+
+        // ==================== DASHBOARD ====================
+        const fetchDashboardData = async () => {
+            const assistantName = assistantSelect.value;
+            
+            if (!assistantName) {
+                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-slate-500 p-4">⚠️ Selecione seu nome para ver o dashboard.</p>';
+                if (statusChartInstance) {
+                    statusChartInstance.destroy();
+                    statusChartInstance = null;
+                }
+                return;
+            }
+
+            const today = new Date();
+            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
+
+            try {
+                const response = await fetch(fetchUrl);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    renderDashboard(result.data);
+                }
+            } catch (error) {
+                console.error('Erro dashboard:', error);
+                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-red-600 p-4">❌ Erro ao carregar dados</p>';
+            }
+        };
+
+        const renderDashboard = (data) => {
+            // AGRUPAMENTO CONFORME SOLICITADO
+            const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+            const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
+            const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
+            const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
+            const matricula = data.filter(a => a.situacao === 'MATRICULA').length;
+            const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
+            const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
+
+            // Atualiza estatísticas
+            document.getElementById('dashboard-stats').innerHTML = `
+                <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                    <span class="font-medium">📊 Total:</span>
+                    <span class="font-bold text-lg">${data.length}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span class="font-medium text-green-800">✅ Confirmadas + Já Veio:</span>
+                    <span class="font-bold text-lg text-green-600">${confirmadas}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                    <span class="font-medium text-red-800">❌ Canceladas + Sem Interesse:</span>
+                    <span class="font-bold text-lg text-red-600">${canceladas}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+                    <span class="font-medium text-amber-800">⚡ Puxadas:</span>
+                    <span class="font-bold text-lg text-amber-600">${puxadas}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="font-medium text-blue-800">📅 Reagendar:</span>
+                    <span class="font-bold text-lg text-blue-600">${reagendar}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                    <span class="font-medium text-purple-800">🎓 Matrícula:</span>
+                    <span class="font-bold text-lg text-purple-600">${matricula}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-slate-100 rounded-lg">
+                    <span class="font-medium text-slate-700">⚠️ Confirmou Não Veio:</span>
+                    <span class="font-bold text-lg text-slate-600">${confirmouNaoVeio}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                    <span class="font-medium text-slate-600">⏳ Pendentes:</span>
+                    <span class="font-bold text-lg text-slate-500">${pendentes}</span>
+                </div>
+            `;
+
+            // Gráfico
+            const ctx = document.getElementById('statusChart');
+            if (statusChartInstance) {
+                statusChartInstance.destroy();
+            }
+
+            statusChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Confirmadas + Já Veio', 
+                        'Canceladas + Sem Interesse', 
+                        'Puxadas', 
+                        'Reagendar', 
+                        'Matrícula', 
+                        'Confirmou Não Veio', 
+                        'Pendentes'
+                    ],
+                    datasets: [{
+                        data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
+                        backgroundColor: [
+                            '#22c55e', // Verde - Confirmadas
+                            '#ef4444', // Vermelho - Canceladas
+                            '#f59e0b', // Âmbar - Puxadas
+                            '#3b82f6', // Azul - Reagendar
+                            '#a855f7', // Roxo - Matrícula
+                            '#64748b', // Cinza escuro - Confirmou Não Veio
+                            '#cbd5e1'  // Cinza claro - Pendentes
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 10,
+                                font: { 
+                                    size: 10,
+                                    family: 'Inter'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        // ==================== EVENT LISTENERS ====================
         addRecipientBtn.addEventListener('click', handleAddRecipient);
         addPuxadaBtn.addEventListener('click', handleAddPuxada);
-        recipientsList.addEventListener('click', (e) => { if (e.target.closest('.remove-recipient-btn')) handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id); });
-        generateMessagesBtn.addEventListener('click', handleGenerateMessages);
-        messagesList.addEventListener('click', (e) => e.target.closest('.save-btn') && handleSaveToSheet(e.target.closest('.save-btn')));
-        assistantSelect.addEventListener('change', () => { updateGenerateButtonState(); if (document.getElementById('gerenciar-section').classList.contains('hidden') === false) fetchAppointments(); if (document.getElementById('dashboard-section').classList.contains('hidden') === false) fetchDashboardData(); });
         
+        recipientsList.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-recipient-btn')) {
+                handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
+            }
+        });
+        
+        generateMessagesBtn.addEventListener('click', handleGenerateMessages);
+        
+        messagesList.addEventListener('click', (e) => {
+            if (e.target.closest('.save-btn')) {
+                handleSaveToSheet(e.target.closest('.save-btn'));
+            }
+        });
+        
+        assistantSelect.addEventListener('change', () => {
+            updateGenerateButtonState();
+            if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
+                fetchAppointments();
+            }
+            if (!document.getElementById('dashboard-section').classList.contains('hidden')) {
+                fetchDashboardData();
+            }
+        });
+        
+        // ==================== INICIALIZAÇÃO ====================
         loadFromLocalStorage();
         renderRecipients();
+        updateGenerateButtonState();
     });
     </script>
-    
-    <!-- CORREÇÃO: Template do empty-state escondido -->
-    <template id="empty-state-template">
-        <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
-            <p class="text-slate-500">Nenhum destinatário adicionado.</p>
-        </div>
-    </template>
 </body>
 </html>
