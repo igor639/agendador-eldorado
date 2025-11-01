@@ -558,37 +558,70 @@
 
     return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
 };
-        const handleGenerateInstituto = () => {
-    const assistantValue = assistantSelect.value;
-    if (!assistantValue) {
-        alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
-        return;
-    }
+                // ==================== GERAÇÃO DE MENSAGENS ====================
+        const handleGenerateMessages = () => {
+            const assistantValue = assistantSelect.value;
+            if (!assistantValue) {
+                alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
+                return;
+            }
 
-    const generatedMessages = recipients
-        .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-        .map(r => {
-            const idade = calculateAge(r.data_nascimento);
-            const codigo = generateCode(r.jovem);
-            const originalData = { 
-                ...r, 
-                idade, 
-                codigo, 
-                assistente: assistantValue, 
-                local: locationSelect.value,
-                isInstituto: true // ← Flag para indicar versão Instituto
-            };
-            return { originalData };
-        });
-    
-    if (generatedMessages.length === 0) {
-        alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-        return;
-    }
-    
-    renderMessages(generatedMessages);
-    messagesSection.scrollIntoView({ behavior: 'smooth' });
-};
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
+                    const idade = calculateAge(r.data_nascimento);
+                    const codigo = generateCode(r.jovem);
+                    const originalData = { 
+                        ...r, 
+                        idade, 
+                        codigo, 
+                        assistente: assistantValue, 
+                        local: locationSelect.value,
+                        isInstituto: false // Versão Empresa Crescer
+                    };
+                    return { originalData };
+                });
+            
+            if (generatedMessages.length === 0) {
+                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
+                return;
+            }
+            
+            renderMessages(generatedMessages);
+            messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        const handleGenerateInstituto = () => {
+            const assistantValue = assistantSelect.value;
+            if (!assistantValue) {
+                alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
+                return;
+            }
+
+            const generatedMessages = recipients
+                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+                .map(r => {
+                    const idade = calculateAge(r.data_nascimento);
+                    const codigo = generateCode(r.jovem);
+                    const originalData = { 
+                        ...r, 
+                        idade, 
+                        codigo, 
+                        assistente: assistantValue, 
+                        local: locationSelect.value,
+                        isInstituto: true // Versão Instituto Crescer'Minas
+                    };
+                    return { originalData };
+                });
+            
+            if (generatedMessages.length === 0) {
+                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
+                return;
+            }
+            
+            renderMessages(generatedMessages);
+            messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
 
         const renderMessages = (generatedMessages) => {
             messagesList.innerHTML = '';
@@ -831,56 +864,54 @@ Após 17h, cadastro retorna à lista de espera.
             });
         };
 
-const updateAppointmentStatus = async (selectElement) => {
-    const rowId = selectElement.dataset.rowId;
-    const sheetName = selectElement.dataset.sheetName;
-    const newStatus = selectElement.value;
-    
-    console.log('🔄 Tentando atualizar status:', { rowId, sheetName, newStatus });
-    
-    selectElement.disabled = true;
-    const originalBg = selectElement.style.backgroundColor;
-    selectElement.style.backgroundColor = '#fef3c7';
+        const updateAppointmentStatus = async (selectElement) => {
+            const rowId = selectElement.dataset.rowId;
+            const sheetName = selectElement.dataset.sheetName;
+            const newStatus = selectElement.value;
+            
+            console.log('🔄 Tentando atualizar status:', { rowId, sheetName, newStatus });
+            
+            selectElement.disabled = true;
+            const originalBg = selectElement.style.backgroundColor;
+            selectElement.style.backgroundColor = '#fef3c7';
 
-    try {
-        const payload = {
-            action: 'updateStatus',
-            rowId: rowId,
-            sheetName: sheetName,
-            newStatus: newStatus
+            try {
+                const payload = {
+                    action: 'updateStatus',
+                    rowId: rowId,
+                    sheetName: sheetName,
+                    newStatus: newStatus
+                };
+
+                console.log('📤 Enviando payload:', payload);
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    redirect: 'follow',
+                    body: JSON.stringify(payload)
+                });
+                
+                console.log('📥 Resposta recebida:', response);
+
+                const card = document.getElementById(`appt-${rowId}`);
+                card.classList.add('status-updated');
+                setTimeout(() => card.classList.remove('status-updated'), 1500);
+                
+                console.log('✅ Status atualizado com sucesso');
+                
+            } catch (error) {
+                console.error('❌ Erro ao atualizar status:', error);
+                alert(`❌ Erro ao atualizar status: ${error.message}`);
+                selectElement.style.backgroundColor = '#fee2e2';
+            } finally {
+                selectElement.disabled = false;
+                setTimeout(() => { 
+                    selectElement.style.backgroundColor = originalBg; 
+                }, 1500);
+            }
         };
-
-        console.log('📤 Enviando payload:', payload);
-
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // ← IMPORTANTE: Adiciona no-cors
-            cache: 'no-cache',
-            redirect: 'follow',
-            body: JSON.stringify(payload)
-        });
-        
-        console.log('📥 Resposta recebida:', response);
-
-        // Com no-cors, não conseguimos ler a resposta, então assumimos sucesso
-        // se não houve erro de rede
-        const card = document.getElementById(`appt-${rowId}`);
-        card.classList.add('status-updated');
-        setTimeout(() => card.classList.remove('status-updated'), 1500);
-        
-        console.log('✅ Status atualizado com sucesso');
-        
-    } catch (error) {
-        console.error('❌ Erro ao atualizar status:', error);
-        alert(`❌ Erro ao atualizar status: ${error.message}`);
-        selectElement.style.backgroundColor = '#fee2e2';
-    } finally {
-        selectElement.disabled = false;
-        setTimeout(() => { 
-            selectElement.style.backgroundColor = originalBg; 
-        }, 1500);
-    }
-};
 
         managementList.addEventListener('change', (e) => {
             if (e.target.classList.contains('status-select')) {
@@ -919,7 +950,6 @@ const updateAppointmentStatus = async (selectElement) => {
         };
 
         const renderDashboard = (data) => {
-            // AGRUPAMENTO CONFORME SOLICITADO
             const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
             const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
             const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
@@ -928,7 +958,6 @@ const updateAppointmentStatus = async (selectElement) => {
             const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
             const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
 
-            // Atualiza estatísticas
             document.getElementById('dashboard-stats').innerHTML = `
                 <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
                     <span class="font-medium">📊 Total:</span>
@@ -964,7 +993,6 @@ const updateAppointmentStatus = async (selectElement) => {
                 </div>
             `;
 
-            // Gráfico
             const ctx = document.getElementById('statusChart');
             if (statusChartInstance) {
                 statusChartInstance.destroy();
@@ -985,13 +1013,13 @@ const updateAppointmentStatus = async (selectElement) => {
                     datasets: [{
                         data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
                         backgroundColor: [
-                            '#22c55e', // Verde - Confirmadas
-                            '#ef4444', // Vermelho - Canceladas
-                            '#f59e0b', // Âmbar - Puxadas
-                            '#3b82f6', // Azul - Reagendar
-                            '#a855f7', // Roxo - Matrícula
-                            '#64748b', // Cinza escuro - Confirmou Não Veio
-                            '#cbd5e1'  // Cinza claro - Pendentes
+                            '#22c55e',
+                            '#ef4444',
+                            '#f59e0b',
+                            '#3b82f6',
+                            '#a855f7',
+                            '#64748b',
+                            '#cbd5e1'
                         ],
                         borderWidth: 2,
                         borderColor: '#fff'
@@ -1036,6 +1064,11 @@ const updateAppointmentStatus = async (selectElement) => {
         
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
         
+        const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+        if (generateInstitutoBtn) {
+            generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
+        }
+        
         messagesList.addEventListener('click', (e) => {
             if (e.target.closest('.save-btn')) {
                 handleSaveToSheet(e.target.closest('.save-btn'));
@@ -1053,11 +1086,6 @@ const updateAppointmentStatus = async (selectElement) => {
         });
         
         // ==================== INICIALIZAÇÃO ====================
-        // Event listener para o botão Instituto
-const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
-if (generateInstitutoBtn) {
-    generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
-}
         loadFromLocalStorage();
         renderRecipients();
         updateGenerateButtonState();
