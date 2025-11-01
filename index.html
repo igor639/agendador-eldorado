@@ -76,14 +76,15 @@
                     <div>
                         <label for="assistant-name" class="block text-sm font-semibold text-slate-700 mb-2">👤 Seu Nome</label>
                         <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                            <option value="">-- Escolha seu nome --</option>
-                            <option value="IGOR">Igor</option>
-                            <option value="DIANA">Diana</option>
-                            <option value="TATIANA">Tatiana</option>
-                            <option value="CAMILE">Camile</option>
-                            <option value="ISABELLE">Isabelle</option>
-                            <option value="WELKER">Welker</option>
-                        </select>
+    <option value="">-- Escolha seu nome --</option>
+    <option value="DIANA">Diana</option>
+    <option value="IGOR">Igor</option>
+    <option value="WELKER">Welker</option>
+    <option value="TREINEE">Treinee</option>
+    <option value="CAMILE">Camile</option>
+    <option value="ISIS">Isis</option>
+    <option value="TATIANA">Tatiana</option>
+</select>
                     </div>
                     <div>
                         <label for="location-select" class="block text-sm font-semibold text-slate-700 mb-2">📍 Local</label>
@@ -110,11 +111,12 @@
                     </div>
                 </div>
 
-                <!-- BOTÕES DE AÇÃO -->
-                <div class="flex justify-end gap-3">
-                    <button id="quick-message-btn" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition">📨 Mensagem Rápida</button>
-                    <button id="generate-messages-btn" class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>📝 Gerar Mensagens Completas</button>
-                </div>
+               <!-- BOTÕES DE AÇÃO -->
+<div class="flex flex-col sm:flex-row justify-end gap-3">
+    <button id="quick-message-btn" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition">📨 Mensagem Rápida</button>
+    <button id="generate-messages-btn" class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>📝 Mensagem Empresa Crescer</button>
+    <button id="generate-instituto-btn" class="py-2 px-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>🏢 Mensagem Instituto Crescer'Minas</button>
+</div>
 
                 <!-- MENSAGENS GERADAS -->
                 <div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
@@ -237,13 +239,14 @@
 
         // ==================== MAPEAMENTO DE NOMES ====================
         const assistantFullNameMap = {
-            'IGOR': 'Igor Araújo de Alencar',
-            'DIANA': 'Diana D´Ávila Fagundes',
-            'TATIANA': 'Tatiana F. Moretti',
-            'CAMILE': 'Camile da Cruz Monteiro',
-            'ISABELLE': 'Isabelle Santos',
-            'WELKER': 'Welker Pablo Zanetti'
-        };
+    'IGOR': 'Igor Araújo de Alencar',
+    'DIANA': 'Diana D´Ávila Fagundes',
+    'TATIANA': 'Tatiana F. Moretti',
+    'CAMILE': 'Camile da Cruz Monteiro',
+    'ISIS': 'Isis Sampaio Freitas',
+    'WELKER': 'Welker Pablo Zanetti',
+    'TREINEE': 'Coordenação' // Apenas "Coordenação" para treinee
+};
 
         // ==================== GERENCIAMENTO DE TABS ====================
         const tabBtns = document.querySelectorAll('.tab-btn');
@@ -276,16 +279,16 @@
         };
 
         const getTomorrowDateString = () => {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            let daysToAdd = 1;
-            
-            if (today.getDay() === 5) daysToAdd = 3; // Sexta -> Segunda
-            if (today.getDay() === 6) daysToAdd = 2; // Sábado -> Segunda
-            
-            tomorrow.setDate(today.getDate() + daysToAdd);
-            return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
-        };
+    const today = new Date();
+    const tomorrow = new Date(today);
+    
+    // Sexta (5) -> Sábado (1 dia)
+    // Sábado (6) -> Domingo (1 dia)
+    // Demais dias -> Dia seguinte (1 dia)
+    tomorrow.setDate(today.getDate() + 1);
+    
+    return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
+};
 
         const getDayOfWeek = (dateString) => {
             if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
@@ -496,9 +499,15 @@
         };
 
         const updateGenerateButtonState = () => {
-            generateMessagesBtn.disabled = (assistantSelect.value === '' || recipients.length === 0);
-        };
-
+    const hasData = assistantSelect.value !== '' && recipients.length > 0;
+    generateMessagesBtn.disabled = !hasData;
+    
+    // Atualiza também o botão do Instituto
+    const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+    if (generateInstitutoBtn) {
+        generateInstitutoBtn.disabled = !hasData;
+    }
+};
         // ==================== TEMPLATES DE MENSAGEM COMPLETA ====================
         const messageTemplates = {
             long: {
@@ -512,58 +521,74 @@
             }
         };
 
-        const generateMessageText = (data) => {
-            const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
-            const diaDaSemana = getDayOfWeek(data.data);
-            
-            let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
-            if (data.idade !== null) {
-                jovemInfo += ` (${data.idade} anos)`;
-            }
+       const generateMessageText = (data) => {
+    const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
+    const diaDaSemana = getDayOfWeek(data.data);
+    
+    let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
+    if (data.idade !== null) {
+        jovemInfo += ` (${data.idade} anos)`;
+    }
 
-            let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
-            if (data.irmaos && data.irmaos.trim() !== '') {
-                personalInfo += `\n*Irmãos:* ${data.irmaos}`;
-            }
+    let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+    if (data.irmaos && data.irmaos.trim() !== '') {
+        personalInfo += `\n*Irmãos:* ${data.irmaos}`;
+    }
 
-            const schedulingInfo = messageTemplates.long.scheduling_info
-                .replace(/{diaDaSemana}/g, diaDaSemana)
-                .replace(/{data}/g, data.data)
-                .replace(/{horario}/g, data.horario);
-            
-            const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
-            
-            const footer = messageTemplates.long.footer
-                .replace(/{codigo}/g, data.codigo)
-                .replace(/{assistente}/g, assistantDisplayName);
+    const schedulingInfo = messageTemplates.long.scheduling_info
+        .replace(/{diaDaSemana}/g, diaDaSemana)
+        .replace(/{data}/g, data.data)
+        .replace(/{horario}/g, data.horario);
+    
+    const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
+    
+    // Define o rodapé baseado no tipo de mensagem e assistente
+    let footer;
+    if (data.isInstituto) {
+        // Versão Instituto Crescer'Minas
+        footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nInstituto Crescer'Minas`;
+    } else {
+        // Versão Empresa Crescer (padrão)
+        footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`;
+    }
+    
+    footer = footer
+        .replace(/{codigo}/g, data.codigo)
+        .replace(/{assistente}/g, assistantDisplayName);
 
-            return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
-        };
+    return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+};
+        const handleGenerateInstituto = () => {
+    const assistantValue = assistantSelect.value;
+    if (!assistantValue) {
+        alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
+        return;
+    }
 
-        const handleGenerateMessages = () => {
-            const assistantValue = assistantSelect.value;
-            if (!assistantValue) {
-                alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
-                return;
-            }
-
-            const generatedMessages = recipients
-                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-                .map(r => {
-                    const idade = calculateAge(r.data_nascimento);
-                    const codigo = generateCode(r.jovem);
-                    const originalData = { ...r, idade, codigo, assistente: assistantValue, local: locationSelect.value };
-                    return { originalData };
-                });
-            
-            if (generatedMessages.length === 0) {
-                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-                return;
-            }
-            
-            renderMessages(generatedMessages);
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-        };
+    const generatedMessages = recipients
+        .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
+        .map(r => {
+            const idade = calculateAge(r.data_nascimento);
+            const codigo = generateCode(r.jovem);
+            const originalData = { 
+                ...r, 
+                idade, 
+                codigo, 
+                assistente: assistantValue, 
+                local: locationSelect.value,
+                isInstituto: true // ← Flag para indicar versão Instituto
+            };
+            return { originalData };
+        });
+    
+    if (generatedMessages.length === 0) {
+        alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
+        return;
+    }
+    
+    renderMessages(generatedMessages);
+    messagesSection.scrollIntoView({ behavior: 'smooth' });
+};
 
         const renderMessages = (generatedMessages) => {
             messagesList.innerHTML = '';
@@ -1028,6 +1053,11 @@ const updateAppointmentStatus = async (selectElement) => {
         });
         
         // ==================== INICIALIZAÇÃO ====================
+        // Event listener para o botão Instituto
+const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+if (generateInstitutoBtn) {
+    generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
+}
         loadFromLocalStorage();
         renderRecipients();
         updateGenerateButtonState();
