@@ -778,7 +778,16 @@ if (clearArchiveBtn) {
                     return { originalData };
                 });
             
-            const handleGenerateInstituto = () => {
+            if (generatedMessages.length === 0) {
+                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
+                return;
+            }
+            
+            renderMessages(generatedMessages);
+            messagesSection.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        const handleGenerateInstituto = () => {
     const assistantValue = assistantSelect.value;
     if (!assistantValue) {
         alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
@@ -796,7 +805,7 @@ if (clearArchiveBtn) {
                 codigo, 
                 assistente: assistantValue, 
                 local: locationSelect.value,
-                isInstituto: true
+                isInstituto: true // Versão Instituto Crescer'Minas
             };
             return { originalData };
         });
@@ -809,6 +818,13 @@ if (clearArchiveBtn) {
     renderMessages(generatedMessages);
     messagesSection.scrollIntoView({ behavior: 'smooth' });
 };
+
+        const renderMessages = (generatedMessages) => {
+    messagesList.innerHTML = '';
+    if (generatedMessages.length > 0) {
+        messagesSection.classList.remove('hidden');
+        
+        generatedMessages.forEach(msgData => {
             // ARQUIVA AUTOMATICAMENTE
             saveToArchive(msgData.originalData);
             
@@ -843,52 +859,6 @@ if (clearArchiveBtn) {
         messagesSection.classList.add('hidden');
     }
 };
-
-            const generatedMessages = recipients
-                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-                .map(r => {
-                    const idade = calculateAge(r.data_nascimento);
-                    const codigo = generateCode(r.jovem);
-                    const originalData = { 
-                        ...r, 
-                        idade, 
-                        codigo, 
-                        assistente: assistantValue, 
-                        local: locationSelect.value,
-                        isInstituto: true // Versão Instituto Crescer'Minas
-                    };
-                    return { originalData };
-
-                    const renderMessages = (generatedMessages) => {
-    messagesList.innerHTML = '';
-    if (generatedMessages.length > 0) {
-        messagesSection.classList.remove('hidden');
-        
-        generatedMessages.forEach(msgData => {
-            // ARQUIVA AUTOMATICAMENTE
-            saveToArchive(msgData.originalData);
-            
-            const messageItem = document.createElement('div');
-            messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
-            messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-            
-            const messageText = generateMessageText(msgData.originalData);
-            const encodedMessage = encodeURIComponent(messageText);
-
-            messageItem.innerHTML = `
-                <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
-                <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
-                <div class="flex flex-wrap gap-3">
-                    <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
-                        <span>📱 Enviar WhatsApp</span>
-                    </a>
-                    <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                        <span>💾 Salvar na Planilha</span>
-                    </button>
-                </div>`;
-            messagesList.appendChild(messageItem);
-        });
-        
         // Mostra notificação de arquivamento
         const notification = document.createElement('div');
         notification.className = 'p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-4';
