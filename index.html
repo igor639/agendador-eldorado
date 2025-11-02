@@ -57,13 +57,14 @@
         </header>
 
         <!-- TABS DE NAVEGAÇÃO -->
-        <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
-            <nav class="flex space-x-1" aria-label="Tabs">
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="agendar">📝 Agendar</button>
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="gerenciar">📊 Gerenciar</button>
-                <button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="dashboard">📈 Dashboard</button>
-            </nav>
-        </div>
+<div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
+    <nav class="flex space-x-1" aria-label="Tabs">
+        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="agendar">📝 Agendar</button>
+        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="arquivo">🗂️ Arquivo</button>
+        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="gerenciar">📊 Gerenciar</button>
+        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="dashboard">📈 Dashboard</button>
+    </nav>
+</div>
 
         <!-- CONTEÚDO PRINCIPAL -->
         <main id="content-area">
@@ -125,6 +126,29 @@
                 </div>
             </section>
             
+            <!-- ==================== SEÇÃO ARQUIVO ==================== -->
+<section id="arquivo-section" class="tab-content hidden fade-in">
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-xl font-semibold text-slate-900">🗂️ Arquivo de Mensagens</h2>
+                <p class="text-sm text-slate-600 mt-1">Mensagens geradas nas últimas 24 horas</p>
+            </div>
+            <button id="clear-archive-btn" class="py-2 px-4 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition text-sm">
+                🗑️ Limpar Tudo
+            </button>
+        </div>
+        <div id="archive-list" class="space-y-4">
+            <div id="archive-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg">
+                <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                <p class="text-slate-500 font-semibold mt-4">Nenhuma mensagem arquivada</p>
+                <p class="text-sm text-slate-400 mt-1">As mensagens geradas aparecerão aqui automaticamente</p>
+            </div>
+        </div>
+    </div>
+</section>
             <!-- ==================== SEÇÃO GERENCIAR ==================== -->
             <section id="gerenciar-section" class="tab-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
@@ -236,6 +260,8 @@
         let recipients = [];
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         let statusChartInstance = null;
+        const ARCHIVE_STORAGE_KEY = 'agendadorProArquivoMensagens';
+let archivedMessages = [];
 
         // ==================== MAPEAMENTO DE NOMES ====================
         const assistantFullNameMap = {
@@ -253,21 +279,22 @@
         const tabContents = document.querySelectorAll('.tab-content');
         
         const switchTab = (tabName) => {
-            tabBtns.forEach(btn => {
-                btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-                btn.classList.add('text-slate-600', 'hover:text-slate-800');
-            });
-            tabContents.forEach(content => content.classList.add('hidden'));
+    tabBtns.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+        btn.classList.add('text-slate-600', 'hover:text-slate-800');
+    });
+    tabContents.forEach(content => content.classList.add('hidden'));
 
-            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
-            activeBtn.classList.remove('text-slate-600', 'hover:text-slate-800');
-            activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
-            
-            document.getElementById(`${tabName}-section`).classList.remove('hidden');
+    const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+    activeBtn.classList.remove('text-slate-600', 'hover:text-slate-800');
+    activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+    
+    document.getElementById(`${tabName}-section`).classList.remove('hidden');
 
-            if (tabName === 'gerenciar') fetchAppointments();
-            if (tabName === 'dashboard') fetchDashboardData();
-        };
+    if (tabName === 'gerenciar') fetchAppointments();
+    if (tabName === 'dashboard') fetchDashboardData();
+    if (tabName === 'arquivo') renderArchive();
+};
 
         tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
         switchTab('agendar');
@@ -281,12 +308,14 @@
         const getTomorrowDateString = () => {
     const today = new Date();
     const tomorrow = new Date(today);
+    let daysToAdd = 1;
     
-    // Sexta (5) -> Sábado (1 dia)
-    // Sábado (6) -> Domingo (1 dia)
-    // Demais dias -> Dia seguinte (1 dia)
-    tomorrow.setDate(today.getDate() + 1);
+    // Sábado (6) -> Segunda (pula domingo, +2 dias)
+    if (today.getDay() === 6) {
+        daysToAdd = 2;
+    }
     
+    tomorrow.setDate(today.getDate() + daysToAdd);
     return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
 };
 
@@ -346,6 +375,173 @@
                 }
             }
         };
+
+        // ==================== SISTEMA DE ARQUIVO ====================
+const saveToArchive = (messageData) => {
+    const archive = {
+        id: Date.now().toString(),
+        timestamp: new Date().getTime(),
+        data: messageData,
+        messageText: generateMessageText(messageData)
+    };
+    
+    archivedMessages.push(archive);
+    saveArchiveToStorage();
+    renderArchive();
+};
+
+const saveArchiveToStorage = () => {
+    // Remove mensagens com mais de 24h
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+    const now = new Date().getTime();
+    archivedMessages = archivedMessages.filter(msg => (now - msg.timestamp) < ONE_DAY_IN_MS);
+    
+    localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archivedMessages));
+};
+
+const loadArchiveFromStorage = () => {
+    const savedArchive = localStorage.getItem(ARCHIVE_STORAGE_KEY);
+    if (savedArchive) {
+        archivedMessages = JSON.parse(savedArchive);
+        // Limpa mensagens antigas
+        saveArchiveToStorage();
+    }
+};
+
+const renderArchive = () => {
+    const archiveList = document.getElementById('archive-list');
+    const archiveEmptyState = document.getElementById('archive-empty-state');
+    
+    // Remove todos os cards exceto o empty state
+    const cards = archiveList.querySelectorAll('[data-archive-id]');
+    cards.forEach(card => card.remove());
+    
+    if (archivedMessages.length === 0) {
+        archiveEmptyState.style.display = 'block';
+    } else {
+        archiveEmptyState.style.display = 'none';
+        
+        // Ordena por mais recente primeiro
+        archivedMessages.sort((a, b) => b.timestamp - a.timestamp);
+        
+        archivedMessages.forEach(archive => {
+            const archiveCard = document.createElement('div');
+            archiveCard.className = 'p-5 border-2 border-slate-200 rounded-xl bg-gradient-to-br from-white to-slate-50';
+            archiveCard.dataset.archiveId = archive.id;
+            
+            const timeAgo = getTimeAgo(archive.timestamp);
+            const encodedMessage = encodeURIComponent(archive.messageText);
+            
+            archiveCard.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <p class="font-bold text-slate-800">${archive.data.jovem}</p>
+                        <p class="text-xs text-slate-500">📅 ${archive.data.data} às ${archive.data.horario}</p>
+                        <p class="text-xs text-slate-400 mt-1">⏰ Arquivado ${timeAgo}</p>
+                    </div>
+                    <button class="delete-archive-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-archive-id="${archive.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
+                <details class="mb-3">
+                    <summary class="cursor-pointer text-sm text-indigo-600 font-semibold hover:text-indigo-800">Ver Mensagem</summary>
+                    <textarea class="archive-message-text w-full mt-2 p-3 bg-white border border-slate-300 rounded-lg text-sm font-mono" rows="12" data-archive-id="${archive.id}">${archive.messageText}</textarea>
+                </details>
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition text-sm">
+                        📱 Enviar WhatsApp
+                    </a>
+                    <button class="update-archive-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition text-sm" data-archive-id="${archive.id}">
+                        💾 Salvar Edição
+                    </button>
+                    <button class="resend-archive-btn flex items-center gap-2 py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition text-sm" data-archive-id="${archive.id}">
+                        🔄 Reenviar Editada
+                    </button>
+                </div>
+            `;
+            
+            archiveList.appendChild(archiveCard);
+        });
+    }
+};
+
+const getTimeAgo = (timestamp) => {
+    const now = new Date().getTime();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    
+    if (hours > 0) {
+        return `há ${hours}h`;
+    } else if (minutes > 0) {
+        return `há ${minutes}min`;
+    } else {
+        return 'agora';
+    }
+};
+
+const deleteArchivedMessage = (id) => {
+    if (confirm('Deseja realmente excluir esta mensagem do arquivo?')) {
+        archivedMessages = archivedMessages.filter(msg => msg.id !== id);
+        saveArchiveToStorage();
+        renderArchive();
+    }
+};
+
+const updateArchivedMessage = (id) => {
+    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
+    const newText = textarea.value;
+    
+    const archive = archivedMessages.find(msg => msg.id === id);
+    if (archive) {
+        archive.messageText = newText;
+        saveArchiveToStorage();
+        alert('✅ Mensagem atualizada com sucesso!');
+    }
+};
+
+const resendEditedMessage = (id) => {
+    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
+    const editedText = textarea.value;
+    
+    const archive = archivedMessages.find(msg => msg.id === id);
+    if (archive) {
+        const encodedMessage = encodeURIComponent(editedText);
+        const whatsappUrl = `https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+    }
+};
+
+const clearAllArchive = () => {
+    if (confirm('⚠️ Deseja realmente excluir TODAS as mensagens arquivadas? Esta ação não pode ser desfeita.')) {
+        archivedMessages = [];
+        saveArchiveToStorage();
+        renderArchive();
+    }
+};
+
+// Event listeners para arquivo
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.delete-archive-btn')) {
+        const id = e.target.closest('.delete-archive-btn').dataset.archiveId;
+        deleteArchivedMessage(id);
+    }
+    
+    if (e.target.closest('.update-archive-btn')) {
+        const id = e.target.closest('.update-archive-btn').dataset.archiveId;
+        updateArchivedMessage(id);
+    }
+    
+    if (e.target.closest('.resend-archive-btn')) {
+        const id = e.target.closest('.resend-archive-btn').dataset.archiveId;
+        resendEditedMessage(id);
+    }
+});
+
+const clearArchiveBtn = document.getElementById('clear-archive-btn');
+if (clearArchiveBtn) {
+    clearArchiveBtn.addEventListener('click', clearAllArchive);
+}
 
         // ==================== RENDERIZAÇÃO DE DESTINATÁRIOS ====================
         const renderRecipients = () => {
@@ -623,35 +819,172 @@
             messagesSection.scrollIntoView({ behavior: 'smooth' });
         };
 
-        const renderMessages = (generatedMessages) => {
-            messagesList.innerHTML = '';
-            if (generatedMessages.length > 0) {
-                messagesSection.classList.remove('hidden');
-                generatedMessages.forEach(msgData => {
-                    const messageItem = document.createElement('div');
-                    messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
-                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-                    
-                    const messageText = generateMessageText(msgData.originalData);
-                    const encodedMessage = encodeURIComponent(messageText);
+        // ==================== SISTEMA DE ARQUIVO ====================
+const saveToArchive = (messageData) => {
+    const archive = {
+        id: Date.now().toString(),
+        timestamp: new Date().getTime(),
+        data: messageData,
+        messageText: generateMessageText(messageData)
+    };
+    
+    archivedMessages.push(archive);
+    saveArchiveToStorage();
+    renderArchive();
+};
 
-                    messageItem.innerHTML = `
-                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
-                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
-                                <span>📱 Enviar WhatsApp</span>
-                            </a>
-                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                                <span>💾 Salvar na Planilha</span>
-                            </button>
-                        </div>`;
-                    messagesList.appendChild(messageItem);
-                });
-            } else {
-                messagesSection.classList.add('hidden');
-            }
-        };
+const saveArchiveToStorage = () => {
+    // Remove mensagens com mais de 24h
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+    const now = new Date().getTime();
+    archivedMessages = archivedMessages.filter(msg => (now - msg.timestamp) < ONE_DAY_IN_MS);
+    
+    localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archivedMessages));
+};
+
+const loadArchiveFromStorage = () => {
+    const savedArchive = localStorage.getItem(ARCHIVE_STORAGE_KEY);
+    if (savedArchive) {
+        archivedMessages = JSON.parse(savedArchive);
+        // Limpa mensagens antigas
+        saveArchiveToStorage();
+    }
+};
+
+const renderArchive = () => {
+    const archiveList = document.getElementById('archive-list');
+    const archiveEmptyState = document.getElementById('archive-empty-state');
+    
+    // Remove todos os cards exceto o empty state
+    const cards = archiveList.querySelectorAll('[data-archive-id]');
+    cards.forEach(card => card.remove());
+    
+    if (archivedMessages.length === 0) {
+        archiveEmptyState.style.display = 'block';
+    } else {
+        archiveEmptyState.style.display = 'none';
+        
+        // Ordena por mais recente primeiro
+        archivedMessages.sort((a, b) => b.timestamp - a.timestamp);
+        
+        archivedMessages.forEach(archive => {
+            const archiveCard = document.createElement('div');
+            archiveCard.className = 'p-5 border-2 border-slate-200 rounded-xl bg-gradient-to-br from-white to-slate-50';
+            archiveCard.dataset.archiveId = archive.id;
+            
+            const timeAgo = getTimeAgo(archive.timestamp);
+            const encodedMessage = encodeURIComponent(archive.messageText);
+            
+            archiveCard.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <p class="font-bold text-slate-800">${archive.data.jovem}</p>
+                        <p class="text-xs text-slate-500">📅 ${archive.data.data} às ${archive.data.horario}</p>
+                        <p class="text-xs text-slate-400 mt-1">⏰ Arquivado ${timeAgo}</p>
+                    </div>
+                    <button class="delete-archive-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-archive-id="${archive.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
+                <details class="mb-3">
+                    <summary class="cursor-pointer text-sm text-indigo-600 font-semibold hover:text-indigo-800">Ver Mensagem</summary>
+                    <textarea class="archive-message-text w-full mt-2 p-3 bg-white border border-slate-300 rounded-lg text-sm font-mono" rows="12" data-archive-id="${archive.id}">${archive.messageText}</textarea>
+                </details>
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition text-sm">
+                        📱 Enviar WhatsApp
+                    </a>
+                    <button class="update-archive-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition text-sm" data-archive-id="${archive.id}">
+                        💾 Salvar Edição
+                    </button>
+                    <button class="resend-archive-btn flex items-center gap-2 py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition text-sm" data-archive-id="${archive.id}">
+                        🔄 Reenviar Editada
+                    </button>
+                </div>
+            `;
+            
+            archiveList.appendChild(archiveCard);
+        });
+    }
+};
+
+const getTimeAgo = (timestamp) => {
+    const now = new Date().getTime();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    
+    if (hours > 0) {
+        return `há ${hours}h`;
+    } else if (minutes > 0) {
+        return `há ${minutes}min`;
+    } else {
+        return 'agora';
+    }
+};
+
+const deleteArchivedMessage = (id) => {
+    if (confirm('Deseja realmente excluir esta mensagem do arquivo?')) {
+        archivedMessages = archivedMessages.filter(msg => msg.id !== id);
+        saveArchiveToStorage();
+        renderArchive();
+    }
+};
+
+const updateArchivedMessage = (id) => {
+    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
+    const newText = textarea.value;
+    
+    const archive = archivedMessages.find(msg => msg.id === id);
+    if (archive) {
+        archive.messageText = newText;
+        saveArchiveToStorage();
+        alert('✅ Mensagem atualizada com sucesso!');
+    }
+};
+
+const resendEditedMessage = (id) => {
+    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
+    const editedText = textarea.value;
+    
+    const archive = archivedMessages.find(msg => msg.id === id);
+    if (archive) {
+        const encodedMessage = encodeURIComponent(editedText);
+        const whatsappUrl = `https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+    }
+};
+
+const clearAllArchive = () => {
+    if (confirm('⚠️ Deseja realmente excluir TODAS as mensagens arquivadas? Esta ação não pode ser desfeita.')) {
+        archivedMessages = [];
+        saveArchiveToStorage();
+        renderArchive();
+    }
+};
+
+// Event listeners para arquivo
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.delete-archive-btn')) {
+        const id = e.target.closest('.delete-archive-btn').dataset.archiveId;
+        deleteArchivedMessage(id);
+    }
+    
+    if (e.target.closest('.update-archive-btn')) {
+        const id = e.target.closest('.update-archive-btn').dataset.archiveId;
+        updateArchivedMessage(id);
+    }
+    
+    if (e.target.closest('.resend-archive-btn')) {
+        const id = e.target.closest('.resend-archive-btn').dataset.archiveId;
+        resendEditedMessage(id);
+    }
+});
+
+const clearArchiveBtn = document.getElementById('clear-archive-btn');
+if (clearArchiveBtn) {
+    clearArchiveBtn.addEventListener('click', clearAllArchive);
+}
 
         const handleSaveToSheet = async (button) => {
             const messageItem = button.closest('[data-recipient-data]');
@@ -1087,6 +1420,7 @@ Após 17h, cadastro retorna à lista de espera.
         
         // ==================== INICIALIZAÇÃO ====================
         loadFromLocalStorage();
+        loadArchiveFromStorage(); // ← ADICIONE ESTA LINHA
         renderRecipients();
         updateGenerateButtonState();
     });
