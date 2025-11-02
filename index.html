@@ -272,61 +272,58 @@ if (tabName === 'dashboard') fetchDashboardData();
 tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 switchTab('agendar');
 
- // ==================== FUNÇÕES DE DATA ====================
-    const getTodayDateString = () => {
-        const today = new Date();
-        return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-    };
+// ==================== FUNÇÕES DE DATA ====================
+const getTodayDateString = () => {
+const today = new Date();
+return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+};
 
-    const getTomorrowDateString = () => {
+const getTomorrowDateString = () => {
 const today = new Date();
 const tomorrow = new Date(today);
-let daysToAdd = 1;
 
-// Sábado (6) -> Segunda (pula domingo, +2 dias)
-if (today.getDay() === 6) {
-    daysToAdd = 2;
-}
+// Sexta (5) -> Sábado (1 dia)
+// Sábado (6) -> Domingo (1 dia)
+// Demais dias -> Dia seguinte (1 dia)
+tomorrow.setDate(today.getDate() + 1);
 
-tomorrow.setDate(today.getDate() + daysToAdd);
 return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
 };
 
-    const getDayOfWeek = (dateString) => {
-        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
-        const parts = dateString.split('/');
-        const year = parseInt(parts[2], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const day = parseInt(parts[0], 10);
-        const date = new Date(year, month, day, 12);
-        
-        if (isNaN(date.getTime())) return '';
-        const options = { weekday: 'long' };
-        let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
-        return dayName.charAt(0).toUpperCase() + dayName.slice(1);
-    };
+const getDayOfWeek = (dateString) => {
+if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
+const parts = dateString.split('/');
+const year = parseInt(parts[2], 10);
+const month = parseInt(parts[1], 10) - 1;
+const day = parseInt(parts[0], 10);
+const date = new Date(year, month, day, 12);
 
-    const calculateAge = (birthDateString) => {
-        if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
-        const parts = birthDateString.split('/');
-        const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
-        if (isNaN(birthDate.getTime())) return null;
-        
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    };
+if (isNaN(date.getTime())) return '';
+const options = { weekday: 'long' };
+let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
+return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+};
 
-    const generateCode = (jovem) => {
-        const words = jovem.split(' ').filter(w => w);
-        let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
-        return initials + Math.floor(100 + Math.random() * 900);
-    };
+const calculateAge = (birthDateString) => {
+if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
+const parts = birthDateString.split('/');
+const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+if (isNaN(birthDate.getTime())) return null;
 
+const today = new Date();
+let age = today.getFullYear() - birthDate.getFullYear();
+const m = today.getMonth() - birthDate.getMonth();
+if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+age--;
+}
+return age;
+};
+
+const generateCode = (jovem) => {
+const words = jovem.split(' ').filter(w => w);
+let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+return initials + Math.floor(100 + Math.random() * 900);
+};
 
 // ==================== LOCAL STORAGE ====================
 const saveToLocalStorage = () => {
