@@ -755,76 +755,47 @@ if (clearArchiveBtn) {
     return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
 };
                 // ==================== GERAÇÃO DE MENSAGENS ====================
-        const handleGenerateMessages = () => {
-            const assistantValue = assistantSelect.value;
-            if (!assistantValue) {
-                alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
-                return;
-            }
+    const generateMessageText = (data) => {
+        const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
+        const diaDaSemana = getDayOfWeek(data.data);
+        const jovemInfo = `*Jovem Convocado:* ${data.jovem}${data.idade ? ` (${data.idade} anos)` : ''}`;
+        const personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+        const schedulingInfo = `*Dados do Agendamento:*\n\n*Data:* ${diaDaSemana}, ${data.data}\n*Horário:* ${data.horario} (chegar 10min antes)`;
+        const locationText = `*Local:* ${data.local === 'Eldorado' ? 'Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem. (Em frente a Caixa Econômica Federal)' : 'Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte. (Em frente a Casa&Video)'}`;
+        const footerText = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* ${data.codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável.\n\nAtenciosamente,\n\n*${assistantDisplayName}*\n${data.isInstituto ? 'Instituto Crescer\'Minas' : 'Coordenação | Empresa Crescer'}`;
+        return [`*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`, personalInfo, schedulingInfo, locationText, footerText].join('\n---\n');
+    };
 
-            const generatedMessages = recipients
-                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-                .map(r => {
-                    const idade = calculateAge(r.data_nascimento);
-                    const codigo = generateCode(r.jovem);
-                    const originalData = { 
-                        ...r, 
-                        idade, 
-                        codigo, 
-                        assistente: assistantValue, 
-                        local: locationSelect.value,
-                        isInstituto: false // Versão Empresa Crescer
-                    };
-                    return { originalData };
-                });
-            
-            if (generatedMessages.length === 0) {
-                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-                return;
-            }
-            
-            renderMessages(generatedMessages);
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        const handleGenerateInstituto = () => {
-    const assistantValue = assistantSelect.value;
-    if (!assistantValue) {
-        alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
-        return;
-    }
-
-    const generatedMessages = recipients
-        .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-        .map(r => {
-            const idade = calculateAge(r.data_nascimento);
-            const codigo = generateCode(r.jovem);
-            const originalData = { 
-                ...r, 
-                idade, 
-                codigo, 
-                assistente: assistantValue, 
-                local: locationSelect.value,
-                isInstituto: true // Versão Instituto Crescer'Minas
-            };
+    const renderMessages = (generatedMessages) => {
+        messagesList.innerHTML = '';
+        if (generatedMessages.length > 0) {
+            messagesSection.classList.remove('hidden');
+            generatedMessages.forEach(msgData => {
+                saveToArchive(msgData.originalData);
+                const messageItem = document.createElement('div');
+                messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
+                messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
+                const messageText = generateMessageText(msgData.originalData);
+                const encodedMessage = encodeURIComponent(messageText);
+                messageItem.innerHTML = `<p class="font-semibold mb-4">Para: <span class="font-normal">${msgData.originalData.jovem}</span></p><pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm mb-4">${messageText}</pre><div class="flex gap-3"><a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="py-2 px-4 bg-green-500 text-white rounded-lg">Enviar WhatsApp</a><button class="save-btn py-2 px-4 bg-blue-500 text-white rounded-lg">Salvar Planilha</button></div>`;
+                messagesList.appendChild(messageItem);
+            });
+        } else {
+            messagesSection.classList.add('hidden');
+        }
+    };
+    
+    const generateMessages = (isInstituto = false) => {
+        const assistantValue = assistantSelect.value;
+        if (!assistantValue) { alert('⚠️ Selecione seu nome.'); return; }
+        const generated = recipients.filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel).map(r => {
+            const originalData = { ...r, idade: calculateAge(r.data_nascimento), codigo: generateCode(r.jovem), assistente: assistantValue, local: locationSelect.value, isInstituto };
             return { originalData };
         });
-    
-    if (generatedMessages.length === 0) {
-        alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-        return;
-    }
-    
-    renderMessages(generatedMessages);
-    messagesSection.scrollIntoView({ behavior: 'smooth' });
-};
-
-        const renderMessages = (generatedMessages) => {
-    messagesList.innerHTML = '';
-    if (generatedMessages.length > 0) {
-        messagesSection.classList.remove('hidden');
-        
-        generatedMessages.forEach(msgData => {
+        if (generated.length === 0) { alert('⚠️ Preencha os campos obrigatórios.'); return; }
+        renderMessages(generated);
+        messagesSection.scrollIntoView({ behavior: 'smooth' });
+    };
             // ARQUIVA AUTOMATICAMENTE
             saveToArchive(msgData.originalData);
             
