@@ -49,7 +49,7 @@
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 antialiased min-h-screen">
 
     <div class="container mx-auto p-4 md:p-6 max-w-6xl">
-
+        
         <!-- HEADER -->
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">📋 Agendador PRO</h1>
@@ -67,10 +67,10 @@
 
         <!-- CONTEÚDO PRINCIPAL -->
         <main id="content-area">
-
+            
             <!-- ==================== SEÇÃO AGENDAR ==================== -->
             <section id="agendar-section" class="tab-content space-y-6 fade-in">
-
+                
                 <!-- SELEÇÃO DE ASSISTENTE E LOCAL -->
                 <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -124,7 +124,7 @@
                     <div id="messages-list" class="space-y-4"></div>
                 </div>
             </section>
-
+            
             <!-- ==================== SEÇÃO GERENCIAR ==================== -->
             <section id="gerenciar-section" class="tab-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
@@ -204,7 +204,7 @@
         <div id="quick-message-result" class="mt-4 hidden"></div>
     </div>
 </div>
-
+    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         // ==================== CONFIGURAÇÃO ====================
@@ -223,7 +223,7 @@
         const managementList = document.getElementById('management-list');
         const loader = document.getElementById('loader');
         const managementEmptyState = document.getElementById('management-empty-state');
-
+        
         // Modal Mensagem Rápida
         const quickMessageBtn = document.getElementById('quick-message-btn');
         const quickMessageModal = document.getElementById('quick-message-modal');
@@ -251,7 +251,7 @@
         // ==================== GERENCIAMENTO DE TABS ====================
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-
+        
         const switchTab = (tabName) => {
             tabBtns.forEach(btn => {
                 btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
@@ -262,7 +262,7 @@
             const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
             activeBtn.classList.remove('text-slate-600', 'hover:text-slate-800');
             activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
-
+            
             document.getElementById(`${tabName}-section`).classList.remove('hidden');
 
             if (tabName === 'gerenciar') fetchAppointments();
@@ -281,12 +281,12 @@
         const getTomorrowDateString = () => {
     const today = new Date();
     const tomorrow = new Date(today);
-
+    
     // Sexta (5) -> Sábado (1 dia)
     // Sábado (6) -> Domingo (1 dia)
     // Demais dias -> Dia seguinte (1 dia)
     tomorrow.setDate(today.getDate() + 1);
-
+    
     return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
 };
 
@@ -297,7 +297,7 @@
             const month = parseInt(parts[1], 10) - 1;
             const day = parseInt(parts[0], 10);
             const date = new Date(year, month, day, 12);
-
+            
             if (isNaN(date.getTime())) return '';
             const options = { weekday: 'long' };
             let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
@@ -309,7 +309,7 @@
             const parts = birthDateString.split('/');
             const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
             if (isNaN(birthDate.getTime())) return null;
-
+            
             const today = new Date();
             let age = today.getFullYear() - birthDate.getFullYear();
             const m = today.getMonth() - birthDate.getMonth();
@@ -352,7 +352,7 @@
             // Remove tudo exceto o empty-state
             const forms = recipientsList.querySelectorAll('[data-id]');
             forms.forEach(form => form.remove());
-
+            
             if (recipients.length === 0) {
                 emptyState.style.display = 'block';
             } else {
@@ -415,7 +415,7 @@
         // ==================== MÁSCARAS DE ENTRADA ====================
         recipientsList.addEventListener('input', (e) => {
             if (!e.target.dataset.field) return;
-
+            
             const input = e.target;
             let value = input.value;
             const field = input.dataset.field;
@@ -445,7 +445,7 @@
                 if (value.length > 5) value = value.slice(0, 5);
                 input.value = value;
             }
-
+            
             handleUpdateRecipient(id, field, input.value);
         });
 
@@ -466,7 +466,7 @@
             renderRecipients();
             saveToLocalStorage();
         };
-
+        
         const handleAddPuxada = () => {
             recipients.push({ 
                 id: Date.now().toString(), 
@@ -489,7 +489,7 @@
             renderRecipients();
             saveToLocalStorage();
         };
-
+        
         const handleUpdateRecipient = (id, field, value) => {
             const recipient = recipients.find(r => r.id === id);
             if (recipient) {
@@ -501,7 +501,7 @@
         const updateGenerateButtonState = () => {
     const hasData = assistantSelect.value !== '' && recipients.length > 0;
     generateMessagesBtn.disabled = !hasData;
-
+    
     // Atualiza também o botão do Instituto
     const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
     if (generateInstitutoBtn) {
@@ -524,7 +524,7 @@
        const generateMessageText = (data) => {
     const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
     const diaDaSemana = getDayOfWeek(data.data);
-
+    
     let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
     if (data.idade !== null) {
         jovemInfo += ` (${data.idade} anos)`;
@@ -539,9 +539,9 @@
         .replace(/{diaDaSemana}/g, diaDaSemana)
         .replace(/{data}/g, data.data)
         .replace(/{horario}/g, data.horario);
-
+    
     const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
-
+    
     // Define o rodapé baseado no tipo de mensagem e assistente
     let footer;
     if (data.isInstituto) {
@@ -551,7 +551,7 @@
         // Versão Empresa Crescer (padrão)
         footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`;
     }
-
+    
     footer = footer
         .replace(/{codigo}/g, data.codigo)
         .replace(/{assistente}/g, assistantDisplayName);
@@ -592,41 +592,12 @@
         };
 
         const handleGenerateInstituto = () => {
-    const assistantValue = assistantSelect.value;
-    if (!assistantValue) {
-        alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
-        return;
-    }
             const assistantValue = assistantSelect.value;
             if (!assistantValue) {
                 alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
                 return;
             }
 
-    const generatedMessages = recipients
-        .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-        .map(r => {
-            const idade = calculateAge(r.data_nascimento);
-            const codigo = generateCode(r.jovem);
-            const originalData = { 
-                ...r, 
-                idade, 
-                codigo, 
-                assistente: assistantValue, 
-                local: locationSelect.value,
-                isInstituto: true // ← Flag para indicar versão Instituto
-            };
-            return { originalData };
-        });
-    
-    if (generatedMessages.length === 0) {
-        alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-        return;
-    }
-    
-    renderMessages(generatedMessages);
-    messagesSection.scrollIntoView({ behavior: 'smooth' });
-};
             const generatedMessages = recipients
                 .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
                 .map(r => {
@@ -660,7 +631,7 @@
                     const messageItem = document.createElement('div');
                     messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
                     messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-
+                    
                     const messageText = generateMessageText(msgData.originalData);
                     const encodedMessage = encodeURIComponent(messageText);
 
@@ -685,7 +656,7 @@
         const handleSaveToSheet = async (button) => {
             const messageItem = button.closest('[data-recipient-data]');
             const data = JSON.parse(messageItem.dataset.recipientData);
-
+            
             button.disabled = true;
             button.innerHTML = '<span>⏳ Salvando...</span>';
 
@@ -698,7 +669,7 @@
                     body: JSON.stringify(data)
                 });
                 const result = await response.json();
-
+                
                 if (result.status === 'success') {
                     button.innerHTML = '<span>✅ Salvo com Sucesso!</span>';
                     button.style.backgroundColor = '#22c55e';
@@ -733,7 +704,7 @@ Horário: 9h às 17h (dias úteis)
 Informações apenas por contato telefônico.
 
 Att, Equipe de Cadastramento`,
-
+            
             variacao2: (jovem) => `CRESCER | Departamento de Orientação Profissional
 
 Ref.: ${jovem}
@@ -752,7 +723,7 @@ Horário: 9h às 17h
 Não responder por mensagem - apenas ligação.
 
 Equipe de Cadastramento`,
-
+            
             followup: (jovem) => `⚠️ CRESCER - Lembrete Urgente
 
 Ref.: ${jovem}
@@ -816,7 +787,7 @@ Após 17h, cadastro retorna à lista de espera.
         // ==================== GERENCIAMENTO DE AGENDAMENTOS ====================
         const fetchAppointments = async () => {
             const assistantName = assistantSelect.value;
-
+            
             if (!assistantName) {
                 managementList.innerHTML = '<p class="text-center text-slate-500 py-8">⚠️ Selecione seu nome para ver os agendamentos de hoje.</p>';
                 return;
@@ -829,7 +800,7 @@ Após 17h, cadastro retorna à lista de espera.
 
             const today = new Date();
             const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
+            
             const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
 
             try {
@@ -851,7 +822,7 @@ Após 17h, cadastro retorna à lista de espera.
 
         const renderAppointments = (appointments) => {
             managementList.innerHTML = '';
-
+            
             if (appointments.length === 0) {
                 managementEmptyState.style.display = 'block';
                 managementList.appendChild(managementEmptyState);
@@ -893,24 +864,6 @@ Após 17h, cadastro retorna à lista de espera.
             });
         };
 
-const updateAppointmentStatus = async (selectElement) => {
-    const rowId = selectElement.dataset.rowId;
-    const sheetName = selectElement.dataset.sheetName;
-    const newStatus = selectElement.value;
-    
-    console.log('🔄 Tentando atualizar status:', { rowId, sheetName, newStatus });
-    
-    selectElement.disabled = true;
-    const originalBg = selectElement.style.backgroundColor;
-    selectElement.style.backgroundColor = '#fef3c7';
-
-    try {
-        const payload = {
-            action: 'updateStatus',
-            rowId: rowId,
-            sheetName: sheetName,
-            newStatus: newStatus
-        };
         const updateAppointmentStatus = async (selectElement) => {
             const rowId = selectElement.dataset.rowId;
             const sheetName = selectElement.dataset.sheetName;
@@ -922,7 +875,6 @@ const updateAppointmentStatus = async (selectElement) => {
             const originalBg = selectElement.style.backgroundColor;
             selectElement.style.backgroundColor = '#fef3c7';
 
-        console.log('📤 Enviando payload:', payload);
             try {
                 const payload = {
                     action: 'updateStatus',
@@ -931,36 +883,8 @@ const updateAppointmentStatus = async (selectElement) => {
                     newStatus: newStatus
                 };
 
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // ← IMPORTANTE: Adiciona no-cors
-            cache: 'no-cache',
-            redirect: 'follow',
-            body: JSON.stringify(payload)
-        });
-        
-        console.log('📥 Resposta recebida:', response);
                 console.log('📤 Enviando payload:', payload);
 
-        // Com no-cors, não conseguimos ler a resposta, então assumimos sucesso
-        // se não houve erro de rede
-        const card = document.getElementById(`appt-${rowId}`);
-        card.classList.add('status-updated');
-        setTimeout(() => card.classList.remove('status-updated'), 1500);
-        
-        console.log('✅ Status atualizado com sucesso');
-        
-    } catch (error) {
-        console.error('❌ Erro ao atualizar status:', error);
-        alert(`❌ Erro ao atualizar status: ${error.message}`);
-        selectElement.style.backgroundColor = '#fee2e2';
-    } finally {
-        selectElement.disabled = false;
-        setTimeout(() => { 
-            selectElement.style.backgroundColor = originalBg; 
-        }, 1500);
-    }
-};
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -998,7 +922,7 @@ const updateAppointmentStatus = async (selectElement) => {
         // ==================== DASHBOARD ====================
         const fetchDashboardData = async () => {
             const assistantName = assistantSelect.value;
-
+            
             if (!assistantName) {
                 document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-slate-500 p-4">⚠️ Selecione seu nome para ver o dashboard.</p>';
                 if (statusChartInstance) {
@@ -1026,7 +950,6 @@ const updateAppointmentStatus = async (selectElement) => {
         };
 
         const renderDashboard = (data) => {
-            // AGRUPAMENTO CONFORME SOLICITADO
             const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
             const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
             const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
@@ -1035,7 +958,6 @@ const updateAppointmentStatus = async (selectElement) => {
             const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
             const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
 
-            // Atualiza estatísticas
             document.getElementById('dashboard-stats').innerHTML = `
                 <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
                     <span class="font-medium">📊 Total:</span>
@@ -1071,7 +993,6 @@ const updateAppointmentStatus = async (selectElement) => {
                 </div>
             `;
 
-            // Gráfico
             const ctx = document.getElementById('statusChart');
             if (statusChartInstance) {
                 statusChartInstance.destroy();
@@ -1092,13 +1013,6 @@ const updateAppointmentStatus = async (selectElement) => {
                     datasets: [{
                         data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
                         backgroundColor: [
-                            '#22c55e', // Verde - Confirmadas
-                            '#ef4444', // Vermelho - Canceladas
-                            '#f59e0b', // Âmbar - Puxadas
-                            '#3b82f6', // Azul - Reagendar
-                            '#a855f7', // Roxo - Matrícula
-                            '#64748b', // Cinza escuro - Confirmou Não Veio
-                            '#cbd5e1'  // Cinza claro - Pendentes
                             '#22c55e',
                             '#ef4444',
                             '#f59e0b',
@@ -1141,15 +1055,15 @@ const updateAppointmentStatus = async (selectElement) => {
         // ==================== EVENT LISTENERS ====================
         addRecipientBtn.addEventListener('click', handleAddRecipient);
         addPuxadaBtn.addEventListener('click', handleAddPuxada);
-
+        
         recipientsList.addEventListener('click', (e) => {
             if (e.target.closest('.remove-recipient-btn')) {
                 handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
             }
         });
-
+        
         generateMessagesBtn.addEventListener('click', handleGenerateMessages);
-
+        
         const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
         if (generateInstitutoBtn) {
             generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
@@ -1160,7 +1074,7 @@ const updateAppointmentStatus = async (selectElement) => {
                 handleSaveToSheet(e.target.closest('.save-btn'));
             }
         });
-
+        
         assistantSelect.addEventListener('change', () => {
             updateGenerateButtonState();
             if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
@@ -1170,13 +1084,8 @@ const updateAppointmentStatus = async (selectElement) => {
                 fetchDashboardData();
             }
         });
-
+        
         // ==================== INICIALIZAÇÃO ====================
-        // Event listener para o botão Instituto
-const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
-if (generateInstitutoBtn) {
-    generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
-}
         loadFromLocalStorage();
         renderRecipients();
         updateGenerateButtonState();
