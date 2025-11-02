@@ -778,16 +778,7 @@ if (clearArchiveBtn) {
                     return { originalData };
                 });
             
-            if (generatedMessages.length === 0) {
-                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-                return;
-            }
-            
-            renderMessages(generatedMessages);
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        const handleGenerateInstituto = () => {
+            const handleGenerateInstituto = () => {
     const assistantValue = assistantSelect.value;
     if (!assistantValue) {
         alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
@@ -805,7 +796,7 @@ if (clearArchiveBtn) {
                 codigo, 
                 assistente: assistantValue, 
                 local: locationSelect.value,
-                isInstituto: true // Versão Instituto Crescer'Minas
+                isInstituto: true
             };
             return { originalData };
         });
@@ -818,13 +809,6 @@ if (clearArchiveBtn) {
     renderMessages(generatedMessages);
     messagesSection.scrollIntoView({ behavior: 'smooth' });
 };
-
-        const renderMessages = (generatedMessages) => {
-    messagesList.innerHTML = '';
-    if (generatedMessages.length > 0) {
-        messagesSection.classList.remove('hidden');
-        
-        generatedMessages.forEach(msgData => {
             // ARQUIVA AUTOMATICAMENTE
             saveToArchive(msgData.originalData);
             
