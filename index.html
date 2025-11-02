@@ -1,758 +1,565 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendador PRO - Unidade Eldorado</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-        }
-        .fade-in { 
-            animation: fadeIn 0.3s ease-out forwards; 
-        }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(-10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        .loader { 
-            border: 4px solid #f3f3f3; 
-            border-top: 4px solid #4f46e5; 
-            border-radius: 50%; 
-            width: 40px; 
-            height: 40px; 
-            animation: spin 1s linear infinite; 
-        }
-        @keyframes spin { 
-            0% { transform: rotate(0deg); } 
-            100% { transform: rotate(360deg); } 
-        }
-        .status-select { 
-            -webkit-appearance: none; 
-            -moz-appearance: none; 
-            appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
-            background-repeat: no-repeat; 
-            background-position: right 0.5rem center; 
-            background-size: 1.5em 1.5em; 
-            padding-right: 2.5rem; 
-        }
-        .status-updated { 
-            transition: background-color 0.5s; 
-            background-color: #dcfce7 !important; 
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendador PRO - Unidade Eldorado</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { 
+font-family: 'Inter', sans-serif; 
+}
+.fade-in { 
+animation: fadeIn 0.3s ease-out forwards; 
+}
+@keyframes fadeIn { 
+from { opacity: 0; transform: translateY(-10px); } 
+to { opacity: 1; transform: translateY(0); } 
+}
+.loader { 
+border: 4px solid #f3f3f3; 
+border-top: 4px solid #4f46e5; 
+border-radius: 50%; 
+width: 40px; 
+height: 40px; 
+animation: spin 1s linear infinite; 
+}
+@keyframes spin { 
+0% { transform: rotate(0deg); } 
+100% { transform: rotate(360deg); } 
+}
+.status-select { 
+-webkit-appearance: none; 
+-moz-appearance: none; 
+appearance: none; 
+background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+background-repeat: no-repeat; 
+background-position: right 0.5rem center; 
+background-size: 1.5em 1.5em; 
+padding-right: 2.5rem; 
+}
+.status-updated { 
+transition: background-color 0.5s; 
+background-color: #dcfce7 !important; 
+}
+</style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 antialiased min-h-screen">
 
-    <div class="container mx-auto p-4 md:p-6 max-w-6xl">
-        
-        <!-- HEADER -->
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">📋 Agendador PRO</h1>
-            <p class="text-slate-600 mt-2">Unidade Eldorado - Central de Comando</p>
-        </header>
+<div class="container mx-auto p-4 md:p-6 max-w-6xl">
 
-        <!-- TABS DE NAVEGAÇÃO -->
+<!-- HEADER -->
+<header class="text-center mb-8">
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">📋 Agendador PRO</h1>
+<p class="text-slate-600 mt-2">Unidade Eldorado - Central de Comando</p>
+</header>
+
+<!-- TABS DE NAVEGAÇÃO -->
 <div class="mb-8 bg-white p-1 rounded-xl shadow-sm">
-    <nav class="flex space-x-1" aria-label="Tabs">
-        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="agendar">📝 Agendar</button>
-        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="arquivo">🗂️ Arquivo</button>
-        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="gerenciar">📊 Gerenciar</button>
-        <button class="tab-btn flex-1 whitespace-nowrap py-3 px-2 font-semibold text-xs sm:text-sm rounded-lg transition-all" data-tab="dashboard">📈 Dashboard</button>
-    </nav>
+<nav class="flex space-x-1" aria-label="Tabs">
+<button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="agendar">📝 Agendar</button>
+<button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="gerenciar">📊 Gerenciar</button>
+<button class="tab-btn flex-1 whitespace-nowrap py-3 px-4 font-semibold text-sm rounded-lg transition-all" data-tab="dashboard">📈 Dashboard</button>
+</nav>
 </div>
 
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main id="content-area">
-            
-            <!-- ==================== SEÇÃO AGENDAR ==================== -->
-            <section id="agendar-section" class="tab-content space-y-6 fade-in">
-                
-                <!-- SELEÇÃO DE ASSISTENTE E LOCAL -->
-                <div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="assistant-name" class="block text-sm font-semibold text-slate-700 mb-2">👤 Seu Nome</label>
-                        <select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-    <option value="">-- Escolha seu nome --</option>
-    <option value="DIANA">Diana</option>
-    <option value="IGOR">Igor</option>
-    <option value="WELKER">Welker</option>
-    <option value="TREINEE">Treinee</option>
-    <option value="CAMILE">Camile</option>
-    <option value="ISIS">Isis</option>
-    <option value="TATIANA">Tatiana</option>
+<!-- CONTEÚDO PRINCIPAL -->
+<main id="content-area">
+
+<!-- ==================== SEÇÃO AGENDAR ==================== -->
+<section id="agendar-section" class="tab-content space-y-6 fade-in">
+
+<!-- SELEÇÃO DE ASSISTENTE E LOCAL -->
+<div class="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label for="assistant-name" class="block text-sm font-semibold text-slate-700 mb-2">👤 Seu Nome</label>
+<select id="assistant-name" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+<option value="">-- Escolha seu nome --</option>
+<option value="DIANA">Diana</option>
+<option value="IGOR">Igor</option>
+<option value="WELKER">Welker</option>
+<option value="TREINEE">Treinee</option>
+<option value="CAMILE">Camile</option>
+<option value="ISIS">Isis</option>
+<option value="TATIANA">Tatiana</option>
 </select>
-                    </div>
-                    <div>
-                        <label for="location-select" class="block text-sm font-semibold text-slate-700 mb-2">📍 Local</label>
-                        <select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                            <option value="Eldorado" selected>Eldorado</option>
-                            <option value="Centro">Centro</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- LISTA DE DESTINATÁRIOS -->
-                <div class="bg-white p-6 rounded-2xl shadow-lg">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <h2 class="text-xl font-semibold text-slate-900">👥 Destinatários</h2>
-                        <div class="flex gap-2 w-full sm:w-auto">
-                            <button id="add-recipient-btn" class="flex-1 sm:flex-none py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition">+ Amanhã</button>
-                            <button id="add-puxada-btn" class="flex-1 sm:flex-none py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 transition">+ Hoje (Puxada)</button>
-                        </div>
-                    </div>
-                    <div id="recipients-list" class="space-y-4">
-                        <div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
-                            <p class="text-slate-500">Nenhum destinatário adicionado.</p>
-                        </div>
-                    </div>
-                </div>
-
-               <!-- BOTÕES DE AÇÃO -->
-<div class="flex flex-col sm:flex-row justify-end gap-3">
-    <button id="quick-message-btn" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition">📨 Mensagem Rápida</button>
-    <button id="generate-messages-btn" class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>📝 Mensagem Empresa Crescer</button>
-    <button id="generate-instituto-btn" class="py-2 px-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>🏢 Mensagem Instituto Crescer'Minas</button>
+</div>
+<div>
+<label for="location-select" class="block text-sm font-semibold text-slate-700 mb-2">📍 Local</label>
+<select id="location-select" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+<option value="Eldorado" selected>Eldorado</option>
+<option value="Centro">Centro</option>
+</select>
+</div>
 </div>
 
-                <!-- MENSAGENS GERADAS -->
-                <div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-4">💬 Mensagens Geradas</h2>
-                    <div id="messages-list" class="space-y-4"></div>
-                </div>
-            </section>
-            
-            <!-- ==================== SEÇÃO ARQUIVO ==================== -->
-<section id="arquivo-section" class="tab-content hidden fade-in">
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h2 class="text-xl font-semibold text-slate-900">🗂️ Arquivo de Mensagens</h2>
-                <p class="text-sm text-slate-600 mt-1">Mensagens geradas nas últimas 24 horas</p>
-            </div>
-            <button id="clear-archive-btn" class="py-2 px-4 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition text-sm">
-                🗑️ Limpar Tudo
-            </button>
-        </div>
-        <div id="archive-list" class="space-y-4">
-            <div id="archive-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg">
-                <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                <p class="text-slate-500 font-semibold mt-4">Nenhuma mensagem arquivada</p>
-                <p class="text-sm text-slate-400 mt-1">As mensagens geradas aparecerão aqui automaticamente</p>
-            </div>
-        </div>
-    </div>
-</section>
-            <!-- ==================== SEÇÃO GERENCIAR ==================== -->
-            <section id="gerenciar-section" class="tab-content hidden fade-in">
-                <div class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-4">📋 Agendamentos de Hoje</h2>
-                    <p class="text-sm text-slate-600 mb-4">Selecione seu nome acima para ver e gerenciar os agendamentos do dia.</p>
-                    <div id="management-list" class="space-y-3">
-                        <div id="loader" class="text-center py-12 hidden">
-                            <div class="loader mx-auto"></div>
-                            <p class="mt-4 text-slate-500">Buscando dados...</p>
-                        </div>
-                        <div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
-                            <p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+<!-- LISTA DE DESTINATÁRIOS -->
+<div class="bg-white p-6 rounded-2xl shadow-lg">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+<h2 class="text-xl font-semibold text-slate-900">👥 Destinatários</h2>
+<div class="flex gap-2 w-full sm:w-auto">
+<button id="add-recipient-btn" class="flex-1 sm:flex-none py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition">+ Amanhã</button>
+<button id="add-puxada-btn" class="flex-1 sm:flex-none py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 transition">+ Hoje (Puxada)</button>
+</div>
+</div>
+<div id="recipients-list" class="space-y-4">
+<div id="empty-state" class="text-center py-8 border-2 border-dashed border-slate-200 rounded-lg">
+<p class="text-slate-500">Nenhum destinatário adicionado.</p>
+</div>
+</div>
+</div>
 
-            <!-- ==================== SEÇÃO DASHBOARD ==================== -->
-            <section id="dashboard-section" class="tab-content hidden fade-in">
-                <div class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-slate-900 mb-6">📈 Seu Desempenho Hoje</h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 p-4 rounded-xl">
-                            <h3 class="text-lg font-semibold text-slate-700 mb-4">Status dos Agendamentos</h3>
-                            <canvas id="statusChart" width="400" height="300"></canvas>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl">
-                            <h3 class="text-lg font-semibold text-slate-700 mb-4">Resumo Numérico</h3>
-                            <div id="dashboard-stats" class="space-y-3 mt-4">
-                                <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                                    <span class="font-medium">Total de Agendamentos:</span>
-                                    <span class="font-bold text-lg">0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+<!-- BOTÕES DE AÇÃO -->
+<div class="flex flex-col sm:flex-row justify-end gap-3">
+<button id="quick-message-btn" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition">📨 Mensagem Rápida</button>
+<button id="generate-messages-btn" class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>📝 Mensagem Empresa Crescer</button>
+<button id="generate-instituto-btn" class="py-2 px-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>🏢 Mensagem Instituto Crescer'Minas</button>
+</div>
+
+<!-- MENSAGENS GERADAS -->
+<div id="messages-section" class="bg-white p-6 rounded-2xl shadow-lg hidden">
+<h2 class="text-xl font-semibold text-slate-900 mb-4">💬 Mensagens Geradas</h2>
+<div id="messages-list" class="space-y-4"></div>
+</div>
+</section>
+
+<!-- ==================== SEÇÃO GERENCIAR ==================== -->
+<section id="gerenciar-section" class="tab-content hidden fade-in">
+<div class="bg-white p-6 rounded-2xl shadow-lg">
+<h2 class="text-xl font-semibold text-slate-900 mb-4">📋 Agendamentos de Hoje</h2>
+<p class="text-sm text-slate-600 mb-4">Selecione seu nome acima para ver e gerenciar os agendamentos do dia.</p>
+<div id="management-list" class="space-y-3">
+<div id="loader" class="text-center py-12 hidden">
+<div class="loader mx-auto"></div>
+<p class="mt-4 text-slate-500">Buscando dados...</p>
+</div>
+<div id="management-empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-lg hidden">
+<p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para hoje.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== SEÇÃO DASHBOARD ==================== -->
+<section id="dashboard-section" class="tab-content hidden fade-in">
+<div class="bg-white p-6 rounded-2xl shadow-lg">
+<h2 class="text-xl font-semibold text-slate-900 mb-6">📈 Seu Desempenho Hoje</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="bg-slate-50 p-4 rounded-xl">
+<h3 class="text-lg font-semibold text-slate-700 mb-4">Status dos Agendamentos</h3>
+<canvas id="statusChart" width="400" height="300"></canvas>
+</div>
+<div class="bg-slate-50 p-4 rounded-xl">
+<h3 class="text-lg font-semibold text-slate-700 mb-4">Resumo Numérico</h3>
+<div id="dashboard-stats" class="space-y-3 mt-4">
+<div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+<span class="font-medium">Total de Agendamentos:</span>
+<span class="font-bold text-lg">0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
 
 <!-- ==================== MODAL MENSAGEM RÁPIDA ==================== -->
 <div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm" style="display: none;">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 transform transition-all">
-        <h3 class="text-xl font-bold text-slate-900 mb-4">📨 Gerar Mensagem Rápida</h3>
-        <div class="space-y-4">
-            <div>
-                <label for="quick-jovem" class="block text-sm font-medium text-slate-700 mb-1">Nome do Jovem</label>
-                <input type="text" id="quick-jovem" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Ex: João Silva">
-            </div>
-            <div>
-                <label for="quick-numero" class="block text-sm font-medium text-slate-700 mb-1">Número (com DDD)</label>
-                <input type="tel" id="quick-numero" placeholder="55319..." maxlength="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">Escolha o Template</label>
-                <div class="space-y-2">
-                    <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
-                        <input type="radio" name="quick-template" value="variacao1" class="mr-3" checked>
-                        <span class="text-sm">VARIAÇÃO 1 (Retorno até amanhã)</span>
-                    </label>
-                    <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
-                        <input type="radio" name="quick-template" value="variacao2" class="mr-3">
-                        <span class="text-sm">VARIAÇÃO 2 (Retorno obrigatório)</span>
-                    </label>
-                    <label class="flex items-center p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition">
-                        <input type="radio" name="quick-template" value="followup" class="mr-3">
-                        <span class="text-sm font-semibold text-red-600">FOLLOW-UP (Urgente - Hoje)</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-end gap-3 mt-6">
-            <button id="quick-modal-cancel" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
-            <button id="quick-generate-btn" class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">Gerar e Enviar</button>
-        </div>
-        <div id="quick-message-result" class="mt-4 hidden"></div>
-    </div>
+<div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 transform transition-all">
+<h3 class="text-xl font-bold text-slate-900 mb-4">📨 Gerar Mensagem Rápida</h3>
+<div class="space-y-4">
+<div>
+<label for="quick-jovem" class="block text-sm font-medium text-slate-700 mb-1">Nome do Jovem</label>
+<input type="text" id="quick-jovem" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Ex: João Silva">
 </div>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // ==================== CONFIGURAÇÃO ====================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
+<div>
+<label for="quick-numero" class="block text-sm font-medium text-slate-700 mb-1">Número (com DDD)</label>
+<input type="tel" id="quick-numero" placeholder="55319..." maxlength="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-2">Escolha o Template</label>
+<div class="space-y-2">
+<label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+<input type="radio" name="quick-template" value="variacao1" class="mr-3" checked>
+<span class="text-sm">VARIAÇÃO 1 (Retorno até amanhã)</span>
+</label>
+<label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+<input type="radio" name="quick-template" value="variacao2" class="mr-3">
+<span class="text-sm">VARIAÇÃO 2 (Retorno obrigatório)</span>
+</label>
+<label class="flex items-center p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition">
+<input type="radio" name="quick-template" value="followup" class="mr-3">
+<span class="text-sm font-semibold text-red-600">FOLLOW-UP (Urgente - Hoje)</span>
+</label>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-3 mt-6">
+<button id="quick-modal-cancel" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
+<button id="quick-generate-btn" class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">Gerar e Enviar</button>
+</div>
+<div id="quick-message-result" class="mt-4 hidden"></div>
+</div>
+</div>
 
-        // ==================== SELETORES ====================
-        const assistantSelect = document.getElementById('assistant-name');
-        const locationSelect = document.getElementById('location-select');
-        const addRecipientBtn = document.getElementById('add-recipient-btn');
-        const addPuxadaBtn = document.getElementById('add-puxada-btn');
-        const recipientsList = document.getElementById('recipients-list');
-        const generateMessagesBtn = document.getElementById('generate-messages-btn');
-        const messagesSection = document.getElementById('messages-section');
-        const messagesList = document.getElementById('messages-list');
-        const emptyState = document.getElementById('empty-state');
-        const managementList = document.getElementById('management-list');
-        const loader = document.getElementById('loader');
-        const managementEmptyState = document.getElementById('management-empty-state');
-        
-        // Modal Mensagem Rápida
-        const quickMessageBtn = document.getElementById('quick-message-btn');
-        const quickMessageModal = document.getElementById('quick-message-modal');
-        const quickModalCancel = document.getElementById('quick-modal-cancel');
-        const quickGenerateBtn = document.getElementById('quick-generate-btn');
-        const quickJovemInput = document.getElementById('quick-jovem');
-        const quickNumeroInput = document.getElementById('quick-numero');
-        const quickMessageResult = document.getElementById('quick-message-result');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+// ==================== CONFIGURAÇÃO ====================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
 
-        let recipients = [];
-        const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
-        let statusChartInstance = null;
-        const ARCHIVE_STORAGE_KEY = 'agendadorProArquivoMensagens';
-let archivedMessages = [];
+// ==================== SELETORES ====================
+const assistantSelect = document.getElementById('assistant-name');
+const locationSelect = document.getElementById('location-select');
+const addRecipientBtn = document.getElementById('add-recipient-btn');
+const addPuxadaBtn = document.getElementById('add-puxada-btn');
+const recipientsList = document.getElementById('recipients-list');
+const generateMessagesBtn = document.getElementById('generate-messages-btn');
+const messagesSection = document.getElementById('messages-section');
+const messagesList = document.getElementById('messages-list');
+const emptyState = document.getElementById('empty-state');
+const managementList = document.getElementById('management-list');
+const loader = document.getElementById('loader');
+const managementEmptyState = document.getElementById('management-empty-state');
 
-        // ==================== MAPEAMENTO DE NOMES ====================
-        const assistantFullNameMap = {
-    'IGOR': 'Igor Araújo de Alencar',
-    'DIANA': 'Diana D´Ávila Fagundes',
-    'TATIANA': 'Tatiana F. Moretti',
-    'CAMILE': 'Camile da Cruz Monteiro',
-    'ISIS': 'Isis Sampaio Freitas',
-    'WELKER': 'Welker Pablo Zanetti',
-    'TREINEE': 'Coordenação' // Apenas "Coordenação" para treinee
+// Modal Mensagem Rápida
+const quickMessageBtn = document.getElementById('quick-message-btn');
+const quickMessageModal = document.getElementById('quick-message-modal');
+const quickModalCancel = document.getElementById('quick-modal-cancel');
+const quickGenerateBtn = document.getElementById('quick-generate-btn');
+const quickJovemInput = document.getElementById('quick-jovem');
+const quickNumeroInput = document.getElementById('quick-numero');
+const quickMessageResult = document.getElementById('quick-message-result');
+
+let recipients = [];
+const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
+let statusChartInstance = null;
+
+// ==================== MAPEAMENTO DE NOMES ====================
+const assistantFullNameMap = {
+'IGOR': 'Igor Araújo de Alencar',
+'DIANA': 'Diana D´Ávila Fagundes',
+'TATIANA': 'Tatiana F. Moretti',
+'CAMILE': 'Camile da Cruz Monteiro',
+'ISIS': 'Isis Sampaio Freitas',
+'WELKER': 'Welker Pablo Zanetti',
+'TREINEE': 'Coordenação' // Apenas "Coordenação" para treinee
 };
 
-        // ==================== GERENCIAMENTO DE TABS ====================
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        const switchTab = (tabName) => {
-    tabBtns.forEach(btn => {
-        btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-        btn.classList.add('text-slate-600', 'hover:text-slate-800');
-    });
-    tabContents.forEach(content => content.classList.add('hidden'));
+// ==================== GERENCIAMENTO DE TABS ====================
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
 
-    const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
-    activeBtn.classList.remove('text-slate-600', 'hover:text-slate-800');
-    activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
-    
-    document.getElementById(`${tabName}-section`).classList.remove('hidden');
-
-    if (tabName === 'gerenciar') fetchAppointments();
-    if (tabName === 'dashboard') fetchDashboardData();
-    if (tabName === 'arquivo') renderArchive();
-};
-
-        tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-        switchTab('agendar');
-
-        // ==================== FUNÇÕES DE DATA ====================
-        const getTodayDateString = () => {
-            const today = new Date();
-            return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-        };
-
-        const getTomorrowDateString = () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    let daysToAdd = 1;
-    
-    // Sábado (6) -> Segunda (pula domingo, +2 dias)
-    if (today.getDay() === 6) {
-        daysToAdd = 2;
-    }
-    
-    tomorrow.setDate(today.getDate() + daysToAdd);
-    return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
-};
-
-        const getDayOfWeek = (dateString) => {
-            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
-            const parts = dateString.split('/');
-            const year = parseInt(parts[2], 10);
-            const month = parseInt(parts[1], 10) - 1;
-            const day = parseInt(parts[0], 10);
-            const date = new Date(year, month, day, 12);
-            
-            if (isNaN(date.getTime())) return '';
-            const options = { weekday: 'long' };
-            let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
-            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
-        };
-
-        const calculateAge = (birthDateString) => {
-            if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
-            const parts = birthDateString.split('/');
-            const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
-            if (isNaN(birthDate.getTime())) return null;
-            
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-            return age;
-        };
-
-        const generateCode = (jovem) => {
-            const words = jovem.split(' ').filter(w => w);
-            let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
-            return initials + Math.floor(100 + Math.random() * 900);
-        };
-
-        // ==================== LOCAL STORAGE ====================
-        const saveToLocalStorage = () => {
-            const dataToSave = {
-                timestamp: new Date().getTime(),
-                recipients: recipients
-            };
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
-        };
-
-        const loadFromLocalStorage = () => {
-            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-                if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
-                    recipients = parsedData.recipients || [];
-                } else {
-                    localStorage.removeItem(LOCAL_STORAGE_KEY);
-                }
-            }
-        };
-
-        // ==================== SISTEMA DE ARQUIVO ====================
-const saveToArchive = (messageData) => {
-    const archive = {
-        id: Date.now().toString(),
-        timestamp: new Date().getTime(),
-        data: messageData,
-        messageText: generateMessageText(messageData)
-    };
-    
-    archivedMessages.push(archive);
-    saveArchiveToStorage();
-    renderArchive();
-};
-
-const saveArchiveToStorage = () => {
-    // Remove mensagens com mais de 24h
-    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-    const now = new Date().getTime();
-    archivedMessages = archivedMessages.filter(msg => (now - msg.timestamp) < ONE_DAY_IN_MS);
-    
-    localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archivedMessages));
-};
-
-const loadArchiveFromStorage = () => {
-    const savedArchive = localStorage.getItem(ARCHIVE_STORAGE_KEY);
-    if (savedArchive) {
-        archivedMessages = JSON.parse(savedArchive);
-        // Limpa mensagens antigas
-        saveArchiveToStorage();
-    }
-};
-
-const renderArchive = () => {
-    const archiveList = document.getElementById('archive-list');
-    const archiveEmptyState = document.getElementById('archive-empty-state');
-    
-    // Remove todos os cards exceto o empty state
-    const cards = archiveList.querySelectorAll('[data-archive-id]');
-    cards.forEach(card => card.remove());
-    
-    if (archivedMessages.length === 0) {
-        archiveEmptyState.style.display = 'block';
-    } else {
-        archiveEmptyState.style.display = 'none';
-        
-        // Ordena por mais recente primeiro
-        archivedMessages.sort((a, b) => b.timestamp - a.timestamp);
-        
-        archivedMessages.forEach(archive => {
-            const archiveCard = document.createElement('div');
-            archiveCard.className = 'p-5 border-2 border-slate-200 rounded-xl bg-gradient-to-br from-white to-slate-50';
-            archiveCard.dataset.archiveId = archive.id;
-            
-            const timeAgo = getTimeAgo(archive.timestamp);
-            const encodedMessage = encodeURIComponent(archive.messageText);
-            
-            archiveCard.innerHTML = `
-                <div class="flex justify-between items-start mb-3">
-                    <div>
-                        <p class="font-bold text-slate-800">${archive.data.jovem}</p>
-                        <p class="text-xs text-slate-500">📅 ${archive.data.data} às ${archive.data.horario}</p>
-                        <p class="text-xs text-slate-400 mt-1">⏰ Arquivado ${timeAgo}</p>
-                    </div>
-                    <button class="delete-archive-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-archive-id="${archive.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
-                </div>
-                <details class="mb-3">
-                    <summary class="cursor-pointer text-sm text-indigo-600 font-semibold hover:text-indigo-800">Ver Mensagem</summary>
-                    <textarea class="archive-message-text w-full mt-2 p-3 bg-white border border-slate-300 rounded-lg text-sm font-mono" rows="12" data-archive-id="${archive.id}">${archive.messageText}</textarea>
-                </details>
-                <div class="flex flex-wrap gap-2">
-                    <a href="https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition text-sm">
-                        📱 Enviar WhatsApp
-                    </a>
-                    <button class="update-archive-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition text-sm" data-archive-id="${archive.id}">
-                        💾 Salvar Edição
-                    </button>
-                    <button class="resend-archive-btn flex items-center gap-2 py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition text-sm" data-archive-id="${archive.id}">
-                        🔄 Reenviar Editada
-                    </button>
-                </div>
-            `;
-            
-            archiveList.appendChild(archiveCard);
-        });
-    }
-};
-
-const getTimeAgo = (timestamp) => {
-    const now = new Date().getTime();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    
-    if (hours > 0) {
-        return `há ${hours}h`;
-    } else if (minutes > 0) {
-        return `há ${minutes}min`;
-    } else {
-        return 'agora';
-    }
-};
-
-const deleteArchivedMessage = (id) => {
-    if (confirm('Deseja realmente excluir esta mensagem do arquivo?')) {
-        archivedMessages = archivedMessages.filter(msg => msg.id !== id);
-        saveArchiveToStorage();
-        renderArchive();
-    }
-};
-
-const updateArchivedMessage = (id) => {
-    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
-    const newText = textarea.value;
-    
-    const archive = archivedMessages.find(msg => msg.id === id);
-    if (archive) {
-        archive.messageText = newText;
-        saveArchiveToStorage();
-        alert('✅ Mensagem atualizada com sucesso!');
-    }
-};
-
-const resendEditedMessage = (id) => {
-    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
-    const editedText = textarea.value;
-    
-    const archive = archivedMessages.find(msg => msg.id === id);
-    if (archive) {
-        const encodedMessage = encodeURIComponent(editedText);
-        const whatsappUrl = `https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
-    }
-};
-
-const clearAllArchive = () => {
-    if (confirm('⚠️ Deseja realmente excluir TODAS as mensagens arquivadas? Esta ação não pode ser desfeita.')) {
-        archivedMessages = [];
-        saveArchiveToStorage();
-        renderArchive();
-    }
-};
-
-// Event listeners para arquivo
-document.addEventListener('click', (e) => {
-    if (e.target.closest('.delete-archive-btn')) {
-        const id = e.target.closest('.delete-archive-btn').dataset.archiveId;
-        deleteArchivedMessage(id);
-    }
-    
-    if (e.target.closest('.update-archive-btn')) {
-        const id = e.target.closest('.update-archive-btn').dataset.archiveId;
-        updateArchivedMessage(id);
-    }
-    
-    if (e.target.closest('.resend-archive-btn')) {
-        const id = e.target.closest('.resend-archive-btn').dataset.archiveId;
-        resendEditedMessage(id);
-    }
+const switchTab = (tabName) => {
+tabBtns.forEach(btn => {
+btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+btn.classList.add('text-slate-600', 'hover:text-slate-800');
 });
+tabContents.forEach(content => content.classList.add('hidden'));
 
-const clearArchiveBtn = document.getElementById('clear-archive-btn');
-if (clearArchiveBtn) {
-    clearArchiveBtn.addEventListener('click', clearAllArchive);
+const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+activeBtn.classList.remove('text-slate-600', 'hover:text-slate-800');
+activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+
+document.getElementById(`${tabName}-section`).classList.remove('hidden');
+
+if (tabName === 'gerenciar') fetchAppointments();
+if (tabName === 'dashboard') fetchDashboardData();
+};
+
+tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+switchTab('agendar');
+
+ // ==================== FUNÇÕES DE DATA ====================
+    const getTodayDateString = () => {
+        const today = new Date();
+        return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    };
+
+    const getTomorrowDateString = () => {
+const today = new Date();
+const tomorrow = new Date(today);
+let daysToAdd = 1;
+
+// Sábado (6) -> Segunda (pula domingo, +2 dias)
+if (today.getDay() === 6) {
+    daysToAdd = 2;
 }
 
-        // ==================== RENDERIZAÇÃO DE DESTINATÁRIOS ====================
-        const renderRecipients = () => {
-            // Remove tudo exceto o empty-state
-            const forms = recipientsList.querySelectorAll('[data-id]');
-            forms.forEach(form => form.remove());
-            
-            if (recipients.length === 0) {
-                emptyState.style.display = 'block';
-            } else {
-                emptyState.style.display = 'none';
-                recipients.forEach((recipient, index) => {
-                    recipientsList.appendChild(createRecipientForm(recipient, index));
-                });
-            }
-            updateGenerateButtonState();
-        };
-
-        const createRecipientForm = (recipient, index) => {
-            const form = document.createElement('div');
-            form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in bg-white';
-            form.dataset.id = recipient.id;
-            form.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
-                    <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label>
-                        <input type="text" placeholder="Nome completo" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento</label>
-                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label>
-                        <input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável</label>
-                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem</label>
-                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label>
-                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Horário</label>
-                        <input type="text" placeholder="HH:MM" maxlength="5" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition time-mask">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label>
-                        <input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
-                    </div>
-                </div>`;
-            return form;
-        };
-
-        // ==================== MÁSCARAS DE ENTRADA ====================
-        recipientsList.addEventListener('input', (e) => {
-            if (!e.target.dataset.field) return;
-            
-            const input = e.target;
-            let value = input.value;
-            const field = input.dataset.field;
-            const id = input.closest('[data-id]').dataset.id;
-
-            // Máscara de Data (DD/MM/AAAA)
-            if (input.classList.contains('date-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
-                if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
-                if (value.length > 10) value = value.slice(0, 10);
-                input.value = value;
-            }
-            // Máscara de Telefone (55...)
-            else if (input.classList.contains('phone-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length > 0 && !value.startsWith('55')) {
-                    value = '55' + value;
-                }
-                if (value.length > 15) value = value.slice(0, 15);
-                input.value = value;
-            }
-            // Máscara de Hora (HH:MM)
-            else if (input.classList.contains('time-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
-                if (value.length > 5) value = value.slice(0, 5);
-                input.value = value;
-            }
-            
-            handleUpdateRecipient(id, field, input.value);
-        });
-
-        // ==================== HANDLERS DE DESTINATÁRIOS ====================
-        const handleAddRecipient = () => {
-            recipients.push({ 
-                id: Date.now().toString(), 
-                jovem: '', 
-                responsavel: '', 
-                data: getTomorrowDateString(), 
-                horario: '', 
-                numero_responsavel: '', 
-                numero_jovem: '', 
-                data_nascimento: '', 
-                irmaos: '', 
-                isPuxada: false
-            });
-            renderRecipients();
-            saveToLocalStorage();
-        };
-        
-        const handleAddPuxada = () => {
-            recipients.push({ 
-                id: Date.now().toString(), 
-                jovem: '', 
-                responsavel: '', 
-                data: getTodayDateString(), 
-                horario: '', 
-                numero_responsavel: '', 
-                numero_jovem: '', 
-                data_nascimento: '', 
-                irmaos: '', 
-                isPuxada: true
-            });
-            renderRecipients();
-            saveToLocalStorage();
-        };
-
-        const handleRemoveRecipient = (id) => {
-            recipients = recipients.filter(r => r.id !== id);
-            renderRecipients();
-            saveToLocalStorage();
-        };
-        
-        const handleUpdateRecipient = (id, field, value) => {
-            const recipient = recipients.find(r => r.id === id);
-            if (recipient) {
-                recipient[field] = value;
-                saveToLocalStorage();
-            }
-        };
-
-        const updateGenerateButtonState = () => {
-    const hasData = assistantSelect.value !== '' && recipients.length > 0;
-    generateMessagesBtn.disabled = !hasData;
-    
-    // Atualiza também o botão do Instituto
-    const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
-    if (generateInstitutoBtn) {
-        generateInstitutoBtn.disabled = !hasData;
-    }
+tomorrow.setDate(today.getDate() + daysToAdd);
+return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
 };
-        // ==================== TEMPLATES DE MENSAGEM COMPLETA ====================
-        const messageTemplates = {
-            long: {
-                title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
-                scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
-                locations: {
-                    Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
-                    Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
-                },
-                footer: `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
-            }
-        };
 
-       const generateMessageText = (data) => {
-    const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
-    const diaDaSemana = getDayOfWeek(data.data);
-    
-    let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
-    if (data.idade !== null) {
-        jovemInfo += ` (${data.idade} anos)`;
-    }
+    const getDayOfWeek = (dateString) => {
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
+        const parts = dateString.split('/');
+        const year = parseInt(parts[2], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[0], 10);
+        const date = new Date(year, month, day, 12);
+        
+        if (isNaN(date.getTime())) return '';
+        const options = { weekday: 'long' };
+        let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
+        return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    };
 
-    let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
-    if (data.irmaos && data.irmaos.trim() !== '') {
-        personalInfo += `\n*Irmãos:* ${data.irmaos}`;
-    }
+    const calculateAge = (birthDateString) => {
+        if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
+        const parts = birthDateString.split('/');
+        const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
+        if (isNaN(birthDate.getTime())) return null;
+        
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
 
-    const schedulingInfo = messageTemplates.long.scheduling_info
-        .replace(/{diaDaSemana}/g, diaDaSemana)
-        .replace(/{data}/g, data.data)
-        .replace(/{horario}/g, data.horario);
-    
-    const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
-    
-    // Define o rodapé baseado no tipo de mensagem e assistente
-    let footer;
-    if (data.isInstituto) {
-        // Versão Instituto Crescer'Minas
-        footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nInstituto Crescer'Minas`;
-    } else {
-        // Versão Empresa Crescer (padrão)
-        footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`;
-    }
-    
-    footer = footer
-        .replace(/{codigo}/g, data.codigo)
-        .replace(/{assistente}/g, assistantDisplayName);
+    const generateCode = (jovem) => {
+        const words = jovem.split(' ').filter(w => w);
+        let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+        return initials + Math.floor(100 + Math.random() * 900);
+    };
 
-    return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
+
+// ==================== LOCAL STORAGE ====================
+const saveToLocalStorage = () => {
+const dataToSave = {
+timestamp: new Date().getTime(),
+recipients: recipients
+};
+localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+};
+
+const loadFromLocalStorage = () => {
+const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+if (savedData) {
+const parsedData = JSON.parse(savedData);
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+if (new Date().getTime() - parsedData.timestamp < ONE_DAY_IN_MS) {
+recipients = parsedData.recipients || [];
+} else {
+localStorage.removeItem(LOCAL_STORAGE_KEY);
+}
+}
+};
+
+// ==================== RENDERIZAÇÃO DE DESTINATÁRIOS ====================
+const renderRecipients = () => {
+// Remove tudo exceto o empty-state
+const forms = recipientsList.querySelectorAll('[data-id]');
+forms.forEach(form => form.remove());
+
+if (recipients.length === 0) {
+emptyState.style.display = 'block';
+} else {
+emptyState.style.display = 'none';
+recipients.forEach((recipient, index) => {
+recipientsList.appendChild(createRecipientForm(recipient, index));
+});
+}
+updateGenerateButtonState();
+};
+
+const createRecipientForm = (recipient, index) => {
+const form = document.createElement('div');
+form.className = 'p-5 border border-slate-200 rounded-xl space-y-4 fade-in bg-white';
+form.dataset.id = recipient.id;
+form.innerHTML = `
+               <div class="flex justify-between items-center">
+                   <h3 class="font-semibold text-lg text-slate-700">Destinatário ${index + 1}</h3>
+                   <button class="remove-recipient-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-id="${recipient.id}" title="Remover">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                   </button>
+               </div>
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Jovem Convocado</label>
+                       <input type="text" placeholder="Nome completo" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                   </div>
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Data de Nascimento</label>
+                       <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
+                   </div>
+                   <div class="md:col-span-2">
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Responsável</label>
+                       <input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                   </div>
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Responsável</label>
+                       <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
+                   </div>
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Telefone do Jovem</label>
+                       <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition phone-mask">
+                   </div>
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Data do Agendamento</label>
+                       <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data" value="${recipient.data || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition date-mask">
+                   </div>
+                   <div>
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Horário</label>
+                       <input type="text" placeholder="HH:MM" maxlength="5" data-field="horario" value="${recipient.horario || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition time-mask">
+                   </div>
+                   <div class="md:col-span-2">
+                       <label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label>
+                       <input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 transition">
+                   </div>
+               </div>`;
+return form;
+};
+
+// ==================== MÁSCARAS DE ENTRADA ====================
+recipientsList.addEventListener('input', (e) => {
+if (!e.target.dataset.field) return;
+
+const input = e.target;
+let value = input.value;
+const field = input.dataset.field;
+const id = input.closest('[data-id]').dataset.id;
+
+// Máscara de Data (DD/MM/AAAA)
+if (input.classList.contains('date-mask')) {
+value = value.replace(/\D/g, '');
+if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
+if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
+if (value.length > 10) value = value.slice(0, 10);
+input.value = value;
+}
+// Máscara de Telefone (55...)
+else if (input.classList.contains('phone-mask')) {
+value = value.replace(/\D/g, '');
+if (value.length > 0 && !value.startsWith('55')) {
+value = '55' + value;
+}
+if (value.length > 15) value = value.slice(0, 15);
+input.value = value;
+}
+// Máscara de Hora (HH:MM)
+else if (input.classList.contains('time-mask')) {
+value = value.replace(/\D/g, '');
+if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
+if (value.length > 5) value = value.slice(0, 5);
+input.value = value;
+}
+
+handleUpdateRecipient(id, field, input.value);
+});
+
+// ==================== HANDLERS DE DESTINATÁRIOS ====================
+const handleAddRecipient = () => {
+recipients.push({ 
+id: Date.now().toString(), 
+jovem: '', 
+responsavel: '', 
+data: getTomorrowDateString(), 
+horario: '', 
+numero_responsavel: '', 
+numero_jovem: '', 
+data_nascimento: '', 
+irmaos: '', 
+isPuxada: false
+});
+renderRecipients();
+saveToLocalStorage();
+};
+
+const handleAddPuxada = () => {
+recipients.push({ 
+id: Date.now().toString(), 
+jovem: '', 
+responsavel: '', 
+data: getTodayDateString(), 
+horario: '', 
+numero_responsavel: '', 
+numero_jovem: '', 
+data_nascimento: '', 
+irmaos: '', 
+isPuxada: true
+});
+renderRecipients();
+saveToLocalStorage();
+};
+
+const handleRemoveRecipient = (id) => {
+recipients = recipients.filter(r => r.id !== id);
+renderRecipients();
+saveToLocalStorage();
+};
+
+const handleUpdateRecipient = (id, field, value) => {
+const recipient = recipients.find(r => r.id === id);
+if (recipient) {
+recipient[field] = value;
+saveToLocalStorage();
+}
+};
+
+const updateGenerateButtonState = () => {
+const hasData = assistantSelect.value !== '' && recipients.length > 0;
+generateMessagesBtn.disabled = !hasData;
+
+// Atualiza também o botão do Instituto
+const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+if (generateInstitutoBtn) {
+generateInstitutoBtn.disabled = !hasData;
+}
+};
+// ==================== TEMPLATES DE MENSAGEM COMPLETA ====================
+const messageTemplates = {
+long: {
+title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
+scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
+locations: {
+Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
+Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
+},
+footer: `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`
+}
+};
+
+const generateMessageText = (data) => {
+const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
+const diaDaSemana = getDayOfWeek(data.data);
+
+let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
+if (data.idade !== null) {
+jovemInfo += ` (${data.idade} anos)`;
+}
+
+let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
+if (data.irmaos && data.irmaos.trim() !== '') {
+personalInfo += `\n*Irmãos:* ${data.irmaos}`;
+}
+
+const schedulingInfo = messageTemplates.long.scheduling_info
+.replace(/{diaDaSemana}/g, diaDaSemana)
+.replace(/{data}/g, data.data)
+.replace(/{horario}/g, data.horario);
+
+const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
+
+// Define o rodapé baseado no tipo de mensagem e assistente
+let footer;
+if (data.isInstituto) {
+// Versão Instituto Crescer'Minas
+footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nInstituto Crescer'Minas`;
+} else {
+// Versão Empresa Crescer (padrão)
+footer = `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\nCoordenação | Empresa Crescer`;
+}
+
+footer = footer
+.replace(/{codigo}/g, data.codigo)
+.replace(/{assistente}/g, assistantDisplayName);
+
+return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
 };
                 // ==================== GERAÇÃO DE MENSAGENS ====================
         const handleGenerateMessages = () => {
@@ -787,7 +594,7 @@ if (clearArchiveBtn) {
             messagesSection.scrollIntoView({ behavior: 'smooth' });
         };
 
-        const handleGenerateInstituto = () => {
+const handleGenerateInstituto = () => {
     const assistantValue = assistantSelect.value;
     if (!assistantValue) {
         alert('⚠️ Por favor, selecione seu nome antes de gerar as mensagens.');
@@ -848,325 +655,71 @@ if (clearArchiveBtn) {
             messagesSection.scrollIntoView({ behavior: 'smooth' });
         };
 
-        const renderMessages = (generatedMessages) => {
-            messagesList.innerHTML = '';
-            if (generatedMessages.length > 0) {
-                messagesSection.classList.remove('hidden');
-                generatedMessages.forEach(msgData => {
-                    const messageItem = document.createElement('div');
-                    messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
-                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
+const renderMessages = (generatedMessages) => {
+messagesList.innerHTML = '';
+if (generatedMessages.length > 0) {
+messagesSection.classList.remove('hidden');
+generatedMessages.forEach(msgData => {
+const messageItem = document.createElement('div');
+messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
+messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
 
-                    const messageText = generateMessageText(msgData.originalData);
-                    const encodedMessage = encodeURIComponent(messageText);
+const messageText = generateMessageText(msgData.originalData);
+const encodedMessage = encodeURIComponent(messageText);
 
-                    messageItem.innerHTML = `
-                        <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
-                        <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
-                                <span>📱 Enviar WhatsApp</span>
-                            </a>
-                            <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                                <span>💾 Salvar na Planilha</span>
-                            </button>
-                        </div>`;
-                    messagesList.appendChild(messageItem);
-                });
-            } else {
-                messagesSection.classList.add('hidden');
-            }
-        };
-
-        const handleSaveToSheet = async (button) => {
-            const messageItem = button.closest('[data-recipient-data]');
-            const data = JSON.parse(messageItem.dataset.recipientData);
-
-            button.disabled = true;
-            button.innerHTML = '<span>⏳ Salvando...</span>';
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    button.innerHTML = '<span>✅ Salvo com Sucesso!</span>';
-                    button.style.backgroundColor = '#22c55e';
-                } else { 
-                    throw new Error(result.message); 
-                }
-            } catch (error) {
-                console.error('Erro ao salvar:', error);
-                button.innerHTML = '<span>❌ Erro ao Salvar</span>';
-                button.style.backgroundColor = '#ef4444';
-                alert('Erro ao salvar: ' + error.message);
-                button.disabled = false;
-            }
-        };
-
-            // ARQUIVA AUTOMATICAMENTE
-            saveToArchive(msgData.originalData);
-            
-            const messageItem = document.createElement('div');
-            messageItem.className = 'p-5 border border-slate-200 rounded-xl bg-white';
-            messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-            
-            const messageText = generateMessageText(msgData.originalData);
-            const encodedMessage = encodeURIComponent(messageText);
-
-            messageItem.innerHTML = `
-                <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
-                <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
-                <div class="flex flex-wrap gap-3">
-                    <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
-                        <span>📱 Enviar WhatsApp</span>
-                    </a>
-                    <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                        <span>💾 Salvar na Planilha</span>
-                    </button>
-                </div>`;
-            messagesList.appendChild(messageItem);
-        });
-        
-        // Mostra notificação de arquivamento
-        const notification = document.createElement('div');
-        notification.className = 'p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-4';
-        notification.innerHTML = `✅ ${generatedMessages.length} mensagem(ns) arquivada(s) automaticamente! Acesse a aba <strong>🗂️ Arquivo</strong> para recuperá-las.`;
-        messagesList.insertBefore(notification, messagesList.firstChild);
-        
-    } else {
-        messagesSection.classList.add('hidden');
-    }
-};
-        // Mostra notificação de arquivamento
-        const notification = document.createElement('div');
-        notification.className = 'p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-4';
-        notification.innerHTML = `✅ ${generatedMessages.length} mensagem(ns) arquivada(s) automaticamente! Acesse a aba <strong>🗂️ Arquivo</strong> para recuperá-las.`;
-        messagesList.insertBefore(notification, messagesList.firstChild);
-        
-    } else {
-        messagesSection.classList.add('hidden');
-    }
-};
-                });
-            
-            if (generatedMessages.length === 0) {
-                alert('⚠️ Preencha os campos obrigatórios: Jovem, Responsável, Data, Horário e Telefone.');
-                return;
-            }
-            
-            renderMessages(generatedMessages);
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        // ==================== SISTEMA DE ARQUIVO ====================
-const saveToArchive = (messageData) => {
-    const archive = {
-        id: Date.now().toString(),
-        timestamp: new Date().getTime(),
-        data: messageData,
-        messageText: generateMessageText(messageData)
-    };
-    
-    archivedMessages.push(archive);
-    saveArchiveToStorage();
-    renderArchive();
-};
-
-const saveArchiveToStorage = () => {
-    // Remove mensagens com mais de 24h
-    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-    const now = new Date().getTime();
-    archivedMessages = archivedMessages.filter(msg => (now - msg.timestamp) < ONE_DAY_IN_MS);
-    
-    localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archivedMessages));
-};
-
-const loadArchiveFromStorage = () => {
-    const savedArchive = localStorage.getItem(ARCHIVE_STORAGE_KEY);
-    if (savedArchive) {
-        archivedMessages = JSON.parse(savedArchive);
-        // Limpa mensagens antigas
-        saveArchiveToStorage();
-    }
-};
-
-const renderArchive = () => {
-    const archiveList = document.getElementById('archive-list');
-    const archiveEmptyState = document.getElementById('archive-empty-state');
-    
-    // Remove todos os cards exceto o empty state
-    const cards = archiveList.querySelectorAll('[data-archive-id]');
-    cards.forEach(card => card.remove());
-    
-    if (archivedMessages.length === 0) {
-        archiveEmptyState.style.display = 'block';
-    } else {
-        archiveEmptyState.style.display = 'none';
-        
-        // Ordena por mais recente primeiro
-        archivedMessages.sort((a, b) => b.timestamp - a.timestamp);
-        
-        archivedMessages.forEach(archive => {
-            const archiveCard = document.createElement('div');
-            archiveCard.className = 'p-5 border-2 border-slate-200 rounded-xl bg-gradient-to-br from-white to-slate-50';
-            archiveCard.dataset.archiveId = archive.id;
-            
-            const timeAgo = getTimeAgo(archive.timestamp);
-            const encodedMessage = encodeURIComponent(archive.messageText);
-            
-            archiveCard.innerHTML = `
-                <div class="flex justify-between items-start mb-3">
-                    <div>
-                        <p class="font-bold text-slate-800">${archive.data.jovem}</p>
-                        <p class="text-xs text-slate-500">📅 ${archive.data.data} às ${archive.data.horario}</p>
-                        <p class="text-xs text-slate-400 mt-1">⏰ Arquivado ${timeAgo}</p>
-                    </div>
-                    <button class="delete-archive-btn p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors" data-archive-id="${archive.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
-                </div>
-                <details class="mb-3">
-                    <summary class="cursor-pointer text-sm text-indigo-600 font-semibold hover:text-indigo-800">Ver Mensagem</summary>
-                    <textarea class="archive-message-text w-full mt-2 p-3 bg-white border border-slate-300 rounded-lg text-sm font-mono" rows="12" data-archive-id="${archive.id}">${archive.messageText}</textarea>
-                </details>
-                <div class="flex flex-wrap gap-2">
-                    <a href="https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition text-sm">
-                        📱 Enviar WhatsApp
-                    </a>
-                    <button class="update-archive-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition text-sm" data-archive-id="${archive.id}">
-                        💾 Salvar Edição
-                    </button>
-                    <button class="resend-archive-btn flex items-center gap-2 py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition text-sm" data-archive-id="${archive.id}">
-                        🔄 Reenviar Editada
-                    </button>
-                </div>
-            `;
-            
-            archiveList.appendChild(archiveCard);
-        });
-    }
-};
-
-const getTimeAgo = (timestamp) => {
-    const now = new Date().getTime();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    
-    if (hours > 0) {
-        return `há ${hours}h`;
-    } else if (minutes > 0) {
-        return `há ${minutes}min`;
-    } else {
-        return 'agora';
-    }
-};
-
-const deleteArchivedMessage = (id) => {
-    if (confirm('Deseja realmente excluir esta mensagem do arquivo?')) {
-        archivedMessages = archivedMessages.filter(msg => msg.id !== id);
-        saveArchiveToStorage();
-        renderArchive();
-    }
-};
-
-const updateArchivedMessage = (id) => {
-    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
-    const newText = textarea.value;
-    
-    const archive = archivedMessages.find(msg => msg.id === id);
-    if (archive) {
-        archive.messageText = newText;
-        saveArchiveToStorage();
-        alert('✅ Mensagem atualizada com sucesso!');
-    }
-};
-
-const resendEditedMessage = (id) => {
-    const textarea = document.querySelector(`textarea[data-archive-id="${id}"]`);
-    const editedText = textarea.value;
-    
-    const archive = archivedMessages.find(msg => msg.id === id);
-    if (archive) {
-        const encodedMessage = encodeURIComponent(editedText);
-        const whatsappUrl = `https://wa.me/${archive.data.numero_responsavel}?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
-    }
-};
-
-const clearAllArchive = () => {
-    if (confirm('⚠️ Deseja realmente excluir TODAS as mensagens arquivadas? Esta ação não pode ser desfeita.')) {
-        archivedMessages = [];
-        saveArchiveToStorage();
-        renderArchive();
-    }
-};
-
-// Event listeners para arquivo
-document.addEventListener('click', (e) => {
-    if (e.target.closest('.delete-archive-btn')) {
-        const id = e.target.closest('.delete-archive-btn').dataset.archiveId;
-        deleteArchivedMessage(id);
-    }
-    
-    if (e.target.closest('.update-archive-btn')) {
-        const id = e.target.closest('.update-archive-btn').dataset.archiveId;
-        updateArchivedMessage(id);
-    }
-    
-    if (e.target.closest('.resend-archive-btn')) {
-        const id = e.target.closest('.resend-archive-btn').dataset.archiveId;
-        resendEditedMessage(id);
-    }
+messageItem.innerHTML = `
+                       <p class="font-semibold text-slate-800 mb-4">Para: <span class="font-normal">${msgData.originalData.jovem} (via ${msgData.originalData.numero_responsavel})</span></p>
+                       <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-md text-sm text-slate-600 leading-relaxed mb-4">${messageText}</pre>
+                       <div class="flex flex-wrap gap-3">
+                           <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex items-center gap-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors">
+                               <span>📱 Enviar WhatsApp</span>
+                           </a>
+                           <button class="save-btn flex items-center gap-2 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                               <span>💾 Salvar na Planilha</span>
+                           </button>
+                       </div>`;
+messagesList.appendChild(messageItem);
 });
-
-const clearArchiveBtn = document.getElementById('clear-archive-btn');
-if (clearArchiveBtn) {
-    clearArchiveBtn.addEventListener('click', clearAllArchive);
+} else {
+messagesSection.classList.add('hidden');
 }
+};
 
-        const handleSaveToSheet = async (button) => {
-            const messageItem = button.closest('[data-recipient-data]');
-            const data = JSON.parse(messageItem.dataset.recipientData);
-            
-            button.disabled = true;
-            button.innerHTML = '<span>⏳ Salvando...</span>';
+const handleSaveToSheet = async (button) => {
+const messageItem = button.closest('[data-recipient-data]');
+const data = JSON.parse(messageItem.dataset.recipientData);
 
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    button.innerHTML = '<span>✅ Salvo com Sucesso!</span>';
-                    button.style.backgroundColor = '#22c55e';
-                } else { 
-                    throw new Error(result.message); 
-                }
-            } catch (error) {
-                console.error('Erro ao salvar:', error);
-                button.innerHTML = '<span>❌ Erro ao Salvar</span>';
-                button.style.backgroundColor = '#ef4444';
-                alert('Erro ao salvar: ' + error.message);
-                button.disabled = false;
-            }
-        };
+button.disabled = true;
+button.innerHTML = '<span>⏳ Salvando...</span>';
 
-        // ==================== MENSAGEM RÁPIDA ====================
-        const quickMessageTemplates = {
-            variacao1: (jovem) => `CRESCER | Departamento de Orientação Profissional
+try {
+const response = await fetch(SCRIPT_URL, {
+method: 'POST',
+mode: 'cors',
+cache: 'no-cache',
+headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+body: JSON.stringify(data)
+});
+const result = await response.json();
+
+if (result.status === 'success') {
+button.innerHTML = '<span>✅ Salvo com Sucesso!</span>';
+button.style.backgroundColor = '#22c55e';
+} else { 
+throw new Error(result.message); 
+}
+} catch (error) {
+console.error('Erro ao salvar:', error);
+button.innerHTML = '<span>❌ Erro ao Salvar</span>';
+button.style.backgroundColor = '#ef4444';
+alert('Erro ao salvar: ' + error.message);
+button.disabled = false;
+}
+};
+
+// ==================== MENSAGEM RÁPIDA ====================
+const quickMessageTemplates = {
+variacao1: (jovem) => `CRESCER | Departamento de Orientação Profissional
 
 Ref.: ${jovem}
 
@@ -1183,8 +736,8 @@ Horário: 9h às 17h (dias úteis)
 Informações apenas por contato telefônico.
 
 Att, Equipe de Cadastramento`,
-            
-            variacao2: (jovem) => `CRESCER | Departamento de Orientação Profissional
+
+variacao2: (jovem) => `CRESCER | Departamento de Orientação Profissional
 
 Ref.: ${jovem}
 
@@ -1202,8 +755,8 @@ Horário: 9h às 17h
 Não responder por mensagem - apenas ligação.
 
 Equipe de Cadastramento`,
-            
-            followup: (jovem) => `⚠️ CRESCER - Lembrete Urgente
+
+followup: (jovem) => `⚠️ CRESCER - Lembrete Urgente
 
 Ref.: ${jovem}
 
@@ -1216,133 +769,151 @@ Retornar esta ligação.
 Após 17h, cadastro retorna à lista de espera.
 
 Última chamada.`
+};
+
+quickMessageBtn.addEventListener('click', () => {
+quickMessageModal.style.display = 'flex';
+quickJovemInput.value = '';
+quickNumeroInput.value = '';
+quickMessageResult.classList.add('hidden');
+});
+
+quickModalCancel.addEventListener('click', () => {
+quickMessageModal.style.display = 'none';
+});
+
+quickNumeroInput.addEventListener('input', (e) => {
+let value = e.target.value.replace(/\D/g, '');
+if (value.length > 0 && !value.startsWith('55')) {
+value = '55' + value;
+}
+if (value.length > 15) value = value.slice(0, 15);
+e.target.value = value;
+});
+
+quickGenerateBtn.addEventListener('click', () => {
+const jovem = quickJovemInput.value.trim();
+const numero = quickNumeroInput.value.trim();
+const template = document.querySelector('input[name="quick-template"]:checked').value;
+
+if (!jovem || !numero) {
+alert('⚠️ Por favor, preencha nome e número!');
+return;
+}
+
+const messageText = quickMessageTemplates[template](jovem);
+const encodedMessage = encodeURIComponent(messageText);
+const whatsappUrl = `https://wa.me/${numero}?text=${encodedMessage}`;
+
+quickMessageResult.innerHTML = `
+               <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                   <p class="font-semibold text-green-800 mb-3">✅ Mensagem Gerada!</p>
+                   <pre class="whitespace-pre-wrap text-sm bg-white p-3 rounded border mb-3">${messageText}</pre>
+                   <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center gap-2 py-2 px-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition w-full justify-center">
+                       📱 Enviar WhatsApp
+                   </a>
+               </div>`;
+quickMessageResult.classList.remove('hidden');
+});
+
+// ==================== GERENCIAMENTO DE AGENDAMENTOS ====================
+const fetchAppointments = async () => {
+const assistantName = assistantSelect.value;
+
+if (!assistantName) {
+managementList.innerHTML = '<p class="text-center text-slate-500 py-8">⚠️ Selecione seu nome para ver os agendamentos de hoje.</p>';
+return;
+}
+
+loader.style.display = 'block';
+managementEmptyState.style.display = 'none';
+managementList.innerHTML = '';
+managementList.appendChild(loader);
+
+const today = new Date();
+const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
+
+try {
+const response = await fetch(fetchUrl);
+if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+const result = await response.json();
+
+if (result.status === 'success') {
+renderAppointments(result.data);
+} else {
+throw new Error(result.message);
+}
+} catch (error) {
+managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">❌ Erro ao buscar dados: ${error.message}</p>`;
+} finally {
+loader.style.display = 'none';
+}
+};
+
+const renderAppointments = (appointments) => {
+managementList.innerHTML = '';
+
+if (appointments.length === 0) {
+managementEmptyState.style.display = 'block';
+managementList.appendChild(managementEmptyState);
+return;
+}
+
+appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
+
+appointments.forEach(appt => {
+const apptCard = document.createElement('div');
+apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
+apptCard.id = `appt-${appt.rowId}`;
+
+const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+const selectOptions = statusOptions.map(status => 
+`<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
+).join('');
+
+apptCard.innerHTML = `
+                   <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
+                       <div class="flex-1">
+                           <p class="font-bold text-slate-800">${appt.jovem}</p>
+                           <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
+                           <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
+                           <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
+                               <span>🗓️ ${appt.data}</span>
+                               <span>⏰ ${appt.horario || 'N/D'}</span>
+                           </div>
+                       </div>
+                       <div class="w-full sm:w-auto">
+                           <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                               <option value="">Pendente</option>
+                               ${selectOptions}
+                           </select>
+                       </div>
+                   </div>
+               `;
+managementList.appendChild(apptCard);
+});
+};
+
+const updateAppointmentStatus = async (selectElement) => {
+    const rowId = selectElement.dataset.rowId;
+    const sheetName = selectElement.dataset.sheetName;
+    const newStatus = selectElement.value;
+    
+    console.log('🔄 Tentando atualizar status:', { rowId, sheetName, newStatus });
+    
+    selectElement.disabled = true;
+    const originalBg = selectElement.style.backgroundColor;
+    selectElement.style.backgroundColor = '#fef3c7';
+
+    try {
+        const payload = {
+            action: 'updateStatus',
+            rowId: rowId,
+            sheetName: sheetName,
+            newStatus: newStatus
         };
-
-        quickMessageBtn.addEventListener('click', () => {
-            quickMessageModal.style.display = 'flex';
-            quickJovemInput.value = '';
-            quickNumeroInput.value = '';
-            quickMessageResult.classList.add('hidden');
-        });
-
-        quickModalCancel.addEventListener('click', () => {
-            quickMessageModal.style.display = 'none';
-        });
-
-        quickNumeroInput.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0 && !value.startsWith('55')) {
-                value = '55' + value;
-            }
-            if (value.length > 15) value = value.slice(0, 15);
-            e.target.value = value;
-        });
-
-        quickGenerateBtn.addEventListener('click', () => {
-            const jovem = quickJovemInput.value.trim();
-            const numero = quickNumeroInput.value.trim();
-            const template = document.querySelector('input[name="quick-template"]:checked').value;
-
-            if (!jovem || !numero) {
-                alert('⚠️ Por favor, preencha nome e número!');
-                return;
-            }
-
-            const messageText = quickMessageTemplates[template](jovem);
-            const encodedMessage = encodeURIComponent(messageText);
-            const whatsappUrl = `https://wa.me/${numero}?text=${encodedMessage}`;
-
-            quickMessageResult.innerHTML = `
-                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p class="font-semibold text-green-800 mb-3">✅ Mensagem Gerada!</p>
-                    <pre class="whitespace-pre-wrap text-sm bg-white p-3 rounded border mb-3">${messageText}</pre>
-                    <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center gap-2 py-2 px-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition w-full justify-center">
-                        📱 Enviar WhatsApp
-                    </a>
-                </div>`;
-            quickMessageResult.classList.remove('hidden');
-        });
-
-        // ==================== GERENCIAMENTO DE AGENDAMENTOS ====================
-        const fetchAppointments = async () => {
-            const assistantName = assistantSelect.value;
-            
-            if (!assistantName) {
-                managementList.innerHTML = '<p class="text-center text-slate-500 py-8">⚠️ Selecione seu nome para ver os agendamentos de hoje.</p>';
-                return;
-            }
-
-            loader.style.display = 'block';
-            managementEmptyState.style.display = 'none';
-            managementList.innerHTML = '';
-            managementList.appendChild(loader);
-
-            const today = new Date();
-            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            
-            const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
-
-            try {
-                const response = await fetch(fetchUrl);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    renderAppointments(result.data);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                managementList.innerHTML = `<p class="text-center text-red-600 py-8 font-semibold">❌ Erro ao buscar dados: ${error.message}</p>`;
-            } finally {
-                loader.style.display = 'none';
-            }
-        };
-
-        const renderAppointments = (appointments) => {
-            managementList.innerHTML = '';
-            
-            if (appointments.length === 0) {
-                managementEmptyState.style.display = 'block';
-                managementList.appendChild(managementEmptyState);
-                return;
-            }
-
-            appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
-
-            appointments.forEach(appt => {
-                const apptCard = document.createElement('div');
-                apptCard.className = 'p-4 border border-slate-200 rounded-lg bg-white transition-colors duration-300';
-                apptCard.id = `appt-${appt.rowId}`;
-
-                const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
-                const selectOptions = statusOptions.map(status => 
-                    `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
-                ).join('');
-
-                apptCard.innerHTML = `
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
-                        <div class="flex-1">
-                            <p class="font-bold text-slate-800">${appt.jovem}</p>
-                            <p class="text-sm text-slate-500">Responsável: ${appt.responsavel}</p>
-                            <p class="text-sm text-slate-500 mt-1">📞 <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
-                            <div class="mt-2 text-sm text-slate-600 flex flex-wrap gap-4">
-                                <span>🗓️ ${appt.data}</span>
-                                <span>⏰ ${appt.horario || 'N/D'}</span>
-                            </div>
-                        </div>
-                        <div class="w-full sm:w-auto">
-                            <select class="status-select w-full p-2 border border-slate-300 rounded-md bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
-                                <option value="">Pendente</option>
-                                ${selectOptions}
-                            </select>
-                        </div>
-                    </div>
-                `;
-                managementList.appendChild(apptCard);
-            });
-        };
-
         const updateAppointmentStatus = async (selectElement) => {
             const rowId = selectElement.dataset.rowId;
             const sheetName = selectElement.dataset.sheetName;
@@ -1354,6 +925,7 @@ Após 17h, cadastro retorna à lista de espera.
             const originalBg = selectElement.style.backgroundColor;
             selectElement.style.backgroundColor = '#fef3c7';
 
+        console.log('📤 Enviando payload:', payload);
             try {
                 const payload = {
                     action: 'updateStatus',
@@ -1362,8 +934,36 @@ Após 17h, cadastro retorna à lista de espera.
                     newStatus: newStatus
                 };
 
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // ← IMPORTANTE: Adiciona no-cors
+            cache: 'no-cache',
+            redirect: 'follow',
+            body: JSON.stringify(payload)
+        });
+        
+        console.log('📥 Resposta recebida:', response);
                 console.log('📤 Enviando payload:', payload);
 
+        // Com no-cors, não conseguimos ler a resposta, então assumimos sucesso
+        // se não houve erro de rede
+        const card = document.getElementById(`appt-${rowId}`);
+        card.classList.add('status-updated');
+        setTimeout(() => card.classList.remove('status-updated'), 1500);
+        
+        console.log('✅ Status atualizado com sucesso');
+        
+    } catch (error) {
+        console.error('❌ Erro ao atualizar status:', error);
+        alert(`❌ Erro ao atualizar status: ${error.message}`);
+        selectElement.style.backgroundColor = '#fee2e2';
+    } finally {
+        selectElement.disabled = false;
+        setTimeout(() => { 
+            selectElement.style.backgroundColor = originalBg; 
+        }, 1500);
+    }
+};
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1392,106 +992,116 @@ Após 17h, cadastro retorna à lista de espera.
             }
         };
 
-        managementList.addEventListener('change', (e) => {
-            if (e.target.classList.contains('status-select')) {
-                updateAppointmentStatus(e.target);
-            }
-        });
+managementList.addEventListener('change', (e) => {
+if (e.target.classList.contains('status-select')) {
+updateAppointmentStatus(e.target);
+}
+});
 
-        // ==================== DASHBOARD ====================
-        const fetchDashboardData = async () => {
-            const assistantName = assistantSelect.value;
-            
-            if (!assistantName) {
-                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-slate-500 p-4">⚠️ Selecione seu nome para ver o dashboard.</p>';
-                if (statusChartInstance) {
-                    statusChartInstance.destroy();
-                    statusChartInstance = null;
-                }
-                return;
-            }
+// ==================== DASHBOARD ====================
+const fetchDashboardData = async () => {
+const assistantName = assistantSelect.value;
 
-            const today = new Date();
-            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
+if (!assistantName) {
+document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-slate-500 p-4">⚠️ Selecione seu nome para ver o dashboard.</p>';
+if (statusChartInstance) {
+statusChartInstance.destroy();
+statusChartInstance = null;
+}
+return;
+}
 
-            try {
-                const response = await fetch(fetchUrl);
-                const result = await response.json();
+const today = new Date();
+const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+const fetchUrl = `${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`;
 
-                if (result.status === 'success') {
-                    renderDashboard(result.data);
-                }
-            } catch (error) {
-                console.error('Erro dashboard:', error);
-                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-red-600 p-4">❌ Erro ao carregar dados</p>';
-            }
-        };
+try {
+const response = await fetch(fetchUrl);
+const result = await response.json();
 
-        const renderDashboard = (data) => {
-            const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
-            const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
-            const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
-            const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
-            const matricula = data.filter(a => a.situacao === 'MATRICULA').length;
-            const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
-            const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
+if (result.status === 'success') {
+renderDashboard(result.data);
+}
+} catch (error) {
+console.error('Erro dashboard:', error);
+document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-red-600 p-4">❌ Erro ao carregar dados</p>';
+}
+};
 
-            document.getElementById('dashboard-stats').innerHTML = `
-                <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                    <span class="font-medium">📊 Total:</span>
-                    <span class="font-bold text-lg">${data.length}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span class="font-medium text-green-800">✅ Confirmadas + Já Veio:</span>
-                    <span class="font-bold text-lg text-green-600">${confirmadas}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                    <span class="font-medium text-red-800">❌ Canceladas + Sem Interesse:</span>
-                    <span class="font-bold text-lg text-red-600">${canceladas}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
-                    <span class="font-medium text-amber-800">⚡ Puxadas:</span>
-                    <span class="font-bold text-lg text-amber-600">${puxadas}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                    <span class="font-medium text-blue-800">📅 Reagendar:</span>
-                    <span class="font-bold text-lg text-blue-600">${reagendar}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                    <span class="font-medium text-purple-800">🎓 Matrícula:</span>
-                    <span class="font-bold text-lg text-purple-600">${matricula}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-slate-100 rounded-lg">
-                    <span class="font-medium text-slate-700">⚠️ Confirmou Não Veio:</span>
-                    <span class="font-bold text-lg text-slate-600">${confirmouNaoVeio}</span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                    <span class="font-medium text-slate-600">⏳ Pendentes:</span>
-                    <span class="font-bold text-lg text-slate-500">${pendentes}</span>
-                </div>
-            `;
+const renderDashboard = (data) => {
+            // AGRUPAMENTO CONFORME SOLICITADO
+const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
+const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
+const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
+const matricula = data.filter(a => a.situacao === 'MATRICULA').length;
+const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
+const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
 
-            const ctx = document.getElementById('statusChart');
-            if (statusChartInstance) {
-                statusChartInstance.destroy();
-            }
+            // Atualiza estatísticas
+document.getElementById('dashboard-stats').innerHTML = `
+               <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                   <span class="font-medium">📊 Total:</span>
+                   <span class="font-bold text-lg">${data.length}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                   <span class="font-medium text-green-800">✅ Confirmadas + Já Veio:</span>
+                   <span class="font-bold text-lg text-green-600">${confirmadas}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                   <span class="font-medium text-red-800">❌ Canceladas + Sem Interesse:</span>
+                   <span class="font-bold text-lg text-red-600">${canceladas}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+                   <span class="font-medium text-amber-800">⚡ Puxadas:</span>
+                   <span class="font-bold text-lg text-amber-600">${puxadas}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                   <span class="font-medium text-blue-800">📅 Reagendar:</span>
+                   <span class="font-bold text-lg text-blue-600">${reagendar}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                   <span class="font-medium text-purple-800">🎓 Matrícula:</span>
+                   <span class="font-bold text-lg text-purple-600">${matricula}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-slate-100 rounded-lg">
+                   <span class="font-medium text-slate-700">⚠️ Confirmou Não Veio:</span>
+                   <span class="font-bold text-lg text-slate-600">${confirmouNaoVeio}</span>
+               </div>
+               <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                   <span class="font-medium text-slate-600">⏳ Pendentes:</span>
+                   <span class="font-bold text-lg text-slate-500">${pendentes}</span>
+               </div>
+           `;
 
-            statusChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        'Confirmadas + Já Veio', 
-                        'Canceladas + Sem Interesse', 
-                        'Puxadas', 
-                        'Reagendar', 
-                        'Matrícula', 
-                        'Confirmou Não Veio', 
-                        'Pendentes'
-                    ],
-                    datasets: [{
-                        data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
-                        backgroundColor: [
+            // Gráfico
+const ctx = document.getElementById('statusChart');
+if (statusChartInstance) {
+statusChartInstance.destroy();
+}
+
+statusChartInstance = new Chart(ctx, {
+type: 'doughnut',
+data: {
+labels: [
+'Confirmadas + Já Veio', 
+'Canceladas + Sem Interesse', 
+'Puxadas', 
+'Reagendar', 
+'Matrícula', 
+'Confirmou Não Veio', 
+'Pendentes'
+],
+datasets: [{
+data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
+backgroundColor: [
+                            '#22c55e', // Verde - Confirmadas
+                            '#ef4444', // Vermelho - Canceladas
+                            '#f59e0b', // Âmbar - Puxadas
+                            '#3b82f6', // Azul - Reagendar
+                            '#a855f7', // Roxo - Matrícula
+                            '#64748b', // Cinza escuro - Confirmou Não Veio
+                            '#cbd5e1'  // Cinza claro - Pendentes
                             '#22c55e',
                             '#ef4444',
                             '#f59e0b',
@@ -1499,77 +1109,81 @@ Após 17h, cadastro retorna à lista de espera.
                             '#a855f7',
                             '#64748b',
                             '#cbd5e1'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                boxWidth: 12,
-                                padding: 10,
-                                font: { 
-                                    size: 10,
-                                    family: 'Inter'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.parsed;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        };
+],
+borderWidth: 2,
+borderColor: '#fff'
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: true,
+plugins: {
+legend: {
+position: 'bottom',
+labels: {
+boxWidth: 12,
+padding: 10,
+font: { 
+size: 10,
+family: 'Inter'
+}
+}
+},
+tooltip: {
+callbacks: {
+label: function(context) {
+return context.label + ': ' + context.parsed;
+}
+}
+}
+}
+}
+});
+};
 
-        // ==================== EVENT LISTENERS ====================
-        addRecipientBtn.addEventListener('click', handleAddRecipient);
-        addPuxadaBtn.addEventListener('click', handleAddPuxada);
-        
-        recipientsList.addEventListener('click', (e) => {
-            if (e.target.closest('.remove-recipient-btn')) {
-                handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
-            }
-        });
-        
-        generateMessagesBtn.addEventListener('click', handleGenerateMessages);
-        
+// ==================== EVENT LISTENERS ====================
+addRecipientBtn.addEventListener('click', handleAddRecipient);
+addPuxadaBtn.addEventListener('click', handleAddPuxada);
+
+recipientsList.addEventListener('click', (e) => {
+if (e.target.closest('.remove-recipient-btn')) {
+handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
+}
+});
+
+generateMessagesBtn.addEventListener('click', handleGenerateMessages);
+
         const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
         if (generateInstitutoBtn) {
             generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
         }
         
-        messagesList.addEventListener('click', (e) => {
-            if (e.target.closest('.save-btn')) {
-                handleSaveToSheet(e.target.closest('.save-btn'));
-            }
-        });
-        
-        assistantSelect.addEventListener('change', () => {
-            updateGenerateButtonState();
-            if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
-                fetchAppointments();
-            }
-            if (!document.getElementById('dashboard-section').classList.contains('hidden')) {
-                fetchDashboardData();
-            }
-        });
-        
-        // ==================== INICIALIZAÇÃO ====================
-        loadFromLocalStorage();
-        loadArchiveFromStorage(); // ← ADICIONE ESTA LINHA
-        renderRecipients();
-        updateGenerateButtonState();
-    });
-    </script>
+messagesList.addEventListener('click', (e) => {
+if (e.target.closest('.save-btn')) {
+handleSaveToSheet(e.target.closest('.save-btn'));
+}
+});
+
+assistantSelect.addEventListener('change', () => {
+updateGenerateButtonState();
+if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
+fetchAppointments();
+}
+if (!document.getElementById('dashboard-section').classList.contains('hidden')) {
+fetchDashboardData();
+}
+});
+
+// ==================== INICIALIZAÇÃO ====================
+        // Event listener para o botão Instituto
+const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+if (generateInstitutoBtn) {
+    generateInstitutoBtn.addEventListener('click', handleGenerateInstituto);
+}
+loadFromLocalStorage();
+renderRecipients();
+updateGenerateButtonState();
+});
+</script>
 </body>
 </html>
