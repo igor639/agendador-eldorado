@@ -990,6 +990,11 @@
             const messageItem = button.closest('[data-recipient-data]');
             const data = JSON.parse(messageItem.dataset.recipientData);
             
+            // Adiciona o horário de lançamento (timestamp)
+            const now = new Date();
+            const horarioLancamento = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            data.horario_lancamento = horarioLancamento;
+            
             button.disabled = true;
             button.innerHTML = '<span>⏳ Salvando...</span>';
 
