@@ -1011,12 +1011,16 @@
                 if (result.status === 'success') {
                     button.innerHTML = '<span>✅ Salvo!</span>';
                     button.style.backgroundColor = '#22c55e';
-                    showToast('Salvo na planilha com sucesso!', 'success');
+                    showToast('✅ Salvo! Rascunho mantido para edições', 'success');
                     
-                    // Remove do rascunho após salvar
-                    recipients = recipients.filter(r => r.jovem !== data.jovem);
-                    saveToLocalStorage();
-                    renderRecipients();
+                    // MANTÉM o rascunho - apenas marca como salvo
+                    const recipient = recipients.find(r => r.jovem === data.jovem && r.numero_responsavel === data.numero_responsavel);
+                    if (recipient) {
+                        recipient.savedToSheet = true;
+                        recipient.lastSaved = new Date().toLocaleString('pt-BR');
+                        saveToLocalStorage();
+                        renderRecipients();
+                    }
                 } else { 
                     throw new Error(result.message); 
                 }
