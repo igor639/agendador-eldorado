@@ -185,7 +185,7 @@
                             <option value="TATIANA">Tatiana</option>
                             <option value="GABRIELA">Gabriela</option>
                             <option value="MARCELO">Marcelo</option>
-                            <option value="CRISLEY">Crisley</option>
+                            <option value="KELLY">Kelly</option>
                         </select>
                     </div>
                     <div>
@@ -340,32 +340,43 @@
     <!-- ==================== MODAL MENSAGEM RÁPIDA ==================== -->
     <div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm" style="display: none;">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 transform transition-all">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">📨 Gerar Mensagem Rápida</h3>
+            <h3 class="text-xl font-bold text-slate-900 mb-4">📨 Mensagem Rápida de Agendamento</h3>
             <div class="space-y-4">
                 <div>
                     <label for="quick-jovem" class="block text-sm font-medium text-slate-700 mb-1">Nome do Jovem</label>
-                    <input type="text" id="quick-jovem" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Ex: João Silva">
+                    <input type="text" id="quick-jovem" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Ex: Amanda">
+                </div>
+                <div>
+                    <label for="quick-data" class="block text-sm font-medium text-slate-700 mb-1">Data do Agendamento</label>
+                    <input type="text" id="quick-data" placeholder="DD/MM/AAAA" maxlength="10" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="quick-horario" class="block text-sm font-medium text-slate-700 mb-1">Horário</label>
+                    <input type="text" id="quick-horario" placeholder="HH:MM" maxlength="5" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="quick-local" class="block text-sm font-medium text-slate-700 mb-1">Local</label>
+                    <select id="quick-local" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="Eldorado">Eldorado</option>
+                        <option value="Centro">Centro</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="quick-assistente" class="block text-sm font-medium text-slate-700 mb-1">Assistente que vai atender</label>
+                    <select id="quick-assistente" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="">-- Escolha --</option>
+                        <option value="DIANA">Diana</option>
+                        <option value="IGOR">Igor</option>
+                        <option value="WELKER">Welker</option>
+                        <option value="TATIANA">Tatiana</option>
+                        <option value="GABRIELA">Gabriela</option>
+                        <option value="MARCELO">Marcelo</option>
+                        <option value="KELLY">Kelly</option>
+                    </select>
                 </div>
                 <div>
                     <label for="quick-numero" class="block text-sm font-medium text-slate-700 mb-1">Número (com DDD)</label>
                     <input type="tel" id="quick-numero" placeholder="55319..." maxlength="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Escolha o Template</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
-                            <input type="radio" name="quick-template" value="variacao1" class="mr-3" checked>
-                            <span class="text-sm">VARIAÇÃO 1 (Retorno até amanhã)</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-50 transition">
-                            <input type="radio" name="quick-template" value="variacao2" class="mr-3">
-                            <span class="text-sm">VARIAÇÃO 2 (Retorno obrigatório)</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-red-300 rounded-lg cursor-pointer hover:bg-red-50 transition">
-                            <input type="radio" name="quick-template" value="followup" class="mr-3">
-                            <span class="text-sm font-semibold text-red-600">FOLLOW-UP (Urgente - Hoje)</span>
-                        </label>
-                    </div>
                 </div>
             </div>
             <div class="flex justify-end gap-3 mt-6">
@@ -442,6 +453,10 @@
         const quickModalCancel = document.getElementById('quick-modal-cancel');
         const quickGenerateBtn = document.getElementById('quick-generate-btn');
         const quickJovemInput = document.getElementById('quick-jovem');
+        const quickDataInput = document.getElementById('quick-data');
+        const quickHorarioInput = document.getElementById('quick-horario');
+        const quickLocalSelect = document.getElementById('quick-local');
+        const quickAssistenteSelect = document.getElementById('quick-assistente');
         const quickNumeroInput = document.getElementById('quick-numero');
         const quickMessageResult = document.getElementById('quick-message-result');
 
@@ -451,7 +466,7 @@
         const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
         let statusChartInstance = null;
         let localStorageAvailable = false;
-        let memoryStorage = {}; // Fallback storage
+        let memoryStorage = {};
 
         // Detecta se localStorage está disponível
         try {
@@ -473,7 +488,7 @@
             'TREINEE': 'Coordenação',
             'GABRIELA': 'Gabriela Silva',
             'MARCELO': 'Marcelo Eduardo',
-            'CRISLEY': 'Crisley Silva'
+            'KELLY': 'Kelly Martins'
         };
 
         // ==================== GERENCIAMENTO DE TABS ====================
@@ -512,17 +527,14 @@
 
         const getTomorrowDateString = () => {
             const today = new Date();
-            const dayOfWeek = today.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
+            const dayOfWeek = today.getDay();
             const tomorrow = new Date(today);
             
             if (dayOfWeek === 6) {
-                // Sábado -> pula para Segunda (adiciona 2 dias)
                 tomorrow.setDate(today.getDate() + 2);
             } else if (dayOfWeek === 0) {
-                // Domingo -> Segunda (adiciona 1 dia)
                 tomorrow.setDate(today.getDate() + 1);
             } else {
-                // Segunda a Sexta -> dia seguinte normal
                 tomorrow.setDate(today.getDate() + 1);
             }
             
@@ -620,7 +632,6 @@
                     memoryStorage[LOCAL_STORAGE_KEY] = dataToSave;
                 }
             } else {
-                // Usa armazenamento em memória
                 memoryStorage[LOCAL_STORAGE_KEY] = dataToSave;
             }
             updateStats();
@@ -638,7 +649,6 @@
                     savedData = memoryStorage[LOCAL_STORAGE_KEY];
                 }
             } else {
-                // Usa armazenamento em memória
                 savedData = memoryStorage[LOCAL_STORAGE_KEY];
             }
             
@@ -1033,63 +1043,14 @@
             }
         };
 
-        // ==================== MENSAGEM RÁPIDA ====================
-        const quickMessageTemplates = {
-            variacao1: (jovem) => `CRESCER | Departamento de Orientação Profissional
-
-Ref.: ${jovem}
-
-Cadastro liberado para atendimento em:
-
-📌 Teste Vocacional (mapeamento de aptidões)
-📌 Cadastramento em base curricular regional
-
-Agendamento: retornar esta ligação
-Horário: 9h às 17h (dias úteis)
-
-⚠️ Prazo: até amanhã
-
-Informações apenas por contato telefônico.
-
-Att, Equipe de Cadastramento`,
-            
-            variacao2: (jovem) => `CRESCER | Departamento de Orientação Profissional
-
-Ref.: ${jovem}
-
-Cadastro liberado para:
-
-📌 Teste Vocacional (mapeamento de aptidões)
-📌 Cadastramento em base curricular regional
-
-🔔 Retorno obrigatório para agendamento
-Retornar ligação neste contato
-Horário: 9h às 17h
-
-⚠️ Prazo: amanhã
-
-Não responder por mensagem - apenas ligação.
-
-Equipe de Cadastramento`,
-            
-            followup: (jovem) => `⚠️ CRESCER - Lembrete Urgente
-
-Ref.: ${jovem}
-
-Prazo de confirmação encerra HOJE às 17h.
-
-Teste Vocacional + Cadastramento aguardando agendamento.
-
-Retornar esta ligação.
-
-Após 17h, cadastro retorna à lista de espera.
-
-Última chamada.`
-        };
-
+        // ==================== MENSAGEM RÁPIDA - NOVO FORMATO ====================
         quickMessageBtn.addEventListener('click', () => {
             quickMessageModal.style.display = 'flex';
             quickJovemInput.value = '';
+            quickDataInput.value = '';
+            quickHorarioInput.value = '';
+            quickLocalSelect.value = 'Eldorado';
+            quickAssistenteSelect.value = '';
             quickNumeroInput.value = '';
             quickMessageResult.classList.add('hidden');
         });
@@ -1098,6 +1059,24 @@ Após 17h, cadastro retorna à lista de espera.
             quickMessageModal.style.display = 'none';
         });
 
+        // Máscara para data
+        quickDataInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
+            if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
+            if (value.length > 10) value = value.slice(0, 10);
+            e.target.value = value;
+        });
+
+        // Máscara para horário
+        quickHorarioInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
+            if (value.length > 5) value = value.slice(0, 5);
+            e.target.value = value;
+        });
+
+        // Máscara para telefone
         quickNumeroInput.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 0 && !value.startsWith('55')) {
@@ -1109,11 +1088,25 @@ Após 17h, cadastro retorna à lista de espera.
 
         quickGenerateBtn.addEventListener('click', () => {
             const jovem = quickJovemInput.value.trim();
+            const data = quickDataInput.value.trim();
+            const horario = quickHorarioInput.value.trim();
+            const local = quickLocalSelect.value;
+            const assistente = quickAssistenteSelect.value;
             const numero = quickNumeroInput.value.trim();
-            const template = document.querySelector('input[name="quick-template"]:checked').value;
 
-            if (!jovem || !numero) {
-                showToast('Preencha nome e número!', 'warning');
+            // Validações
+            if (!jovem || !data || !horario || !assistente || !numero) {
+                showToast('Preencha todos os campos!', 'warning');
+                return;
+            }
+
+            if (!validateDate(data)) {
+                showToast('Data inválida!', 'error');
+                return;
+            }
+
+            if (!validateTime(horario)) {
+                showToast('Horário inválido!', 'error');
                 return;
             }
 
@@ -1122,7 +1115,20 @@ Após 17h, cadastro retorna à lista de espera.
                 return;
             }
 
-            const messageText = quickMessageTemplates[template](jovem);
+            // Calcula dia da semana
+            const diaDaSemana = getDayOfWeek(data);
+            
+            // Define endereço baseado no local
+            const endereco = local === 'Eldorado' 
+                ? 'Av. João César de Oliveira, 953 no 2° andar' 
+                : 'Rua Curitiba, 656, 11° andar';
+
+            // Pega nome completo do assistente
+            const nomeAssistente = assistantFullNameMap[assistente] || assistente;
+
+            // Gera mensagem no formato solicitado
+            const messageText = `*${diaDaSemana}, às ${horario}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${nomeAssistente}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.`;
+
             const encodedMessage = encodeURIComponent(messageText);
             const whatsappUrl = `https://wa.me/${numero}?text=${encodedMessage}`;
 
