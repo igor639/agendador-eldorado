@@ -16,25 +16,12 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --info: #3b82f6;
-            --dark: #1e293b;
-            --light: #f8fafc;
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border: #334155;
         }
         
         body { 
             font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
         }
         
-        /* Animações */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -45,16 +32,6 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -62,9 +39,7 @@
         
         .fade-in { animation: fadeIn 0.4s ease-out; }
         .slide-in { animation: slideIn 0.3s ease-out; }
-        .pulse-animate { animation: pulse 2s infinite; }
         
-        /* Loader */
         .loader {
             border: 4px solid #f3f4f6;
             border-top: 4px solid var(--primary);
@@ -74,30 +49,6 @@
             animation: spin 1s linear infinite;
         }
         
-        /* Cards Premium */
-        .card-premium {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .card-premium:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 70px rgba(102, 126, 234, 0.4);
-        }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-        }
-        
-        /* Toast Notifications Premium */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -110,34 +61,20 @@
         }
         
         .toast {
-            min-width: 350px;
-            padding: 18px 24px;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            min-width: 300px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
-            gap: 16px;
-            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            gap: 12px;
+            animation: slideIn 0.3s ease-out;
         }
         
-        .toast-success { 
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        .toast-error { 
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-        .toast-info { 
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-        }
-        .toast-warning { 
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .toast-info { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .toast-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         
         .toast.removing {
             animation: slideOut 0.3s ease-out forwards;
@@ -147,85 +84,12 @@
             to { transform: translateX(500px); opacity: 0; }
         }
         
-        /* Buttons Premium */
-        .btn-premium {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
-        }
-        
-        .btn-premium:active {
-            transform: translateY(0);
-        }
-        
-        /* Badge Styles */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Input Focus States Premium */
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-            transform: translateY(-2px);
-            transition: all 0.3s;
-        }
-        
-        /* Skeleton Loading */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 0px, #f8f8f8 40px, #f0f0f0 80px);
-            background-size: 1000px 100%;
-            animation: shimmer 2s infinite;
-            border-radius: 8px;
-        }
-        
-        /* Scrollbar Custom */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-        
-        /* Stats Cards */
         .stat-card {
             background: white;
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: all 0.3s;
-            border: 1px solid #f1f5f9;
         }
         
         .stat-card:hover {
@@ -233,73 +97,18 @@
             box-shadow: 0 12px 40px rgba(0,0,0,0.12);
         }
         
-        /* Dark Mode */
-        [data-theme="dark"] {
-            background: #0f172a;
-            color: #f1f5f9;
-        }
-        
-        [data-theme="dark"] .stat-card {
-            background: #1e293b;
-            border-color: #334155;
-        }
-        
-        [data-theme="dark"] input,
-        [data-theme="dark"] select,
-        [data-theme="dark"] textarea {
-            background: #1e293b;
-            border-color: #334155;
-            color: #f1f5f9;
-        }
-        
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            display: flex;
+        .badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-            cursor: pointer;
-            transition: all 0.3s;
-            z-index: 1000;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
         
-        .fab:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
-        }
-        
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-        }
-        
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 8px 12px;
-            background: #1e293b;
-            color: white;
-            border-radius: 8px;
-            font-size: 12px;
-            white-space: nowrap;
-            margin-bottom: 8px;
-        }
-        
-        /* Progress Bar */
         .progress-bar {
-            height: 8px;
+            height: 6px;
             background: #e5e7eb;
             border-radius: 9999px;
             overflow: hidden;
@@ -311,65 +120,22 @@
             border-radius: 9999px;
             transition: width 0.3s;
         }
-        
-        /* Modal Backdrop */
-        .modal-backdrop {
-            backdrop-filter: blur(8px);
-            background: rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Chip/Tag */
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            background: #f3f4f6;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .chip:hover {
-            background: #e5e7eb;
-            transform: scale(1.05);
-        }
-        
-        /* Notification Dot */
-        .notification-dot {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            width: 12px;
-            height: 12px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 2px solid white;
-            animation: pulse 2s infinite;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
-    
-    <!-- Floating Action Button -->
-    <div class="fab tooltip" data-tooltip="Atalhos (Ctrl+H)" id="fab-shortcuts">
-        <i class="fas fa-keyboard"></i>
-    </div>
 
     <div class="container mx-auto p-4 md:p-6 max-w-7xl">
         
-        <!-- HEADER PREMIUM -->
+        <!-- HEADER -->
         <header class="text-center mb-8 fade-in">
             <div class="inline-flex items-center gap-4 mb-4">
-                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <i class="fas fa-calendar-check text-3xl text-white"></i>
+                <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <i class="fas fa-calendar-check text-2xl text-white"></i>
                 </div>
                 <div class="text-left">
-                    <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <h1 class="text-3xl md:text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                         Agendador PRO 2.0
                     </h1>
                     <p class="text-slate-600 font-medium flex items-center gap-2">
@@ -379,7 +145,6 @@
                 </div>
             </div>
             
-            <!-- Status Bar -->
             <div class="flex flex-wrap justify-center items-center gap-4 mt-6">
                 <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md">
                     <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -389,61 +154,45 @@
                     <i class="fas fa-clock text-indigo-500"></i>
                     <span class="text-sm font-semibold text-slate-700" id="live-clock">--:--:--</span>
                 </div>
-                <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md">
-                    <i class="fas fa-hourglass-half text-purple-500"></i>
-                    <span class="text-sm font-semibold text-slate-700">Sessão: <span id="session-timer">00:00</span></span>
-                </div>
-                <button id="theme-toggle" class="px-4 py-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all">
-                    <i class="fas fa-moon text-slate-700"></i>
-                </button>
             </div>
         </header>
 
-        <!-- TABS DE NAVEGAÇÃO PREMIUM -->
-        <div class="mb-8 bg-white/80 backdrop-blur-lg p-2 rounded-2xl shadow-xl border border-white/20">
-            <nav class="flex flex-wrap gap-2" aria-label="Tabs">
-                <button class="tab-btn flex-1 min-w-[120px] py-4 px-6 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="agendar">
-                    <i class="fas fa-edit"></i>
-                    <span>Agendar</span>
+        <!-- TABS -->
+        <div class="mb-8 bg-white/80 backdrop-blur-lg p-2 rounded-2xl shadow-xl">
+            <nav class="flex flex-wrap gap-2">
+                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="agendar">
+                    <i class="fas fa-edit"></i> Agendar
                 </button>
-                <button class="tab-btn flex-1 min-w-[120px] py-4 px-6 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="gerenciar">
-                    <i class="fas fa-tasks"></i>
-                    <span>Gerenciar</span>
-                    <span class="notification-dot hidden" id="gerenciar-notification"></span>
+                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="gerenciar">
+                    <i class="fas fa-tasks"></i> Gerenciar
                 </button>
-                <button class="tab-btn flex-1 min-w-[120px] py-4 px-6 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="dashboard">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Dashboard</span>
-                </button>
-                <button class="tab-btn flex-1 min-w-[120px] py-4 px-6 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="historico">
-                    <i class="fas fa-history"></i>
-                    <span>Histórico</span>
+                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
                 </button>
             </nav>
         </div>
 
-        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- CONTEÚDO -->
         <main id="content-area">
             
-            <!-- ==================== SEÇÃO AGENDAR ==================== -->
+            <!-- SEÇÃO AGENDAR -->
             <section id="agendar-section" class="tab-content space-y-6 fade-in">
                 
-                <!-- SELEÇÃO DE ASSISTENTE E LOCAL -->
-                <div class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50">
+                <!-- CONFIG -->
+                <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
                             <i class="fas fa-user-tie text-white"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">Configuração Inicial</h2>
+                        <h2 class="text-xl font-bold text-slate-800">Configuração</h2>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="assistant-name" class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                                <i class="fas fa-user text-indigo-500"></i>
-                                Seu Nome
+                            <label for="assistant-name" class="block text-sm font-bold text-slate-700 mb-2">
+                                <i class="fas fa-user text-indigo-500"></i> Seu Nome
                             </label>
-                            <select id="assistant-name" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
+                            <select id="assistant-name" class="w-full p-3 bg-slate-50 border-2 border-slate-200 rounded-xl font-semibold">
                                 <option value="">-- Escolha seu nome --</option>
                                 <option value="DIANA">Diana</option>
                                 <option value="IGOR">Igor</option>
@@ -457,11 +206,10 @@
                             </select>
                         </div>
                         <div>
-                            <label for="location-select" class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                                <i class="fas fa-map-marker-alt text-purple-500"></i>
-                                Local de Atendimento
+                            <label for="location-select" class="block text-sm font-bold text-slate-700 mb-2">
+                                <i class="fas fa-map-marker-alt text-purple-500"></i> Local
                             </label>
-                            <select id="location-select" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
+                            <select id="location-select" class="w-full p-3 bg-slate-50 border-2 border-slate-200 rounded-xl font-semibold">
                                 <option value="Eldorado" selected>Eldorado</option>
                                 <option value="Centro">Centro</option>
                             </select>
@@ -469,256 +217,164 @@
                     </div>
                 </div>
 
-                <!-- ESTATÍSTICAS RÁPIDAS PREMIUM -->
+                <!-- ESTATÍSTICAS -->
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div class="stat-card group">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-clipboard-list text-white text-xl"></i>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-list text-white"></i>
                             </div>
-                            <div class="text-3xl font-black text-indigo-600" id="stat-total">0</div>
+                            <div class="text-2xl font-black text-indigo-600" id="stat-total">0</div>
                         </div>
-                        <div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Total Rascunhos</div>
-                        <div class="progress-bar mt-2">
-                            <div class="progress-fill" id="progress-total" style="width: 0%"></div>
-                        </div>
+                        <div class="text-xs font-semibold text-slate-600">Total</div>
                     </div>
                     
-                    <div class="stat-card group">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-check-circle text-white text-xl"></i>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-check-circle text-white"></i>
                             </div>
-                            <div class="text-3xl font-black text-green-600" id="stat-complete">0</div>
+                            <div class="text-2xl font-black text-green-600" id="stat-complete">0</div>
                         </div>
-                        <div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Completos</div>
-                        <div class="progress-bar mt-2">
-                            <div class="progress-fill" id="progress-complete" style="width: 0%; background: linear-gradient(90deg, #10b981, #059669);"></div>
-                        </div>
+                        <div class="text-xs font-semibold text-slate-600">Completos</div>
                     </div>
                     
-                    <div class="stat-card group">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-bolt text-white text-xl"></i>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-bolt text-white"></i>
                             </div>
-                            <div class="text-3xl font-black text-amber-600" id="stat-puxadas">0</div>
+                            <div class="text-2xl font-black text-amber-600" id="stat-puxadas">0</div>
                         </div>
-                        <div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Puxadas</div>
-                        <div class="progress-bar mt-2">
-                            <div class="progress-fill" id="progress-puxadas" style="width: 0%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
-                        </div>
+                        <div class="text-xs font-semibold text-slate-600">Puxadas</div>
                     </div>
                     
-                    <div class="stat-card group">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-calendar-day text-white text-xl"></i>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-calendar-day text-white"></i>
                             </div>
-                            <div class="text-3xl font-black text-blue-600" id="stat-tomorrow">0</div>
+                            <div class="text-2xl font-black text-blue-600" id="stat-tomorrow">0</div>
                         </div>
-                        <div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Amanhã</div>
-                        <div class="progress-bar mt-2">
-                            <div class="progress-fill" id="progress-tomorrow" style="width: 0%; background: linear-gradient(90deg, #3b82f6, #2563eb);"></div>
-                        </div>
+                        <div class="text-xs font-semibold text-slate-600">Amanhã</div>
                     </div>
                     
-                    <div class="stat-card group cursor-pointer" id="next-day-card" title="Clique para atualizar">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-calendar-plus text-white text-xl"></i>
+                    <div class="stat-card cursor-pointer" id="next-day-card" title="Clique para atualizar">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-calendar-plus text-white"></i>
                             </div>
-                            <div class="text-3xl font-black text-purple-600" id="stat-next-day">
-                                <i class="fas fa-spinner fa-spin text-2xl"></i>
-                            </div>
+                            <div class="text-2xl font-black text-purple-600" id="stat-next-day">-</div>
                         </div>
-                        <div class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Agend. Amanhã</div>
-                        <div class="progress-bar mt-2">
-                            <div class="progress-fill" id="progress-next-day" style="width: 0%; background: linear-gradient(90deg, #a855f7, #9333ea);"></div>
-                        </div>
+                        <div class="text-xs font-semibold text-slate-600">Ag. Amanhã</div>
                     </div>
                 </div>
 
-                <!-- LISTA DE DESTINATÁRIOS PREMIUM -->
-                <div class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50">
+                <!-- DESTINATÁRIOS -->
+                <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
                                 <i class="fas fa-users text-white"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-slate-800">Destinatários</h2>
-                                <p class="text-xs text-slate-500 mt-1">Adicione jovens para gerar convocações</p>
+                                <h2 class="text-xl font-bold text-slate-800">Destinatários</h2>
+                                <p class="text-xs text-slate-500">Adicione jovens para gerar convocações</p>
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-3 w-full sm:w-auto">
-                            <button id="add-recipient-btn" class="flex-1 sm:flex-none btn-premium flex items-center gap-2 justify-center">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>Amanhã</span>
+                        <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                            <button id="add-recipient-btn" class="flex-1 sm:flex-none py-3 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-plus-circle"></i> Amanhã
                             </button>
-                            <button id="add-puxada-btn" class="flex-1 sm:flex-none py-3 px-6 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 justify-center">
-                                <i class="fas fa-bolt"></i>
-                                <span>Hoje (Puxada)</span>
-                            </button>
-                            <button id="backup-btn" class="tooltip px-4 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition-all" data-tooltip="Backup">
-                                <i class="fas fa-download"></i>
+                            <button id="add-puxada-btn" class="flex-1 sm:flex-none py-3 px-5 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-bolt"></i> Hoje
                             </button>
                         </div>
                     </div>
                     
                     <div id="recipients-list" class="space-y-4">
-                        <div id="empty-state" class="text-center py-16 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50">
-                            <i class="fas fa-inbox text-6xl text-slate-300 mb-4"></i>
-                            <p class="text-slate-500 font-semibold text-lg">Nenhum destinatário adicionado</p>
-                            <p class="text-xs text-slate-400 mt-2">Clique em "Amanhã" ou "Hoje (Puxada)" para começar</p>
+                        <div id="empty-state" class="text-center py-12 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50">
+                            <i class="fas fa-inbox text-5xl text-slate-300 mb-4"></i>
+                            <p class="text-slate-500 font-semibold">Nenhum destinatário adicionado</p>
+                            <p class="text-xs text-slate-400 mt-1">Clique em "Amanhã" ou "Hoje" para começar</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- BOTÕES DE AÇÃO PREMIUM -->
-                <div class="flex flex-col sm:flex-row justify-end gap-4">
-                    <button id="quick-message-btn" class="py-4 px-8 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all flex items-center gap-3 justify-center">
-                        <i class="fas fa-comment-dots text-xl"></i>
-                        <span>Mensagem Rápida</span>
+                <!-- BOTÕES DE AÇÃO -->
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                    <button id="quick-message-btn" class="py-3 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-comment-dots"></i> Mensagem Rápida
                     </button>
-                    <button id="generate-messages-btn" class="py-4 px-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 justify-center" disabled>
-                        <i class="fas fa-building text-xl"></i>
-                        <span>Empresa Crescer</span>
+                    <button id="generate-messages-btn" class="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-building"></i> Projeto Conecta Jovem
                     </button>
-                    <button id="generate-instituto-btn" class="py-4 px-8 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 justify-center" disabled>
-                        <i class="fas fa-university text-xl"></i>
-                        <span>Instituto Crescer'Minas</span>
+                    <button id="generate-instituto-btn" class="py-3 px-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-university"></i> Instituto Conecta Jovem
                     </button>
                 </div>
 
-                <!-- MENSAGENS GERADAS PREMIUM -->
-                <div id="messages-section" class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50 hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-comments text-white"></i>
-                            </div>
-                            <h2 class="text-2xl font-bold text-slate-800">Mensagens Geradas</h2>
-                        </div>
-                        <button id="clear-messages-btn" class="px-4 py-2 bg-red-100 text-red-600 font-bold rounded-xl hover:bg-red-200 transition-all flex items-center gap-2">
-                            <i class="fas fa-trash-alt"></i>
-                            <span>Limpar Tudo</span>
+                <!-- MENSAGENS GERADAS -->
+                <div id="messages-section" class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fas fa-comments text-green-500"></i> Mensagens Geradas
+                        </h2>
+                        <button id="clear-messages-btn" class="text-red-500 hover:text-red-700 font-semibold text-sm">
+                            <i class="fas fa-trash"></i> Limpar
                         </button>
                     </div>
                     <div id="messages-list" class="space-y-4"></div>
                 </div>
             </section>
             
-            <!-- ==================== SEÇÃO GERENCIAR ==================== -->
+            <!-- SEÇÃO GERENCIAR -->
             <section id="gerenciar-section" class="tab-content hidden fade-in">
-                <div class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-clipboard-check text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-bold text-slate-800">Agendamentos de Hoje</h2>
-                                <p class="text-sm text-slate-600">Gerencie e atualize status em tempo real</p>
-                            </div>
-                        </div>
-                        <button id="refresh-appointments-btn" class="btn-premium flex items-center gap-2">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>Atualizar</span>
+                <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-slate-800">📋 Agendamentos de Hoje</h2>
+                        <button id="refresh-btn" class="py-2 px-4 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2">
+                            <i class="fas fa-sync-alt"></i> Atualizar
                         </button>
                     </div>
                     
-                    <!-- FILTROS AVANÇADOS -->
-                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="relative">
-                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" id="filter-search" placeholder="Buscar por nome..." class="w-full pl-12 p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
-                        </div>
-                        <select id="filter-status" class="p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="filter-search" placeholder="🔍 Buscar por nome..." class="p-3 border-2 border-slate-200 rounded-xl">
+                        <select id="filter-status" class="p-3 border-2 border-slate-200 rounded-xl">
                             <option value="">Todos os Status</option>
-                            <option value="PUXADA">PUXADA</option>
-                            <option value="SI SEM INTERESSE">SI SEM INTERESSE</option>
                             <option value="CONFIRMADA">CONFIRMADA</option>
                             <option value="CANCELADA">CANCELADA</option>
                             <option value="REAGENDAR">REAGENDAR</option>
+                            <option value="PUXADA">PUXADA</option>
                             <option value="JÁ VEIO">JÁ VEIO</option>
                             <option value="MATRICULA">MATRICULA</option>
-                            <option value="CONFIRMOU E NÃO VEIO">CONFIRMOU E NÃO VEIO</option>
-                            <option value="">PENDENTE</option>
                         </select>
-                        <div class="flex items-center gap-3 bg-slate-50 px-4 rounded-xl border-2 border-slate-200">
-                            <input type="checkbox" id="auto-refresh-toggle" class="w-5 h-5 text-indigo-600 rounded">
-                            <label for="auto-refresh-toggle" class="text-sm font-semibold text-slate-700 cursor-pointer flex-1">
-                                <i class="fas fa-sync-alt text-indigo-500"></i> Auto-refresh (30s)
-                            </label>
-                        </div>
                     </div>
                     
-                    <div id="management-list" class="space-y-4">
-                        <div id="loader" class="text-center py-16 hidden">
+                    <div id="management-list" class="space-y-3">
+                        <div id="loader" class="text-center py-12 hidden">
                             <div class="loader mx-auto"></div>
-                            <p class="mt-6 text-slate-500 font-semibold">Carregando dados...</p>
+                            <p class="mt-4 text-slate-500">Buscando dados...</p>
                         </div>
-                        <div id="management-empty-state" class="text-center py-16 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 hidden">
-                            <i class="fas fa-calendar-times text-6xl text-slate-300 mb-4"></i>
-                            <p class="text-slate-500 font-bold text-lg">Nenhum agendamento encontrado</p>
-                            <p class="text-sm text-slate-400 mt-2">Tente ajustar os filtros ou adicionar novos agendamentos</p>
+                        <div id="management-empty" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
+                            <p class="text-slate-500">Selecione seu nome para ver os agendamentos</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ==================== SEÇÃO DASHBOARD ==================== -->
+            <!-- SEÇÃO DASHBOARD -->
             <section id="dashboard-section" class="tab-content hidden fade-in">
-                <div class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50">
-                    <div class="flex items-center gap-3 mb-8">
-                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-chart-pie text-white"></i>
+                <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-xl font-bold text-slate-800 mb-6">📈 Seu Desempenho Hoje</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <h3 class="font-bold text-slate-700 mb-4">Status dos Agendamentos</h3>
+                            <canvas id="statusChart"></canvas>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">Seu Desempenho Hoje</h2>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl border-2 border-indigo-100">
-                            <h3 class="text-lg font-bold text-slate-700 mb-6 flex items-center gap-2">
-                                <i class="fas fa-doughnut-bite text-indigo-500"></i>
-                                Status dos Agendamentos
-                            </h3>
-                            <canvas id="statusChart" width="400" height="300"></canvas>
-                        </div>
-                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border-2 border-blue-100">
-                            <h3 class="text-lg font-bold text-slate-700 mb-6 flex items-center gap-2">
-                                <i class="fas fa-list-ol text-blue-500"></i>
-                                Resumo Numérico
-                            </h3>
-                            <div id="dashboard-stats" class="space-y-3">
-                                <div class="flex justify-between items-center p-4 bg-white rounded-xl shadow-sm">
-                                    <span class="font-semibold text-slate-700">Total de Agendamentos:</span>
-                                    <span class="font-black text-2xl text-indigo-600">0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ==================== NOVA SEÇÃO: HISTÓRICO ==================== -->
-            <section id="historico-section" class="tab-content hidden fade-in">
-                <div class="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/50">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-green-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-history text-white"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-800">Histórico de Ações</h2>
-                            <p class="text-sm text-slate-600">Últimas 20 operações realizadas</p>
-                        </div>
-                    </div>
-                    
-                    <div id="history-list" class="space-y-3 max-h-[600px] overflow-y-auto">
-                        <div class="text-center py-12 text-slate-400">
-                            <i class="fas fa-clock text-5xl mb-4"></i>
-                            <p class="font-semibold">Nenhuma ação registrada ainda</p>
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <h3 class="font-bold text-slate-700 mb-4">Resumo</h3>
+                            <div id="dashboard-stats" class="space-y-3"></div>
                         </div>
                     </div>
                 </div>
@@ -726,56 +382,37 @@
         </main>
     </div>
 
-    <!-- ==================== MODAL MENSAGEM RÁPIDA PREMIUM ==================== -->
-    <div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop" style="display: none;">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 transform transition-all slide-in">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-paper-plane text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-black text-slate-900">Mensagem Rápida de Agendamento</h3>
-            </div>
-            
-            <div class="space-y-5">
+    <!-- MODAL MENSAGEM RÁPIDA -->
+    <div id="quick-message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 slide-in">
+            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-paper-plane text-green-500"></i> Mensagem Rápida
+            </h3>
+            <div class="space-y-4">
                 <div>
-                    <label for="quick-jovem" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                        <i class="fas fa-user text-indigo-500"></i>
-                        Nome do Jovem
-                    </label>
-                    <input type="text" id="quick-jovem" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium" placeholder="Ex: Amanda Silva">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do Jovem</label>
+                    <input type="text" id="quick-jovem" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Ex: Amanda">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="quick-data" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-calendar text-blue-500"></i>
-                            Data
-                        </label>
-                        <input type="text" id="quick-data" placeholder="DD/MM/AAAA" maxlength="10" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                        <input type="text" id="quick-data" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="DD/MM/AAAA" maxlength="10">
                     </div>
                     <div>
-                        <label for="quick-horario" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-clock text-purple-500"></i>
-                            Horário
-                        </label>
-                        <input type="text" id="quick-horario" placeholder="HH:MM" maxlength="5" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Horário</label>
+                        <input type="text" id="quick-horario" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="HH:MM" maxlength="5">
                     </div>
                 </div>
                 <div>
-                    <label for="quick-local" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                        <i class="fas fa-map-marker-alt text-red-500"></i>
-                        Local
-                    </label>
-                    <select id="quick-local" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
-                        <option value="Eldorado">Eldorado</option>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Local</label>
+                    <select id="quick-local" class="w-full p-3 border-2 border-slate-200 rounded-xl">
+                        <option value="Eldorado" selected>Eldorado</option>
                         <option value="Centro">Centro</option>
                     </select>
                 </div>
                 <div>
-                    <label for="quick-assistente" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                        <i class="fas fa-user-tie text-green-500"></i>
-                        Assistente que vai atender
-                    </label>
-                    <select id="quick-assistente" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Assistente</label>
+                    <select id="quick-assistente" class="w-full p-3 border-2 border-slate-200 rounded-xl">
                         <option value="">-- Escolha --</option>
                         <option value="DIANA">Diana</option>
                         <option value="IGOR">Igor</option>
@@ -788,1509 +425,812 @@
                     </select>
                 </div>
                 <div>
-                    <label for="quick-numero" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                        <i class="fas fa-phone text-teal-500"></i>
-                        Número (com DDD)
-                    </label>
-                    <input type="tel" id="quick-numero" placeholder="55319..." maxlength="15" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Telefone (com DDD)</label>
+                    <input type="tel" id="quick-numero" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="5531..." maxlength="15">
                 </div>
             </div>
-            
-            <div class="flex justify-end gap-4 mt-8">
-                <button id="quick-modal-cancel" class="px-6 py-3 text-slate-600 hover:bg-slate-100 font-bold rounded-xl transition-all">
-                    Cancelar
-                </button>
-                <button id="quick-generate-btn" class="btn-premium flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Gerar Mensagem</span>
-                </button>
+            <div class="flex justify-end gap-3 mt-6">
+                <button id="quick-cancel-btn" class="py-2 px-4 text-slate-600 hover:bg-slate-100 rounded-xl font-semibold">Cancelar</button>
+                <button id="quick-generate-btn" class="py-2 px-4 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700">Gerar</button>
             </div>
-            
-            <div id="quick-message-result" class="mt-6 hidden"></div>
+            <div id="quick-result" class="mt-4 hidden"></div>
         </div>
     </div>
 
-    <!-- ==================== MODAL ATALHOS ==================== -->
-    <div id="shortcuts-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop" style="display: none;">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 slide-in">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-keyboard text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-black text-slate-900">Atalhos de Teclado</h3>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 bg-slate-50 rounded-xl">
-                    <div class="flex items-center gap-3 mb-2">
-                        <kbd class="px-3 py-1 bg-white border-2 border-slate-300 rounded-lg font-mono font-bold text-sm">Ctrl+N</kbd>
-                        <i class="fas fa-arrow-right text-slate-400"></i>
-                    </div>
-                    <p class="text-sm font-semibold text-slate-600">Novo Destinatário</p>
-                </div>
-                
-                <div class="p-4 bg-slate-50 rounded-xl">
-                    <div class="flex items-center gap-3 mb-2">
-                        <kbd class="px-3 py-1 bg-white border-2 border-slate-300 rounded-lg font-mono font-bold text-sm">Ctrl+S</kbd>
-                        <i class="fas fa-arrow-right text-slate-400"></i>
-                    </div>
-                    <p class="text-sm font-semibold text-slate-600">Salvar Tudo</p>
-                </div>
-                
-                <div class="p-4 bg-slate-50 rounded-xl">
-                    <div class="flex items-center gap-3 mb-2">
-                        <kbd class="px-3 py-1 bg-white border-2 border-slate-300 rounded-lg font-mono font-bold text-sm">Ctrl+G</kbd>
-                        <i class="fas fa-arrow-right text-slate-400"></i>
-                    </div>
-                    <p class="text-sm font-semibold text-slate-600">Gerar Mensagens</p>
-                </div>
-                
-                <div class="p-4 bg-slate-50 rounded-xl">
-                    <div class="flex items-center gap-3 mb-2">
-                        <kbd class="px-3 py-1 bg-white border-2 border-slate-300 rounded-lg font-mono font-bold text-sm">Ctrl+H</kbd>
-                        <i class="fas fa-arrow-right text-slate-400"></i>
-                    </div>
-                    <p class="text-sm font-semibold text-slate-600">Mostrar Atalhos</p>
-                </div>
-            </div>
-            
-            <div class="mt-6 text-center">
-                <button id="close-shortcuts-modal" class="btn-premium">
-                    <i class="fas fa-times"></i>
-                    Fechar
-                </button>
-            </div>
-        </div>
-    </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Iniciando sistema Eldorado...');
     
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // ==================== CONFIGURAÇÃO ====================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
+    // ==================== CONFIG ====================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
+    
+    // ==================== NOMES COMPLETOS ====================
+    const nomeCompleto = {
+        'DIANA': 'Diana D´Ávila Fagundes',
+        'IGOR': 'Igor Araújo de Alencar',
+        'WELKER': 'Welker Pablo Zanetti',
+        'TREINEE': 'Coordenação',
+        'TATIANA': 'Tatiana F. Moretti',
+        'GABRIELA': 'Gabriela Silva',
+        'MARCELO': 'Marcelo Eduardo',
+        'KAMILLY': 'Kamilly Rodrigues',
+        'LETICIA': 'Letícia Fernandes'
+    };
+    
+    // ==================== VARIÁVEIS ====================
+    let recipients = [];
+    let allAppointments = [];
+    let chartInstance = null;
+    let localStorageOK = false;
+    let memoryStorage = {};
+    
+    // Testa localStorage
+    try {
+        localStorage.setItem('test', '1');
+        localStorage.removeItem('test');
+        localStorageOK = true;
+    } catch(e) {
+        localStorageOK = false;
+    }
+    
+    // ==================== ELEMENTOS ====================
+    const assistantSelect = document.getElementById('assistant-name');
+    const locationSelect = document.getElementById('location-select');
+    const addRecipientBtn = document.getElementById('add-recipient-btn');
+    const addPuxadaBtn = document.getElementById('add-puxada-btn');
+    const recipientsList = document.getElementById('recipients-list');
+    const emptyState = document.getElementById('empty-state');
+    const generateMessagesBtn = document.getElementById('generate-messages-btn');
+    const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
+    const quickMessageBtn = document.getElementById('quick-message-btn');
+    const messagesSection = document.getElementById('messages-section');
+    const messagesList = document.getElementById('messages-list');
+    const quickModal = document.getElementById('quick-message-modal');
+    const quickCancelBtn = document.getElementById('quick-cancel-btn');
+    const quickGenerateBtn = document.getElementById('quick-generate-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const clearMessagesBtn = document.getElementById('clear-messages-btn');
 
-        // ==================== VARIÁVEIS GLOBAIS ====================
-        let recipients = [];
-        let allAppointments = [];
-        let autoRefreshInterval = null;
-        let statusChartInstance = null;
-        let localStorageAvailable = false;
-        let memoryStorage = {};
-        let sessionStartTime = Date.now();
-        let history = [];
-        
-        const LOCAL_STORAGE_KEY = 'agendadorProEldoradoRascunhos';
-        const HISTORY_KEY = 'agendadorProHistory';
-        
-        // ==================== MAPEAMENTO DE NOMES ====================
-        const assistantFullNameMap = {
-            'IGOR': 'Igor Araújo de Alencar',
-            'DIANA': 'Diana D´Ávila Fagundes',
-            'TATIANA': 'Tatiana F. Moretti',
-            'WELKER': 'Welker Pablo Zanetti',
-            'TREINEE': 'Coordenação',
-            'GABRIELA': 'Gabriela Silva',
-            'MARCELO': 'Marcelo Eduardo',
-            'KAMILLY': 'Kamilly Rodrigues',
-            'LETICIA': 'Letícia Fernandes'
-        };
+    // ==================== TOAST ====================
+    function showToast(msg, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+        toast.innerHTML = `<span class="text-xl">${icons[type]}</span><span class="font-medium">${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('removing');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
 
-        // ==================== SELETORES ====================
-        const assistantSelect = document.getElementById('assistant-name');
-        const locationSelect = document.getElementById('location-select');
-        const addRecipientBtn = document.getElementById('add-recipient-btn');
-        const addPuxadaBtn = document.getElementById('add-puxada-btn');
-        const recipientsList = document.getElementById('recipients-list');
-        const generateMessagesBtn = document.getElementById('generate-messages-btn');
-        const generateInstitutoBtn = document.getElementById('generate-instituto-btn');
-        const messagesSection = document.getElementById('messages-section');
-        const messagesList = document.getElementById('messages-list');
-        const emptyState = document.getElementById('empty-state');
-        const managementList = document.getElementById('management-list');
-        const loader = document.getElementById('loader');
-        const managementEmptyState = document.getElementById('management-empty-state');
-        const refreshAppointmentsBtn = document.getElementById('refresh-appointments-btn');
-        const filterSearch = document.getElementById('filter-search');
-        const filterStatus = document.getElementById('filter-status');
-        const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
-        const clearMessagesBtn = document.getElementById('clear-messages-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        const fabShortcuts = document.getElementById('fab-shortcuts');
-        const shortcutsModal = document.getElementById('shortcuts-modal');
-        const closeShortcutsModal = document.getElementById('close-shortcuts-modal');
-        
-        // Modal Mensagem Rápida
-        const quickMessageBtn = document.getElementById('quick-message-btn');
-        const quickMessageModal = document.getElementById('quick-message-modal');
-        const quickModalCancel = document.getElementById('quick-modal-cancel');
-        const quickGenerateBtn = document.getElementById('quick-generate-btn');
-        const quickJovemInput = document.getElementById('quick-jovem');
-        const quickDataInput = document.getElementById('quick-data');
-        const quickHorarioInput = document.getElementById('quick-horario');
-        const quickLocalSelect = document.getElementById('quick-local');
-        const quickAssistenteSelect = document.getElementById('quick-assistente');
-        const quickNumeroInput = document.getElementById('quick-numero');
-        const quickMessageResult = document.getElementById('quick-message-result');
+    // ==================== RELÓGIO ====================
+    function updateClock() {
+        document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('pt-BR');
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-        // ==================== DETECTA LOCALSTORAGE ====================
-        try {
-            localStorage.setItem('test', 'test');
-            localStorage.removeItem('test');
-            localStorageAvailable = true;
-        } catch(e) {
-            localStorageAvailable = false;
-            console.warn('⚠️ localStorage não disponível');
-            showToast('⚠️ Modo sessão ativa - dados salvos temporariamente', 'warning');
+    // ==================== TABS ====================
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    function switchTab(tabName) {
+        tabBtns.forEach(btn => {
+            btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
+            btn.classList.add('text-slate-600');
+        });
+        tabContents.forEach(c => c.classList.add('hidden'));
+        
+        const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+        activeBtn.classList.remove('text-slate-600');
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
+        document.getElementById(`${tabName}-section`).classList.remove('hidden');
+        
+        if (tabName === 'gerenciar') fetchAppointments();
+        if (tabName === 'dashboard') fetchDashboard();
+    }
+    
+    tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+    switchTab('agendar');
+
+    // ==================== DATAS ====================
+    function getTodayString() {
+        const d = new Date();
+        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+    
+    function getTomorrowString() {
+        const d = new Date();
+        const day = d.getDay();
+        if (day === 6) d.setDate(d.getDate() + 2);
+        else d.setDate(d.getDate() + 1);
+        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+    
+    function getDayOfWeek(dateStr) {
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return '';
+        const [d, m, y] = dateStr.split('/');
+        const date = new Date(y, m - 1, d, 12);
+        if (isNaN(date.getTime())) return '';
+        const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        return dias[date.getDay()];
+    }
+    
+    function calcAge(birthStr) {
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(birthStr)) return null;
+        const [d, m, y] = birthStr.split('/');
+        const birth = new Date(y, m - 1, d);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
+        return age;
+    }
+    
+    function generateCode(nome) {
+        const words = nome.trim().split(' ').filter(w => w);
+        const initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+        return initials + Math.floor(100 + Math.random() * 900);
+    }
+
+    // ==================== ESTATÍSTICAS ====================
+    function updateStats() {
+        const total = recipients.length;
+        const complete = recipients.filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel).length;
+        const puxadas = recipients.filter(r => r.isPuxada).length;
+        const tomorrow = recipients.filter(r => !r.isPuxada).length;
+        
+        document.getElementById('stat-total').textContent = total;
+        document.getElementById('stat-complete').textContent = complete;
+        document.getElementById('stat-puxadas').textContent = puxadas;
+        document.getElementById('stat-tomorrow').textContent = tomorrow;
+    }
+
+    // ==================== STORAGE ====================
+    function saveLocal() {
+        const data = { time: Date.now(), recipients };
+        if (localStorageOK) {
+            try { localStorage.setItem('agendadorEldorado', JSON.stringify(data)); } catch(e) {}
+        } else {
+            memoryStorage['agendadorEldorado'] = data;
         }
+        updateStats();
+    }
+    
+    function loadLocal() {
+        let data = null;
+        if (localStorageOK) {
+            try {
+                const saved = localStorage.getItem('agendadorEldorado');
+                if (saved) data = JSON.parse(saved);
+            } catch(e) {}
+        } else {
+            data = memoryStorage['agendadorEldorado'];
+        }
+        if (data && Date.now() - data.time < 86400000) {
+            recipients = data.recipients || [];
+        }
+    }
 
-        // ==================== SISTEMA DE TOAST PREMIUM ====================
-        const showToast = (message, type = 'info') => {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            
-            const icons = {
-                success: '<i class="fas fa-check-circle text-2xl"></i>',
-                error: '<i class="fas fa-exclamation-circle text-2xl"></i>',
-                info: '<i class="fas fa-info-circle text-2xl"></i>',
-                warning: '<i class="fas fa-exclamation-triangle text-2xl"></i>'
-            };
-            
-            toast.innerHTML = `
-                ${icons[type] || icons.info}
-                <div class="flex-1">
-                    <div class="font-bold text-sm uppercase tracking-wide mb-1">${type}</div>
-                    <div class="text-sm">${message}</div>
-                </div>
-                <button class="ml-2 hover:scale-110 transition-transform" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('removing');
-                setTimeout(() => toast.remove(), 300);
-            }, 5000);
-            
-            addToHistory(`Toast: ${message}`, type);
-        };
-
-        // ==================== RELÓGIO E TIMER DE SESSÃO ====================
-        const updateClock = () => {
-            const now = new Date();
-            document.getElementById('live-clock').textContent = now.toLocaleTimeString('pt-BR');
-        };
+    // ==================== RENDERIZAR DESTINATÁRIOS ====================
+    function renderRecipients() {
+        recipientsList.querySelectorAll('[data-id]').forEach(el => el.remove());
         
-        const updateSessionTimer = () => {
-            const elapsed = Date.now() - sessionStartTime;
-            const minutes = Math.floor(elapsed / 60000);
-            const seconds = Math.floor((elapsed % 60000) / 1000);
-            document.getElementById('session-timer').textContent = 
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        };
-        
-        updateClock();
-        setInterval(updateClock, 1000);
-        setInterval(updateSessionTimer, 1000);
-
-        // ==================== TEMA ESCURO/CLARO ====================
-        themeToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            
-            if (isDark) {
-                html.removeAttribute('data-theme');
-                themeToggle.innerHTML = '<i class="fas fa-moon text-slate-700"></i>';
-                showToast('Tema claro ativado', 'info');
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                themeToggle.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
-                showToast('Tema escuro ativado', 'info');
-            }
-            
-            addToHistory('Tema alternado', 'info');
-        });
-
-        // ==================== ATALHOS DE TECLADO ====================
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey) {
-                switch(e.key.toLowerCase()) {
-                    case 'n':
-                        e.preventDefault();
-                        handleAddRecipient();
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        showToast('Rascunhos salvos automaticamente!', 'success');
-                        break;
-                    case 'g':
-                        e.preventDefault();
-                        if (!generateMessagesBtn.disabled) {
-                            handleGenerateMessages(false);
-                        }
-                        break;
-                    case 'h':
-                        e.preventDefault();
-                        shortcutsModal.style.display = 'flex';
-                        break;
-                }
-            }
-        });
-        
-        fabShortcuts.addEventListener('click', () => {
-            shortcutsModal.style.display = 'flex';
-        });
-        
-        closeShortcutsModal.addEventListener('click', () => {
-            shortcutsModal.style.display = 'none';
-        });
-
-        // ==================== HISTÓRICO DE AÇÕES ====================
-        const addToHistory = (action, type = 'info') => {
-            const timestamp = new Date().toLocaleString('pt-BR');
-            history.unshift({ action, type, timestamp });
-            
-            if (history.length > 20) history.pop();
-            
-            if (localStorageAvailable) {
-                try {
-                    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-                } catch(e) {
-                    console.error('Erro ao salvar histórico');
-                }
-            }
-            
-            renderHistory();
-        };
-        
-        const loadHistory = () => {
-            if (localStorageAvailable) {
-                try {
-                    const saved = localStorage.getItem(HISTORY_KEY);
-                    if (saved) history = JSON.parse(saved);
-                } catch(e) {
-                    console.error('Erro ao carregar histórico');
-                }
-            }
-            renderHistory();
-        };
-        
-        const renderHistory = () => {
-            const historyList = document.getElementById('history-list');
-            
-            if (history.length === 0) {
-                historyList.innerHTML = `
-                    <div class="text-center py-12 text-slate-400">
-                        <i class="fas fa-clock text-5xl mb-4"></i>
-                        <p class="font-semibold">Nenhuma ação registrada ainda</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            historyList.innerHTML = history.map(item => {
-                const icons = {
-                    success: 'fa-check-circle text-green-500',
-                    error: 'fa-times-circle text-red-500',
-                    info: 'fa-info-circle text-blue-500',
-                    warning: 'fa-exclamation-triangle text-amber-500'
-                };
+        if (recipients.length === 0) {
+            emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+            recipients.forEach((r, i) => {
+                const div = document.createElement('div');
+                div.className = 'p-5 border-2 border-slate-200 rounded-xl bg-white fade-in space-y-4';
+                div.dataset.id = r.id;
                 
-                return `
-                    <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-all">
-                        <i class="fas ${icons[item.type]} text-xl mt-1"></i>
-                        <div class="flex-1">
-                            <p class="font-semibold text-slate-800">${item.action}</p>
-                            <p class="text-xs text-slate-500 mt-1">${item.timestamp}</p>
+                const badge = r.isPuxada ? 
+                    '<span class="badge bg-amber-100 text-amber-800"><i class="fas fa-bolt"></i> PUXADA</span>' : 
+                    '<span class="badge bg-blue-100 text-blue-800"><i class="fas fa-calendar"></i> AMANHÃ</span>';
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-bold text-slate-800">Destinatário ${i+1}</span>
+                            ${badge}
                         </div>
+                        <button class="remove-btn p-2 text-red-500 hover:bg-red-100 rounded-lg" data-id="${r.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
-                `;
-            }).join('');
-        };
-
-        // ==================== TABS PREMIUM ====================
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        const switchTab = (tabName) => {
-            tabBtns.forEach(btn => {
-                btn.classList.remove('bg-gradient-to-r', 'from-indigo-600', 'to-purple-600', 'text-white', 'shadow-lg');
-                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
-            });
-            tabContents.forEach(content => content.classList.add('hidden'));
-
-            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
-            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
-            activeBtn.classList.add('bg-gradient-to-r', 'from-indigo-600', 'to-purple-600', 'text-white', 'shadow-lg');
-            
-            document.getElementById(`${tabName}-section`).classList.remove('hidden');
-
-            if (tabName === 'gerenciar') fetchAppointments();
-            if (tabName === 'dashboard') fetchDashboardData();
-            
-            addToHistory(`Navegou para aba: ${tabName}`, 'info');
-        };
-
-        tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-        switchTab('agendar');
-
-        // ==================== FUNÇÕES DE DATA ====================
-        const getTodayDateString = () => {
-            const today = new Date();
-            return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-        };
-
-        const getTomorrowDateString = () => {
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            const tomorrow = new Date(today);
-            
-            if (dayOfWeek === 6) {
-                tomorrow.setDate(today.getDate() + 2);
-            } else if (dayOfWeek === 0) {
-                tomorrow.setDate(today.getDate() + 1);
-            } else {
-                tomorrow.setDate(today.getDate() + 1);
-            }
-            
-            return `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
-        };
-
-        const getDayOfWeek = (dateString) => {
-            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return '';
-            const parts = dateString.split('/');
-            const date = new Date(parts[2], parts[1] - 1, parts[0], 12);
-            
-            if (isNaN(date.getTime())) return '';
-            const options = { weekday: 'long' };
-            let dayName = new Intl.DateTimeFormat('pt-BR', options).format(date);
-            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
-        };
-
-        const calculateAge = (birthDateString) => {
-            if (!birthDateString || !/^\d{2}\/\d{2}\/\d{4}$/.test(birthDateString)) return null;
-            const parts = birthDateString.split('/');
-            const birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
-            if (isNaN(birthDate.getTime())) return null;
-            
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-            return age;
-        };
-
-        const generateCode = (jovem) => {
-            const words = jovem.split(' ').filter(w => w);
-            let initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
-            return initials + Math.floor(100 + Math.random() * 900);
-        };
-
-        // ==================== VALIDAÇÕES ====================
-        const validatePhone = (phone) => {
-            const cleaned = phone.replace(/\D/g, '');
-            return cleaned.length >= 12 && cleaned.startsWith('55');
-        };
-
-        const validateTime = (time) => {
-            return /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(time);
-        };
-
-        const validateDate = (date) => {
-            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) return false;
-            const parts = date.split('/');
-            const day = parseInt(parts[0]);
-            const month = parseInt(parts[1]);
-            return month >= 1 && month <= 12 && day >= 1 && day <= 31;
-        };
-
-        // ==================== ESTATÍSTICAS COM ANIMAÇÃO ====================
-        const updateStats = () => {
-            const total = recipients.length;
-            const complete = recipients.filter(r => 
-                r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel
-            ).length;
-            const puxadas = recipients.filter(r => r.isPuxada).length;
-            const tomorrow = recipients.filter(r => !r.isPuxada).length;
-            
-            animateNumber('stat-total', total);
-            animateNumber('stat-complete', complete);
-            animateNumber('stat-puxadas', puxadas);
-            animateNumber('stat-tomorrow', tomorrow);
-            
-            // Progress bars
-            document.getElementById('progress-total').style.width = `${total > 0 ? 100 : 0}%`;
-            document.getElementById('progress-complete').style.width = `${total > 0 ? (complete/total)*100 : 0}%`;
-            document.getElementById('progress-puxadas').style.width = `${total > 0 ? (puxadas/total)*100 : 0}%`;
-            document.getElementById('progress-tomorrow').style.width = `${total > 0 ? (tomorrow/total)*100 : 0}%`;
-        };
-        
-        const animateNumber = (id, target) => {
-            const element = document.getElementById(id);
-            const current = parseInt(element.textContent) || 0;
-            
-            if (current === target) return;
-            
-            const increment = target > current ? 1 : -1;
-            const duration = 500;
-            const steps = Math.abs(target - current);
-            const stepDuration = duration / steps;
-            
-            let value = current;
-            const interval = setInterval(() => {
-                value += increment;
-                element.textContent = value;
-                
-                if (value === target) clearInterval(interval);
-            }, stepDuration);
-        };
-
-        // ==================== LOCAL STORAGE ====================
-        const saveToLocalStorage = () => {
-            const dataToSave = {
-                timestamp: new Date().getTime(),
-                recipients: recipients
-            };
-            
-            if (localStorageAvailable) {
-                try {
-                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
-                } catch(e) {
-                    memoryStorage[LOCAL_STORAGE_KEY] = dataToSave;
-                }
-            } else {
-                memoryStorage[LOCAL_STORAGE_KEY] = dataToSave;
-            }
-            updateStats();
-        };
-
-        const loadFromLocalStorage = () => {
-            let savedData = null;
-            
-            if (localStorageAvailable) {
-                try {
-                    savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-                    if (savedData) savedData = JSON.parse(savedData);
-                } catch(e) {
-                    savedData = memoryStorage[LOCAL_STORAGE_KEY];
-                }
-            } else {
-                savedData = memoryStorage[LOCAL_STORAGE_KEY];
-            }
-            
-            if (savedData) {
-                const ONE_DAY = 24 * 60 * 60 * 1000;
-                if (Date.now() - savedData.timestamp < ONE_DAY) {
-                    recipients = savedData.recipients || [];
-                } else {
-                    if (localStorageAvailable) {
-                        try {
-                            localStorage.removeItem(LOCAL_STORAGE_KEY);
-                        } catch(e) {
-                            delete memoryStorage[LOCAL_STORAGE_KEY];
-                        }
-                    }
-                }
-            }
-        };
-
-        // ==================== RENDERIZAÇÃO PREMIUM ====================
-        const renderRecipients = () => {
-            recipientsList.querySelectorAll('[data-id]').forEach(el => el.remove());
-            
-            if (recipients.length === 0) {
-                emptyState.style.display = 'block';
-            } else {
-                emptyState.style.display = 'none';
-                recipients.forEach((recipient, index) => {
-                    recipientsList.appendChild(createRecipientForm(recipient, index));
-                });
-            }
-            updateGenerateButtonState();
-            updateStats();
-        };
-
-        const createRecipientForm = (recipient, index) => {
-            const form = document.createElement('div');
-            form.className = 'p-6 border-2 border-slate-200 rounded-2xl space-y-4 fade-in bg-gradient-to-br from-white to-slate-50 hover:border-indigo-300 hover:shadow-xl transition-all';
-            form.dataset.id = recipient.id;
-            
-            const isComplete = recipient.jovem && recipient.responsavel && recipient.data && recipient.horario && recipient.numero_responsavel;
-            const badge = recipient.isPuxada ? 
-                '<span class="badge bg-gradient-to-r from-amber-400 to-orange-500 text-white"><i class="fas fa-bolt"></i> PUXADA</span>' : 
-                '<span class="badge bg-gradient-to-r from-blue-400 to-blue-500 text-white"><i class="fas fa-calendar-day"></i> AMANHÃ</span>';
-            
-            const statusBadge = isComplete ?
-                '<span class="badge bg-gradient-to-r from-green-400 to-green-500 text-white"><i class="fas fa-check-circle"></i> Completo</span>' :
-                '<span class="badge bg-slate-200 text-slate-600"><i class="fas fa-hourglass-half"></i> Incompleto</span>';
-            
-            form.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold">
-                            ${index + 1}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Jovem *</label>
+                            <input type="text" data-field="jovem" value="${r.jovem || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg" placeholder="Nome completo">
                         </div>
                         <div>
-                            <h3 class="font-bold text-lg text-slate-700">Destinatário ${index + 1}</h3>
-                            <div class="flex gap-2 mt-1">
-                                ${badge}
-                                ${statusBadge}
-                            </div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Data Nascimento</label>
+                            <input type="text" data-field="data_nascimento" value="${r.data_nascimento || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg date-mask" placeholder="DD/MM/AAAA" maxlength="10">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Responsável *</label>
+                            <input type="text" data-field="responsavel" value="${r.responsavel || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg" placeholder="Nome do responsável">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Tel. Responsável *</label>
+                            <input type="tel" data-field="numero_responsavel" value="${r.numero_responsavel || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg phone-mask" placeholder="5531..." maxlength="15">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Tel. Jovem</label>
+                            <input type="tel" data-field="numero_jovem" value="${r.numero_jovem || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg phone-mask" placeholder="5531..." maxlength="15">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Data Agendamento *</label>
+                            <input type="text" data-field="data" value="${r.data || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg date-mask" placeholder="DD/MM/AAAA" maxlength="10">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Horário *</label>
+                            <input type="text" data-field="horario" value="${r.horario || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg time-mask" placeholder="HH:MM" maxlength="5">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Irmãos (opcional)</label>
+                            <input type="text" data-field="irmaos" value="${r.irmaos || ''}" class="w-full p-2 border-2 border-slate-200 rounded-lg" placeholder="Ex: João (12), Maria (10)">
                         </div>
                     </div>
-                    <button class="remove-recipient-btn p-3 text-slate-400 hover:bg-red-100 hover:text-red-600 rounded-xl transition-all tooltip" data-id="${recipient.id}" data-tooltip="Remover">
-                        <i class="fas fa-trash-alt text-xl"></i>
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-user text-indigo-500"></i>
-                            Jovem Convocado *
-                        </label>
-                        <input type="text" placeholder="Nome completo" data-field="jovem" value="${recipient.jovem || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition font-medium ${!recipient.jovem ? 'border-red-300' : ''}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-birthday-cake text-pink-500"></i>
-                            Data de Nascimento
-                        </label>
-                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data_nascimento" value="${recipient.data_nascimento || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition date-mask font-medium">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-user-shield text-green-500"></i>
-                            Responsável *
-                        </label>
-                        <input type="text" placeholder="Nome do responsável" data-field="responsavel" value="${recipient.responsavel || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition font-medium ${!recipient.responsavel ? 'border-red-300' : ''}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-phone text-blue-500"></i>
-                            Telefone do Responsável *
-                        </label>
-                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_responsavel" value="${recipient.numero_responsavel || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition phone-mask font-medium ${!recipient.numero_responsavel ? 'border-red-300' : ''}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-mobile-alt text-purple-500"></i>
-                            Telefone do Jovem
-                        </label>
-                        <input type="tel" placeholder="55319..." maxlength="15" data-field="numero_jovem" value="${recipient.numero_jovem || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition phone-mask font-medium">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-calendar text-teal-500"></i>
-                            Data do Agendamento *
-                        </label>
-                        <input type="text" placeholder="DD/MM/AAAA" maxlength="10" data-field="data" value="${recipient.data || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition date-mask font-medium ${!recipient.data ? 'border-red-300' : ''}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-clock text-orange-500"></i>
-                            Horário *
-                        </label>
-                        <input type="text" placeholder="HH:MM" maxlength="5" data-field="horario" value="${recipient.horario || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition time-mask font-medium ${!recipient.horario ? 'border-red-300' : ''}">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-users text-cyan-500"></i>
-                            Irmãos (opcional)
-                        </label>
-                        <input type="text" placeholder="Ex: João (12), Maria (10)" data-field="irmaos" value="${recipient.irmaos || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition font-medium">
-                    </div>
-                </div>`;
-            return form;
-        };
-
-        // ==================== MÁSCARAS ====================
-        recipientsList.addEventListener('input', (e) => {
-            if (!e.target.dataset.field) return;
-            
-            const input = e.target;
-            let value = input.value;
-            const field = input.dataset.field;
-            const id = input.closest('[data-id]').dataset.id;
-
-            if (input.classList.contains('date-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
-                if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
-                if (value.length > 10) value = value.slice(0, 10);
-                input.value = value;
-                
-                if (value.length === 10 && !validateDate(value)) {
-                    input.classList.add('border-red-500', 'shake');
-                    showToast('Data inválida', 'error');
-                } else {
-                    input.classList.remove('border-red-500', 'shake');
-                }
-            }
-            else if (input.classList.contains('phone-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length > 0 && !value.startsWith('55')) value = '55' + value;
-                if (value.length > 15) value = value.slice(0, 15);
-                input.value = value;
-                
-                if (value.length >= 12 && !validatePhone(value)) {
-                    input.classList.add('border-red-500');
-                } else {
-                    input.classList.remove('border-red-500');
-                }
-            }
-            else if (input.classList.contains('time-mask')) {
-                value = value.replace(/\D/g, '');
-                if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
-                if (value.length > 5) value = value.slice(0, 5);
-                input.value = value;
-                
-                if (value.length === 5 && !validateTime(value)) {
-                    input.classList.add('border-red-500');
-                    showToast('Horário inválido (00:00 - 23:59)', 'error');
-                } else {
-                    input.classList.remove('border-red-500');
-                }
-            }
-            
-            handleUpdateRecipient(id, field, input.value);
-        });
-
-        // ==================== HANDLERS ====================
-        const handleAddRecipient = () => {
-            recipients.push({ 
-                id: Date.now().toString(), 
-                jovem: '', 
-                responsavel: '', 
-                data: getTomorrowDateString(), 
-                horario: '', 
-                numero_responsavel: '', 
-                numero_jovem: '', 
-                data_nascimento: '', 
-                irmaos: '', 
-                isPuxada: false
+                `;
+                recipientsList.appendChild(div);
             });
-            renderRecipients();
-            saveToLocalStorage();
-            showToast('✨ Novo destinatário adicionado', 'success');
-            addToHistory('Destinatário adicionado (Amanhã)', 'success');
-        };
+        }
+        updateStats();
+    }
+
+    // ==================== MÁSCARAS ====================
+    recipientsList.addEventListener('input', function(e) {
+        if (!e.target.dataset.field) return;
         
-        const handleAddPuxada = () => {
-            recipients.push({ 
-                id: Date.now().toString(), 
-                jovem: '', 
-                responsavel: '', 
-                data: getTodayDateString(), 
-                horario: '', 
-                numero_responsavel: '', 
-                numero_jovem: '', 
-                data_nascimento: '', 
-                irmaos: '', 
-                isPuxada: true
-            });
-            renderRecipients();
-            saveToLocalStorage();
-            showToast('⚡ Puxada adicionada', 'warning');
-            addToHistory('Puxada adicionada (Hoje)', 'warning');
-        };
+        const input = e.target;
+        let value = input.value;
+        const field = input.dataset.field;
+        const container = input.closest('[data-id]');
+        if (!container) return;
+        const id = container.dataset.id;
+        
+        if (input.classList.contains('date-mask')) {
+            value = value.replace(/\D/g, '');
+            if (value.length >= 2) value = value.slice(0,2) + '/' + value.slice(2);
+            if (value.length >= 5) value = value.slice(0,5) + '/' + value.slice(5,9);
+            input.value = value.slice(0, 10);
+        } else if (input.classList.contains('phone-mask')) {
+            value = value.replace(/\D/g, '');
+            if (value.length > 0 && !value.startsWith('55')) value = '55' + value;
+            input.value = value.slice(0, 15);
+        } else if (input.classList.contains('time-mask')) {
+            value = value.replace(/\D/g, '');
+            if (value.length >= 2) value = value.slice(0,2) + ':' + value.slice(2,4);
+            input.value = value.slice(0, 5);
+        }
+        
+        const recipient = recipients.find(r => r.id === id);
+        if (recipient) {
+            recipient[field] = input.value;
+            saveLocal();
+        }
+    });
 
-        const handleRemoveRecipient = (id) => {
-            if (confirm('🗑️ Tem certeza que deseja remover este destinatário?')) {
-                const recipient = recipients.find(r => r.id === id);
+    // ==================== REMOVER ====================
+    recipientsList.addEventListener('click', function(e) {
+        const removeBtn = e.target.closest('.remove-btn');
+        if (removeBtn) {
+            const id = removeBtn.dataset.id;
+            if (confirm('Remover este destinatário?')) {
                 recipients = recipients.filter(r => r.id !== id);
                 renderRecipients();
-                saveToLocalStorage();
+                saveLocal();
                 showToast('Destinatário removido', 'info');
-                addToHistory(`Removido: ${recipient.jovem || 'Destinatário'}`, 'info');
             }
-        };
+        }
+    });
+
+    // ==================== ADICIONAR ====================
+    addRecipientBtn.addEventListener('click', function() {
+        console.log('➕ Botão Amanhã clicado');
+        recipients.push({
+            id: Date.now().toString(),
+            jovem: '', responsavel: '', data: getTomorrowString(), horario: '',
+            numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '',
+            isPuxada: false
+        });
+        renderRecipients();
+        saveLocal();
+        showToast('Destinatário adicionado', 'success');
+    });
+
+    addPuxadaBtn.addEventListener('click', function() {
+        console.log('⚡ Botão Puxada clicado');
+        recipients.push({
+            id: Date.now().toString(),
+            jovem: '', responsavel: '', data: getTodayString(), horario: '',
+            numero_responsavel: '', numero_jovem: '', data_nascimento: '', irmaos: '',
+            isPuxada: true
+        });
+        renderRecipients();
+        saveLocal();
+        showToast('Puxada adicionada', 'warning');
+    });
+
+    // ==================== GERAR MENSAGENS ====================
+    function gerarMensagens(isInstituto) {
+        console.log('📝 Gerando mensagens...', isInstituto ? 'Instituto' : 'Projeto');
         
-        const handleUpdateRecipient = (id, field, value) => {
-            const recipient = recipients.find(r => r.id === id);
-            if (recipient) {
-                recipient[field] = value;
-                saveToLocalStorage();
-            }
-        };
-
-        const updateGenerateButtonState = () => {
-            const hasData = assistantSelect.value !== '' && recipients.length > 0;
-            generateMessagesBtn.disabled = !hasData;
-            generateInstitutoBtn.disabled = !hasData;
-        };
-
-        // ==================== TEMPLATES ====================
-        const messageTemplates = {
-            long: {
-                title: `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*`,
-                scheduling_info: `*Dados do Agendamento:*\n\n*Data:* {diaDaSemana}, {data}\n*Horário:* {horario} (chegar 10min antes)`,
-                locations: {
-                    Eldorado: `*Local:* Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)`,
-                    Centro: `*Local:* Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)`
-                },
-                footer: `*Documentos Necessários:*\n\n• RG, CPF ou Certidão de Nascimento do jovem.\n• Comprovante de Residência.\n\n---\n*Código do Jovem:* {codigo}\n\n*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.\n\nAtenciosamente,\n\n*{assistente}*\n{organizacao}`
-            }
-        };
-
-        const generateMessageText = (data) => {
-            const assistantDisplayName = assistantFullNameMap[data.assistente] || data.assistente;
-            const diaDaSemana = getDayOfWeek(data.data);
-            const organizacao = data.isInstituto ? "Instituto Crescer'Minas" : "Coordenação | Empresa Crescer";
+        const assistant = assistantSelect.value;
+        const local = locationSelect.value;
+        
+        if (!assistant) {
+            showToast('Selecione seu nome!', 'warning');
+            return;
+        }
+        
+        const validos = recipients.filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel);
+        
+        if (validos.length === 0) {
+            showToast('Preencha os campos obrigatórios!', 'warning');
+            return;
+        }
+        
+        messagesSection.classList.remove('hidden');
+        messagesList.innerHTML = '';
+        
+        validos.forEach(r => {
+            const idade = calcAge(r.data_nascimento);
+            const codigo = generateCode(r.jovem);
+            const diaSemana = getDayOfWeek(r.data);
+            const nomeAssistente = nomeCompleto[assistant] || assistant;
+            const org = isInstituto ? "Instituto Conecta Jovem" : "Coordenação | Projeto Conecta Jovem";
             
-            let jovemInfo = `*Jovem Convocado:* ${data.jovem}`;
-            if (data.idade !== null) jovemInfo += ` (${data.idade} anos)`;
-
-            let personalInfo = `${jovemInfo}\n*Responsável:* ${data.responsavel}`;
-            if (data.irmaos && data.irmaos.trim() !== '') personalInfo += `\n*Irmãos:* ${data.irmaos}`;
-
-            const schedulingInfo = messageTemplates.long.scheduling_info
-                .replace(/{diaDaSemana}/g, diaDaSemana)
-                .replace(/{data}/g, data.data)
-                .replace(/{horario}/g, data.horario);
+            const endereco = local === 'Eldorado' ? 
+                'Avenida João César de Oliveira, Nº 953, 2º andar – Eldorado, Contagem.\n\n(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)' :
+                'Rua Curitiba, 656, 11° andar - Centro, Belo Horizonte.\n\n(Em frente a Casa&Video, próximo a Marisa)';
             
-            const locationText = messageTemplates.long.locations[data.local] || messageTemplates.long.locations.Eldorado;
+            let jovemInfo = `*Jovem Convocado:* ${r.jovem}`;
+            if (idade) jovemInfo += ` (${idade} anos)`;
             
-            const footer = messageTemplates.long.footer
-                .replace(/{codigo}/g, data.codigo)
-                .replace(/{assistente}/g, assistantDisplayName)
-                .replace(/{organizacao}/g, organizacao);
+            let personalInfo = `${jovemInfo}\n*Responsável:* ${r.responsavel}`;
+            if (r.irmaos) personalInfo += `\n*Irmãos:* ${r.irmaos}`;
+            
+            const msg = `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*
+---
+${personalInfo}
+---
+*Dados do Agendamento:*
 
-            return [messageTemplates.long.title, personalInfo, schedulingInfo, locationText, footer].join('\n---\n');
-        };
+*Data:* ${diaSemana}, ${r.data}
+*Horário:* ${r.horario} (chegar 10min antes)
+---
+*Local:* ${endereco}
+---
+*Documentos Necessários:*
 
-        // ==================== COPIAR ====================
-        const copyToClipboard = async (text, button) => {
+• RG, CPF ou Certidão de Nascimento do jovem.
+• Comprovante de Residência.
+
+---
+*Código do Jovem:* ${codigo}
+
+*Atenção:* A presença do responsável junto com o jovem é indispensável. O código já foi gerado e a ausência pode ser interpretada como falta de comprometimento, bloqueando futuras oportunidades pelo projeto social.
+
+Atenciosamente,
+
+*${nomeAssistente}*
+${org}`;
+
+            const timestamp = new Date().toLocaleString('pt-BR');
+            const data = { ...r, idade, codigo, assistente: assistant, local, isInstituto, horario_lancamento: timestamp };
+            
+            const div = document.createElement('div');
+            div.className = 'p-5 border-2 border-slate-200 rounded-xl bg-white';
+            div.dataset.recipientData = JSON.stringify(data);
+            
+            const encoded = encodeURIComponent(msg);
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <p class="font-bold text-slate-800">${r.jovem}</p>
+                        <p class="text-sm text-slate-500">📞 ${r.numero_responsavel}</p>
+                    </div>
+                </div>
+                <pre class="whitespace-pre-wrap bg-slate-50 p-4 rounded-lg text-sm text-slate-700 mb-4 border max-h-60 overflow-y-auto">${msg}</pre>
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://wa.me/${r.numero_responsavel}?text=${encoded}" target="_blank" class="flex-1 py-2 px-4 bg-green-500 text-white font-bold rounded-lg text-center hover:bg-green-600 transition-all flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <button class="copy-btn py-2 px-4 bg-slate-600 text-white font-bold rounded-lg hover:bg-slate-700 transition-all flex items-center gap-2">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                    <button class="save-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all flex items-center gap-2">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            `;
+            
+            messagesList.appendChild(div);
+        });
+        
+        messagesSection.scrollIntoView({ behavior: 'smooth' });
+        showToast(`${validos.length} mensagem(ns) gerada(s)!`, 'success');
+    }
+
+    generateMessagesBtn.addEventListener('click', function() {
+        console.log('🏢 Botão Projeto Conecta Jovem clicado');
+        gerarMensagens(false);
+    });
+
+    generateInstitutoBtn.addEventListener('click', function() {
+        console.log('🏛️ Botão Instituto clicado');
+        gerarMensagens(true);
+    });
+
+    // ==================== COPIAR E SALVAR ====================
+    messagesList.addEventListener('click', async function(e) {
+        const copyBtn = e.target.closest('.copy-btn');
+        const saveBtn = e.target.closest('.save-btn');
+        
+        if (copyBtn) {
+            const pre = copyBtn.closest('[data-recipient-data]').querySelector('pre');
             try {
-                await navigator.clipboard.writeText(text);
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-                button.classList.add('bg-green-600');
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('bg-green-600');
-                }, 2000);
-                showToast('📋 Mensagem copiada!', 'success');
-                addToHistory('Mensagem copiada', 'success');
-            } catch (err) {
-                showToast('❌ Erro ao copiar', 'error');
+                await navigator.clipboard.writeText(pre.textContent);
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar', 2000);
+                showToast('Mensagem copiada!', 'success');
+            } catch(e) {
+                showToast('Erro ao copiar', 'error');
             }
-        };
-
-        // ==================== GERAÇÃO ====================
-        const handleGenerateMessages = (isInstituto = false) => {
-            const assistantValue = assistantSelect.value;
-            if (!assistantValue) {
-                showToast('⚠️ Selecione seu nome', 'warning');
-                return;
-            }
-
-            const generatedMessages = recipients
-                .filter(r => r.jovem && r.responsavel && r.data && r.horario && r.numero_responsavel)
-                .map(r => {
-                    const idade = calculateAge(r.data_nascimento);
-                    const codigo = generateCode(r.jovem);
-                    const originalData = { 
-                        ...r, 
-                        idade, 
-                        codigo, 
-                        assistente: assistantValue, 
-                        local: locationSelect.value,
-                        isInstituto: isInstituto
-                    };
-                    return { originalData };
-                });
+        }
+        
+        if (saveBtn) {
+            const container = saveBtn.closest('[data-recipient-data]');
+            const data = JSON.parse(container.dataset.recipientData);
             
-            if (generatedMessages.length === 0) {
-                showToast('⚠️ Preencha os campos obrigatórios', 'warning');
-                return;
-            }
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
             
-            renderMessages(generatedMessages);
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-            showToast(`✅ ${generatedMessages.length} mensagem(ns) gerada(s)`, 'success');
-            addToHistory(`${generatedMessages.length} mensagens geradas (${isInstituto ? 'Instituto' : 'Empresa'})`, 'success');
-        };
-
-        const renderMessages = (generatedMessages) => {
-            messagesList.innerHTML = '';
-            if (generatedMessages.length > 0) {
-                messagesSection.classList.remove('hidden');
-                generatedMessages.forEach((msgData, idx) => {
-                    const messageItem = document.createElement('div');
-                    messageItem.className = 'p-6 border-2 border-slate-200 rounded-2xl bg-gradient-to-br from-white to-slate-50 hover:shadow-2xl transition-all slide-in';
-                    messageItem.style.animationDelay = `${idx * 0.1}s`;
-                    messageItem.dataset.recipientData = JSON.stringify(msgData.originalData);
-                    
-                    const messageText = generateMessageText(msgData.originalData);
-                    const encodedMessage = encodeURIComponent(messageText);
-                    const charCount = messageText.length;
-                    const charClass = charCount > 1000 ? 'text-red-500 font-bold' : charCount > 800 ? 'text-amber-500 font-semibold' : 'text-slate-500';
-
-                    messageItem.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <p class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                                    <i class="fas fa-user-circle text-indigo-500"></i>
-                                    ${msgData.originalData.jovem}
-                                </p>
-                                <p class="text-sm text-slate-600 mt-1 flex items-center gap-2">
-                                    <i class="fas fa-phone text-green-500"></i>
-                                    ${msgData.originalData.numero_responsavel}
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-xs ${charClass}">${charCount} caracteres</div>
-                                <div class="text-xs text-slate-400 mt-1">WhatsApp: ${Math.ceil(charCount/160)} SMS</div>
-                            </div>
-                        </div>
-                        <pre class="whitespace-pre-wrap bg-gradient-to-br from-slate-50 to-slate-100 p-5 rounded-xl text-sm text-slate-700 leading-relaxed mb-4 border-2 border-slate-200 font-medium">${messageText}</pre>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="https://wa.me/${msgData.originalData.numero_responsavel}?text=${encodedMessage}" target="_blank" class="flex-1 sm:flex-none flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 justify-center">
-                                <i class="fas fa-paper-plane"></i>
-                                <span>Enviar WhatsApp</span>
-                            </a>
-                            <button class="copy-btn flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-slate-600 to-slate-700 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all">
-                                <i class="fas fa-copy"></i>
-                                <span>Copiar</span>
-                            </button>
-                            <button class="save-btn flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all">
-                                <i class="fas fa-save"></i>
-                                <span>Salvar</span>
-                            </button>
-                        </div>`;
-                    messagesList.appendChild(messageItem);
-                });
-            } else {
-                messagesSection.classList.add('hidden');
-            }
-        };
-
-        const handleSaveToSheet = async (button) => {
-            const messageItem = button.closest('[data-recipient-data]');
-            const data = JSON.parse(messageItem.dataset.recipientData);
-            
-            const now = new Date();
-            const horarioLancamento = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            data.horario_lancamento = horarioLancamento;
-            
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-
             try {
-                const response = await fetch(SCRIPT_URL, {
+                const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(data)
                 });
-                const result = await response.json();
+                const result = await resp.json();
                 
                 if (result.status === 'success') {
-                    button.innerHTML = '<i class="fas fa-check"></i> Salvo!';
-                    button.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-blue-600');
-                    button.classList.add('bg-green-600');
-                    showToast('✅ Salvo! Rascunho mantido', 'success');
-                    addToHistory(`Salvo na planilha: ${data.jovem}`, 'success');
-                    
-                    const recipient = recipients.find(r => r.jovem === data.jovem && r.numero_responsavel === data.numero_responsavel);
-                    if (recipient) {
-                        recipient.savedToSheet = true;
-                        recipient.lastSaved = new Date().toLocaleString('pt-BR');
-                        saveToLocalStorage();
-                        renderRecipients();
-                    }
-                } else { 
-                    throw new Error(result.message); 
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                button.innerHTML = '<i class="fas fa-times"></i> Erro';
-                button.classList.add('bg-red-600');
-                showToast('❌ Erro ao salvar: ' + error.message, 'error');
-                addToHistory(`Erro ao salvar: ${data.jovem}`, 'error');
-                button.disabled = false;
-            }
-        };
-
-        // ==================== MENSAGEM RÁPIDA ====================
-        quickMessageBtn.addEventListener('click', () => {
-            quickMessageModal.style.display = 'flex';
-            quickJovemInput.value = '';
-            quickDataInput.value = '';
-            quickHorarioInput.value = '';
-            quickLocalSelect.value = 'Eldorado';
-            quickAssistenteSelect.value = '';
-            quickNumeroInput.value = '';
-            quickMessageResult.classList.add('hidden');
-        });
-
-        quickModalCancel.addEventListener('click', () => {
-            quickMessageModal.style.display = 'none';
-        });
-
-        [quickDataInput, quickHorarioInput, quickNumeroInput].forEach(input => {
-            input.addEventListener('input', (e) => {
-                if (input === quickDataInput) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
-                    if (value.length >= 5) value = value.slice(0, 5) + '/' + value.slice(5, 9);
-                    e.target.value = value.slice(0, 10);
-                } else if (input === quickHorarioInput) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length >= 2) value = value.slice(0, 2) + ':' + value.slice(2, 4);
-                    e.target.value = value.slice(0, 5);
-                } else if (input === quickNumeroInput) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 0 && !value.startsWith('55')) value = '55' + value;
-                    e.target.value = value.slice(0, 15);
-                }
-            });
-        });
-
-        quickGenerateBtn.addEventListener('click', () => {
-            const jovem = quickJovemInput.value.trim();
-            const data = quickDataInput.value.trim();
-            const horario = quickHorarioInput.value.trim();
-            const local = quickLocalSelect.value;
-            const assistente = quickAssistenteSelect.value;
-            const numero = quickNumeroInput.value.trim();
-
-            if (!jovem || !data || !horario || !assistente || !numero) {
-                showToast('⚠️ Preencha todos os campos!', 'warning');
-                return;
-            }
-
-            if (!validateDate(data)) {
-                showToast('❌ Data inválida!', 'error');
-                return;
-            }
-
-            if (!validateTime(horario)) {
-                showToast('❌ Horário inválido!', 'error');
-                return;
-            }
-
-            if (!validatePhone(numero)) {
-                showToast('❌ Telefone inválido!', 'error');
-                return;
-            }
-
-            const diaDaSemana = getDayOfWeek(data);
-            const endereco = local === 'Eldorado' 
-                ? 'Av. João César de Oliveira, 953 no 2° andar' 
-                : 'Rua Curitiba, 656, 11° andar';
-            const nomeAssistente = assistantFullNameMap[assistente] || assistente;
-
-            const messageText = `*${diaDaSemana}, às ${horario}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${nomeAssistente}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.`;
-
-            const encodedMessage = encodeURIComponent(messageText);
-            const whatsappUrl = `https://wa.me/${numero}?text=${encodedMessage}`;
-
-            quickMessageResult.innerHTML = `
-                <div class="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-check text-white text-2xl"></i>
-                        </div>
-                        <p class="font-bold text-green-800 text-xl">Mensagem Gerada!</p>
-                    </div>
-                    <pre class="whitespace-pre-wrap text-sm bg-white p-4 rounded-xl border-2 border-green-200 mb-4 font-medium">${messageText}</pre>
-                    <div class="flex gap-3">
-                        <a href="${whatsappUrl}" target="_blank" class="flex-1 inline-flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-xl transition justify-center">
-                            <i class="fas fa-paper-plane"></i>
-                            Enviar WhatsApp
-                        </a>
-                        <button class="quick-copy-btn inline-flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-slate-600 to-slate-700 text-white font-bold rounded-xl hover:shadow-xl transition" data-text="${messageText.replace(/"/g, '&quot;')}">
-                            <i class="fas fa-copy"></i>
-                            Copiar
-                        </button>
-                    </div>
-                </div>`;
-            quickMessageResult.classList.remove('hidden');
-            showToast('✅ Mensagem rápida gerada!', 'success');
-            addToHistory(`Mensagem rápida: ${jovem}`, 'success');
-        });
-
-        // ==================== GERENCIAR ====================
-        const fetchAppointments = async () => {
-            const assistantName = assistantSelect.value;
-            
-            if (!assistantName) {
-                managementList.innerHTML = '<p class="text-center text-slate-500 py-12 font-semibold">⚠️ Selecione seu nome para ver os agendamentos.</p>';
-                return;
-            }
-
-            loader.style.display = 'block';
-            managementEmptyState.style.display = 'none';
-            managementList.innerHTML = '';
-            managementList.appendChild(loader);
-
-            const today = new Date();
-            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    allAppointments = result.data;
-                    renderAppointments(allAppointments);
-                    showToast(`📊 ${result.data.length} agendamento(s) encontrado(s)`, 'info');
-                    addToHistory(`${result.data.length} agendamentos carregados`, 'info');
+                    saveBtn.innerHTML = '<i class="fas fa-check"></i> Salvo!';
+                    saveBtn.classList.remove('bg-blue-600');
+                    saveBtn.classList.add('bg-green-600');
+                    showToast('Salvo na planilha!', 'success');
                 } else {
                     throw new Error(result.message);
                 }
-            } catch (error) {
-                managementList.innerHTML = `<p class="text-center text-red-600 py-12 font-bold">❌ Erro: ${error.message}</p>`;
-                showToast('❌ Erro ao buscar dados', 'error');
-            } finally {
-                loader.style.display = 'none';
+            } catch(err) {
+                saveBtn.innerHTML = '<i class="fas fa-times"></i> Erro';
+                saveBtn.classList.add('bg-red-600');
+                showToast('Erro ao salvar: ' + err.message, 'error');
+                saveBtn.disabled = false;
             }
-        };
+        }
+    });
 
-        const filterAppointments = () => {
-            const searchTerm = filterSearch.value.toLowerCase();
-            const statusFilter = filterStatus.value;
+    clearMessagesBtn.addEventListener('click', function() {
+        if (confirm('Limpar todas as mensagens?')) {
+            messagesSection.classList.add('hidden');
+            messagesList.innerHTML = '';
+            showToast('Mensagens limpas', 'info');
+        }
+    });
+
+    // ==================== MENSAGEM RÁPIDA ====================
+    quickMessageBtn.addEventListener('click', function() {
+        console.log('📨 Abrindo modal Mensagem Rápida');
+        quickModal.classList.remove('hidden');
+        quickModal.classList.add('flex');
+    });
+
+    quickCancelBtn.addEventListener('click', function() {
+        quickModal.classList.add('hidden');
+        quickModal.classList.remove('flex');
+    });
+
+    // Máscaras do modal
+    document.getElementById('quick-data').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
+        if (v.length >= 5) v = v.slice(0,5) + '/' + v.slice(5,9);
+        e.target.value = v.slice(0, 10);
+    });
+
+    document.getElementById('quick-horario').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length >= 2) v = v.slice(0,2) + ':' + v.slice(2,4);
+        e.target.value = v.slice(0, 5);
+    });
+
+    document.getElementById('quick-numero').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 0 && !v.startsWith('55')) v = '55' + v;
+        e.target.value = v.slice(0, 15);
+    });
+
+    quickGenerateBtn.addEventListener('click', function() {
+        const jovem = document.getElementById('quick-jovem').value.trim();
+        const data = document.getElementById('quick-data').value.trim();
+        const horario = document.getElementById('quick-horario').value.trim();
+        const local = document.getElementById('quick-local').value;
+        const assistente = document.getElementById('quick-assistente').value;
+        const numero = document.getElementById('quick-numero').value.trim();
+        
+        if (!jovem || !data || !horario || !assistente || !numero) {
+            showToast('Preencha todos os campos!', 'warning');
+            return;
+        }
+        
+        const diaSemana = getDayOfWeek(data);
+        const nomeAssist = nomeCompleto[assistente] || assistente;
+        const endereco = local === 'Eldorado' ? 
+            'Av. João César de Oliveira, 953 no 2° andar' : 
+            'Rua Curitiba, 656, 11° andar';
+        
+        const msg = `*${diaSemana}, às ${horario}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${nomeAssist}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.`;
+        
+        const encoded = encodeURIComponent(msg);
+        const whatsappUrl = `https://wa.me/${numero}?text=${encoded}`;
+        
+        document.getElementById('quick-result').innerHTML = `
+            <div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+                <p class="font-bold text-green-800 mb-2">✅ Mensagem Gerada!</p>
+                <pre class="whitespace-pre-wrap text-sm bg-white p-3 rounded border mb-3">${msg}</pre>
+                <div class="flex gap-2">
+                    <a href="${whatsappUrl}" target="_blank" class="flex-1 py-2 px-4 bg-green-600 text-white font-bold rounded-lg text-center hover:bg-green-700 flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp"></i> Enviar
+                    </a>
+                    <button onclick="navigator.clipboard.writeText(\`${msg.replace(/`/g, '\\`')}\`); this.innerHTML='✅ Copiado!';" class="py-2 px-4 bg-slate-600 text-white font-bold rounded-lg hover:bg-slate-700">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+            </div>
+        `;
+        document.getElementById('quick-result').classList.remove('hidden');
+        showToast('Mensagem rápida gerada!', 'success');
+    });
+
+    // ==================== GERENCIAR ====================
+    async function fetchAppointments() {
+        const assistant = assistantSelect.value;
+        if (!assistant) {
+            document.getElementById('management-empty').innerHTML = '<p class="text-slate-500">Selecione seu nome para ver os agendamentos</p>';
+            return;
+        }
+        
+        const loader = document.getElementById('loader');
+        const list = document.getElementById('management-list');
+        const empty = document.getElementById('management-empty');
+        
+        loader.classList.remove('hidden');
+        empty.classList.add('hidden');
+        
+        const today = new Date();
+        const dateFilter = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        
+        try {
+            const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistant}&date=${dateFilter}`);
+            const result = await resp.json();
             
-            let filtered = allAppointments;
-            
-            if (searchTerm) {
-                filtered = filtered.filter(a => 
-                    a.jovem.toLowerCase().includes(searchTerm) ||
-                    a.responsavel.toLowerCase().includes(searchTerm)
-                );
+            if (result.status === 'success') {
+                allAppointments = result.data;
+                renderAppointments(allAppointments);
             }
+        } catch(e) {
+            list.innerHTML = `<p class="text-red-500 text-center py-8">Erro: ${e.message}</p>`;
+        } finally {
+            loader.classList.add('hidden');
+        }
+    }
+
+    function renderAppointments(appointments) {
+        const list = document.getElementById('management-list');
+        const empty = document.getElementById('management-empty');
+        
+        list.querySelectorAll('.appointment-card').forEach(el => el.remove());
+        
+        if (appointments.length === 0) {
+            empty.classList.remove('hidden');
+            empty.innerHTML = '<p class="text-slate-500">Nenhum agendamento encontrado</p>';
+            return;
+        }
+        
+        empty.classList.add('hidden');
+        
+        appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
+        
+        appointments.forEach(appt => {
+            const div = document.createElement('div');
+            div.className = 'appointment-card p-4 border-2 border-slate-200 rounded-xl bg-white';
+            div.id = `appt-${appt.rowId}`;
             
-            if (statusFilter !== '') {
-                filtered = filtered.filter(a => a.situacao === statusFilter);
-            }
+            const options = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+            const selectOpts = options.map(o => `<option value="${o}" ${appt.situacao === o ? 'selected' : ''}>${o}</option>`).join('');
             
-            renderAppointments(filtered);
-        };
-
-        const renderAppointments = (appointments) => {
-            managementList.innerHTML = '';
-            
-            if (appointments.length === 0) {
-                managementEmptyState.style.display = 'block';
-                managementList.appendChild(managementEmptyState);
-                return;
-            }
-
-            appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
-
-            appointments.forEach((appt, idx) => {
-                const apptCard = document.createElement('div');
-                apptCard.className = 'p-5 border-2 border-slate-200 rounded-2xl bg-gradient-to-br from-white to-slate-50 transition-all hover:shadow-xl slide-in';
-                apptCard.style.animationDelay = `${idx * 0.05}s`;
-                apptCard.id = `appt-${appt.rowId}`;
-
-                const statusOptions = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
-                const selectOptions = statusOptions.map(status => 
-                    `<option value="${status}" ${appt.situacao === status ? 'selected' : ''}>${status}</option>`
-                ).join('');
-
-                const statusColors = {
-                    'CONFIRMADA': 'border-green-300 bg-green-50',
-                    'JÁ VEIO': 'border-green-400 bg-green-100',
-                    'CANCELADA': 'border-red-300 bg-red-50',
-                    'SI SEM INTERESSE': 'border-red-400 bg-red-100',
-                    'PUXADA': 'border-amber-300 bg-amber-50',
-                    'REAGENDAR': 'border-blue-300 bg-blue-50',
-                    'MATRICULA': 'border-purple-300 bg-purple-50',
-                    'CONFIRMOU E NÃO VEIO': 'border-slate-300 bg-slate-100'
-                };
-
-                if (statusColors[appt.situacao]) {
-                    apptCard.className += ' ' + statusColors[appt.situacao];
-                }
-
-                apptCard.innerHTML = `
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                                    ${idx + 1}
-                                </div>
-                                <p class="font-black text-slate-800 text-xl">${appt.jovem}</p>
-                            </div>
-                            <p class="text-sm text-slate-600 ml-13 flex items-center gap-2">
-                                <i class="fas fa-user-shield text-green-500"></i>
-                                <span class="font-semibold">${appt.responsavel}</span>
-                            </p>
-                            <div class="flex flex-wrap gap-4 mt-3 ml-13 text-sm">
-                                <span class="flex items-center gap-2 text-slate-600">
-                                    <i class="fas fa-phone text-blue-500"></i>
-                                    <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline font-bold">${appt.telefone_resp || 'N/D'}</a>
-                                </span>
-                                <span class="flex items-center gap-2 text-slate-600">
-                                    <i class="fas fa-calendar text-teal-500"></i>
-                                    <span class="font-semibold">${appt.data}</span>
-                                </span>
-                                <span class="flex items-center gap-2 text-slate-600">
-                                    <i class="fas fa-clock text-orange-500"></i>
-                                    <span class="font-semibold">${appt.horario || 'N/D'}</span>
-                                </span>
-                            </div>
-                            ${appt.codigo ? `
-                                <div class="mt-3 ml-13">
-                                    <span class="badge bg-gradient-to-r from-indigo-400 to-purple-500 text-white">
-                                        <i class="fas fa-barcode"></i>
-                                        Código: ${appt.codigo}
-                                    </span>
-                                </div>
-                            ` : ''}
-                        </div>
-                        <div class="w-full sm:w-auto">
-                            <select class="status-select w-full p-3 border-2 border-slate-300 rounded-xl bg-white text-sm focus:ring-2 focus:ring-indigo-500 font-bold cursor-pointer hover:border-indigo-400 transition-all" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
-                                <option value="">Pendente</option>
-                                ${selectOptions}
-                            </select>
-                        </div>
+            div.innerHTML = `
+                <div class="flex flex-col md:flex-row justify-between gap-3">
+                    <div class="flex-1">
+                        <p class="font-bold text-slate-800">${appt.jovem}</p>
+                        <p class="text-sm text-slate-600">👤 ${appt.responsavel}</p>
+                        <p class="text-sm text-slate-500 mt-1">📞 ${appt.telefone_resp || 'N/D'} | 🗓️ ${appt.data} | ⏰ ${appt.horario || 'N/D'}</p>
                     </div>
-                `;
-                managementList.appendChild(apptCard);
-            });
-        };
-
-        const updateAppointmentStatus = async (selectElement) => {
-            const rowId = selectElement.dataset.rowId;
-            const sheetName = selectElement.dataset.sheetName;
-            const newStatus = selectElement.value;
-            
-            selectElement.disabled = true;
-            const originalBg = selectElement.style.backgroundColor;
-            selectElement.style.backgroundColor = '#fef3c7';
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    body: JSON.stringify({
-                        action: 'updateStatus',
-                        rowId: rowId,
-                        sheetName: sheetName,
-                        newStatus: newStatus
-                    })
-                });
-
-                const card = document.getElementById(`appt-${rowId}`);
-                card.classList.add('status-updated');
-                setTimeout(() => card.classList.remove('status-updated'), 1500);
-                
-                showToast('✅ Status atualizado!', 'success');
-                addToHistory(`Status atualizado: ${newStatus}`, 'success');
-                
-                setTimeout(() => fetchAppointments(), 1000);
-                
-            } catch (error) {
-                console.error('Erro:', error);
-                showToast('❌ Erro ao atualizar', 'error');
-                selectElement.style.backgroundColor = '#fee2e2';
-            } finally {
-                selectElement.disabled = false;
-                setTimeout(() => { 
-                    selectElement.style.backgroundColor = originalBg; 
-                }, 1500);
-            }
-        };
-
-        // ==================== DASHBOARD ====================
-        const fetchDashboardData = async () => {
-            const assistantName = assistantSelect.value;
-            
-            if (!assistantName) {
-                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-slate-500 p-6">⚠️ Selecione seu nome</p>';
-                if (statusChartInstance) {
-                    statusChartInstance.destroy();
-                    statusChartInstance = null;
-                }
-                return;
-            }
-
-            const today = new Date();
-            const dateFilter = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    renderDashboard(result.data);
-                }
-            } catch (error) {
-                console.error('Erro dashboard:', error);
-                document.getElementById('dashboard-stats').innerHTML = '<p class="text-center text-red-600 p-6">❌ Erro</p>';
-            }
-        };
-
-        const renderDashboard = (data) => {
-            const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
-            const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
-            const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
-            const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
-            const matricula = data.filter(a => a.situacao === 'MATRICULA').length;
-            const confirmouNaoVeio = data.filter(a => a.situacao === 'CONFIRMOU E NÃO VEIO').length;
-            const pendentes = data.filter(a => !a.situacao || a.situacao === '').length;
-
-            document.getElementById('dashboard-stats').innerHTML = `
-                <div class="flex justify-between items-center p-4 bg-white rounded-xl shadow-md border-l-4 border-indigo-500">
-                    <span class="font-bold text-slate-700 flex items-center gap-2">
-                        <i class="fas fa-list text-indigo-500"></i>
-                        Total:
-                    </span>
-                    <span class="font-black text-3xl text-indigo-600">${data.length}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-green-50 rounded-xl border-l-4 border-green-500">
-                    <span class="font-bold text-green-800 flex items-center gap-2">
-                        <i class="fas fa-check-circle text-green-500"></i>
-                        Confirmadas + Já Veio:
-                    </span>
-                    <span class="font-black text-3xl text-green-600">${confirmadas}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-red-50 rounded-xl border-l-4 border-red-500">
-                    <span class="font-bold text-red-800 flex items-center gap-2">
-                        <i class="fas fa-times-circle text-red-500"></i>
-                        Canceladas + Sem Interesse:
-                    </span>
-                    <span class="font-black text-3xl text-red-600">${canceladas}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-amber-50 rounded-xl border-l-4 border-amber-500">
-                    <span class="font-bold text-amber-800 flex items-center gap-2">
-                        <i class="fas fa-bolt text-amber-500"></i>
-                        Puxadas:
-                    </span>
-                    <span class="font-black text-3xl text-amber-600">${puxadas}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
-                    <span class="font-bold text-blue-800 flex items-center gap-2">
-                        <i class="fas fa-calendar-alt text-blue-500"></i>
-                        Reagendar:
-                    </span>
-                    <span class="font-black text-3xl text-blue-600">${reagendar}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
-                    <span class="font-bold text-purple-800 flex items-center gap-2">
-                        <i class="fas fa-graduation-cap text-purple-500"></i>
-                        Matrícula:
-                    </span>
-                    <span class="font-black text-3xl text-purple-600">${matricula}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-slate-100 rounded-xl border-l-4 border-slate-500">
-                    <span class="font-bold text-slate-700 flex items-center gap-2">
-                        <i class="fas fa-user-times text-slate-500"></i>
-                        Confirmou Não Veio:
-                    </span>
-                    <span class="font-black text-3xl text-slate-600">${confirmouNaoVeio}</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl border-l-4 border-slate-400">
-                    <span class="font-bold text-slate-600 flex items-center gap-2">
-                        <i class="fas fa-hourglass-half text-slate-400"></i>
-                        Pendentes:
-                    </span>
-                    <span class="font-black text-3xl text-slate-500">${pendentes}</span>
+                    <select class="status-select p-2 border-2 border-slate-300 rounded-lg bg-white font-medium" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                        <option value="">Pendente</option>
+                        ${selectOpts}
+                    </select>
                 </div>
             `;
+            list.appendChild(div);
+        });
+    }
 
-            const ctx = document.getElementById('statusChart');
-            if (statusChartInstance) statusChartInstance.destroy();
-
-            statusChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Confirmadas + Já Veio', 'Canceladas + Sem Interesse', 'Puxadas', 'Reagendar', 'Matrícula', 'Confirmou Não Veio', 'Pendentes'],
-                    datasets: [{
-                        data: [confirmadas, canceladas, puxadas, reagendar, matricula, confirmouNaoVeio, pendentes],
-                        backgroundColor: ['#22c55e', '#ef4444', '#f59e0b', '#3b82f6', '#a855f7', '#64748b', '#cbd5e1'],
-                        borderWidth: 4,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                boxWidth: 15,
-                                padding: 15,
-                                font: { size: 12, family: 'Inter', weight: 'bold' }
-                            }
-                        }
-                    }
-                }
+    document.getElementById('management-list').addEventListener('change', async function(e) {
+        if (!e.target.classList.contains('status-select')) return;
+        
+        const select = e.target;
+        const rowId = select.dataset.rowId;
+        const sheetName = select.dataset.sheetName;
+        const newStatus = select.value;
+        
+        select.disabled = true;
+        select.style.backgroundColor = '#fef3c7';
+        
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ action: 'updateStatus', rowId, sheetName, newStatus })
             });
-        };
-
-        // ==================== BUSCAR AGENDAMENTOS DE AMANHÃ ====================
-        const fetchTomorrowAppointmentsCount = async () => {
-            const assistantName = assistantSelect.value;
-            const statElement = document.getElementById('stat-next-day');
-            const progressElement = document.getElementById('progress-next-day');
             
-            if (!assistantName) {
-                statElement.innerHTML = '<i class="fas fa-user-slash text-2xl"></i>';
-                progressElement.style.width = '0%';
-                return;
-            }
-
-            // Mostra loading
-            statElement.innerHTML = '<i class="fas fa-spinner fa-spin text-2xl"></i>';
-            progressElement.style.width = '50%';
-
-            // Calcula a data de amanhã
-            const tomorrow = new Date();
-            const dayOfWeek = tomorrow.getDay();
-            
-            if (dayOfWeek === 6) {
-                tomorrow.setDate(tomorrow.getDate() + 2);
-            } else if (dayOfWeek === 0) {
-                tomorrow.setDate(tomorrow.getDate() + 1);
-            } else {
-                tomorrow.setDate(tomorrow.getDate() + 1);
-            }
-            
-            const dateFilter = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-            
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistantName}&date=${dateFilter}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    const count = result.data.length;
-                    animateNumber('stat-next-day', count);
-                    progressElement.style.width = count > 0 ? '100%' : '0%';
-                    
-                    if (count > 0) {
-                        addToHistory(`${count} agendamento(s) para amanhã`, 'info');
-                    }
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                console.error('Erro ao buscar agendamentos de amanhã:', error);
-                statElement.textContent = '?';
-                progressElement.style.width = '0%';
-            }
-        };
-
-        // Atualizar ao clicar no card
-        document.getElementById('next-day-card').addEventListener('click', () => {
-            fetchTomorrowAppointmentsCount();
-            showToast('🔄 Atualizando agendamentos de amanhã...', 'info');
-        });
-
-        // ==================== AUTO REFRESH ====================
-        autoRefreshToggle.addEventListener('change', () => {
-            if (autoRefreshToggle.checked) {
-                autoRefreshInterval = setInterval(() => {
-                    if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
-                        fetchAppointments();
-                    }
-                    // Também atualiza agendamentos de amanhã
-                    fetchTomorrowAppointmentsCount();
-                }, 30000);
-                showToast('🔄 Auto-refresh ativado', 'info');
-            } else {
-                if (autoRefreshInterval) {
-                    clearInterval(autoRefreshInterval);
-                    autoRefreshInterval = null;
-                }
-                showToast('⏸️ Auto-refresh desativado', 'info');
-            }
-        });
-
-        // ==================== EVENT LISTENERS ====================
-        addRecipientBtn.addEventListener('click', handleAddRecipient);
-        addPuxadaBtn.addEventListener('click', handleAddPuxada);
-        
-        recipientsList.addEventListener('click', (e) => {
-            if (e.target.closest('.remove-recipient-btn')) {
-                handleRemoveRecipient(e.target.closest('.remove-recipient-btn').dataset.id);
-            }
-        });
-        
-        generateMessagesBtn.addEventListener('click', () => handleGenerateMessages(false));
-        generateInstitutoBtn.addEventListener('click', () => handleGenerateMessages(true));
-        
-        messagesList.addEventListener('click', (e) => {
-            if (e.target.closest('.save-btn')) {
-                handleSaveToSheet(e.target.closest('.save-btn'));
-            }
-            if (e.target.closest('.copy-btn')) {
-                const messageItem = e.target.closest('[data-recipient-data]');
-                const data = JSON.parse(messageItem.dataset.recipientData);
-                copyToClipboard(generateMessageText(data), e.target.closest('.copy-btn'));
-            }
-        });
-
-        quickMessageResult.addEventListener('click', (e) => {
-            if (e.target.closest('.quick-copy-btn')) {
-                const text = e.target.closest('.quick-copy-btn').dataset.text;
-                copyToClipboard(text, e.target.closest('.quick-copy-btn'));
-            }
-        });
-        
-        clearMessagesBtn.addEventListener('click', () => {
-            if (confirm('🗑️ Limpar todas as mensagens?')) {
-                messagesSection.classList.add('hidden');
-                messagesList.innerHTML = '';
-                showToast('Mensagens limpas', 'info');
-                addToHistory('Mensagens limpas', 'info');
-            }
-        });
-        
-        refreshAppointmentsBtn.addEventListener('click', fetchAppointments);
-        filterSearch.addEventListener('input', filterAppointments);
-        filterStatus.addEventListener('change', filterAppointments);
-        
-        managementList.addEventListener('change', (e) => {
-            if (e.target.classList.contains('status-select')) {
-                updateAppointmentStatus(e.target);
-            }
-        });
-        
-        assistantSelect.addEventListener('change', () => {
-            updateGenerateButtonState();
-            if (!document.getElementById('gerenciar-section').classList.contains('hidden')) {
-                fetchAppointments();
-            }
-            if (!document.getElementById('dashboard-section').classList.contains('hidden')) {
-                fetchDashboardData();
-            }
-            // Atualiza agendamentos de amanhã
-            fetchTomorrowAppointmentsCount();
-        });
-        
-        // ==================== BACKUP ====================
-        document.getElementById('backup-btn').addEventListener('click', () => {
-            const dataStr = JSON.stringify(recipients, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `backup-agendador-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            showToast('💾 Backup exportado!', 'success');
-            addToHistory('Backup criado', 'success');
-        });
-        
-        // ==================== INICIALIZAÇÃO ====================
-        loadFromLocalStorage();
-        loadHistory();
-        renderRecipients();
-        updateGenerateButtonState();
-        updateStats();
-        fetchTomorrowAppointmentsCount(); // Carrega agendamentos de amanhã
-        
-        showToast('🚀 Sistema iniciado com sucesso!', 'success');
-        addToHistory('Sistema iniciado', 'info');
+            const card = document.getElementById(`appt-${rowId}`);
+            card.style.backgroundColor = '#dcfce7';
+            setTimeout(() => card.style.backgroundColor = '', 1500);
+            showToast('Status atualizado!', 'success');
+        } catch(e) {
+            showToast('Erro ao atualizar', 'error');
+        } finally {
+            select.disabled = false;
+            select.style.backgroundColor = '';
+        }
     });
-    </script>
+
+    refreshBtn.addEventListener('click', fetchAppointments);
+
+    document.getElementById('filter-search').addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase();
+        const filtered = allAppointments.filter(a => 
+            a.jovem.toLowerCase().includes(term) || 
+            a.responsavel.toLowerCase().includes(term)
+        );
+        renderAppointments(filtered);
+    });
+
+    document.getElementById('filter-status').addEventListener('change', function(e) {
+        const status = e.target.value;
+        const filtered = status ? allAppointments.filter(a => a.situacao === status) : allAppointments;
+        renderAppointments(filtered);
+    });
+
+    // ==================== DASHBOARD ====================
+    async function fetchDashboard() {
+        const assistant = assistantSelect.value;
+        if (!assistant) return;
+        
+        const today = new Date();
+        const dateFilter = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        
+        try {
+            const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistant}&date=${dateFilter}`);
+            const result = await resp.json();
+            
+            if (result.status === 'success') {
+                renderDashboard(result.data);
+            }
+        } catch(e) {
+            console.error('Erro dashboard:', e);
+        }
+    }
+
+    function renderDashboard(data) {
+        const confirmadas = data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+        const canceladas = data.filter(a => a.situacao === 'CANCELADA' || a.situacao === 'SI SEM INTERESSE').length;
+        const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
+        const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
+        const pendentes = data.filter(a => !a.situacao).length;
+        
+        document.getElementById('dashboard-stats').innerHTML = `
+            <div class="p-3 bg-white rounded-lg shadow-sm flex justify-between"><span>📊 Total:</span><span class="font-bold">${data.length}</span></div>
+            <div class="p-3 bg-green-50 rounded-lg flex justify-between"><span class="text-green-800">✅ Confirmadas:</span><span class="font-bold text-green-600">${confirmadas}</span></div>
+            <div class="p-3 bg-red-50 rounded-lg flex justify-between"><span class="text-red-800">❌ Canceladas:</span><span class="font-bold text-red-600">${canceladas}</span></div>
+            <div class="p-3 bg-amber-50 rounded-lg flex justify-between"><span class="text-amber-800">⚡ Puxadas:</span><span class="font-bold text-amber-600">${puxadas}</span></div>
+            <div class="p-3 bg-blue-50 rounded-lg flex justify-between"><span class="text-blue-800">📅 Reagendar:</span><span class="font-bold text-blue-600">${reagendar}</span></div>
+            <div class="p-3 bg-slate-50 rounded-lg flex justify-between"><span class="text-slate-600">⏳ Pendentes:</span><span class="font-bold text-slate-500">${pendentes}</span></div>
+        `;
+        
+        const ctx = document.getElementById('statusChart');
+        if (chartInstance) chartInstance.destroy();
+        
+        chartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Confirmadas', 'Canceladas', 'Puxadas', 'Reagendar', 'Pendentes'],
+                datasets: [{
+                    data: [confirmadas, canceladas, puxadas, reagendar, pendentes],
+                    backgroundColor: ['#22c55e', '#ef4444', '#f59e0b', '#3b82f6', '#cbd5e1'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+
+    // ==================== AGENDAMENTOS DE AMANHÃ ====================
+    async function fetchTomorrowCount() {
+        const assistant = assistantSelect.value;
+        const statEl = document.getElementById('stat-next-day');
+        
+        if (!assistant) {
+            statEl.textContent = '-';
+            return;
+        }
+        
+        const tomorrow = new Date();
+        const day = tomorrow.getDay();
+        if (day === 6) tomorrow.setDate(tomorrow.getDate() + 2);
+        else tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        const dateFilter = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`;
+        
+        try {
+            const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistant}&date=${dateFilter}`);
+            const result = await resp.json();
+            
+            if (result.status === 'success') {
+                statEl.textContent = result.data.length;
+            }
+        } catch(e) {
+            statEl.textContent = '?';
+        }
+    }
+
+    document.getElementById('next-day-card').addEventListener('click', function() {
+        fetchTomorrowCount();
+        showToast('Atualizando...', 'info');
+    });
+
+    // ==================== EVENTOS ====================
+    assistantSelect.addEventListener('change', function() {
+        if (document.getElementById('gerenciar-section').classList.contains('hidden') === false) {
+            fetchAppointments();
+        }
+        if (document.getElementById('dashboard-section').classList.contains('hidden') === false) {
+            fetchDashboard();
+        }
+        fetchTomorrowCount();
+    });
+
+    // ==================== INIT ====================
+    loadLocal();
+    renderRecipients();
+    fetchTomorrowCount();
+    
+    console.log('✅ Sistema Eldorado carregado!');
+    showToast('Sistema pronto!', 'success');
+});
+</script>
 </body>
 </html>
