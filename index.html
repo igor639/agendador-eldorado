@@ -120,11 +120,70 @@
             border-radius: 9999px;
             transition: width 0.3s;
         }
+        
+        .quick-date-btn {
+            transition: all 0.2s;
+        }
+        .quick-date-btn:hover {
+            transform: scale(1.05);
+        }
+        .quick-date-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Modal de senha */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
 
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- MODAL DE SENHA DO SUPERVISOR -->
+    <div id="password-modal" class="modal-overlay hidden">
+        <div class="modal-content fade-in">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-crown text-3xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800">Modo Supervisor</h3>
+                <p class="text-slate-500 mt-2">Digite a senha para acessar</p>
+            </div>
+            <div class="mb-4">
+                <input type="password" id="supervisor-password" placeholder="Digite a senha..." class="w-full p-4 border-2 border-slate-200 rounded-xl text-center text-lg font-bold focus:border-purple-500 focus:outline-none">
+            </div>
+            <div id="password-error" class="text-red-500 text-center mb-4 hidden">
+                <i class="fas fa-exclamation-circle"></i> Senha incorreta!
+            </div>
+            <div class="flex gap-3">
+                <button id="password-cancel" class="flex-1 py-3 px-6 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">
+                    Cancelar
+                </button>
+                <button id="password-confirm" class="flex-1 py-3 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg transition">
+                    <i class="fas fa-unlock"></i> Entrar
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="container mx-auto p-4 md:p-6 max-w-7xl">
         
@@ -154,20 +213,30 @@
                     <i class="fas fa-clock text-indigo-500"></i>
                     <span class="text-sm font-semibold text-slate-700" id="live-clock">--:--:--</span>
                 </div>
+                <div id="supervisor-badge" class="hidden items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-full shadow-md">
+                    <i class="fas fa-crown"></i>
+                    <span class="text-sm font-semibold">Modo Supervisor</span>
+                </div>
             </div>
         </header>
 
         <!-- TABS -->
         <div class="mb-8 bg-white/80 backdrop-blur-lg p-2 rounded-2xl shadow-xl">
             <nav class="flex flex-wrap gap-2">
-                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="agendar">
-                    <i class="fas fa-edit"></i> Agendar
+                <button class="tab-btn flex-1 min-w-[80px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="agendar">
+                    <i class="fas fa-edit"></i> <span class="hidden sm:inline">Agendar</span>
                 </button>
-                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="gerenciar">
-                    <i class="fas fa-tasks"></i> Gerenciar
+                <button class="tab-btn flex-1 min-w-[80px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="gerenciar">
+                    <i class="fas fa-tasks"></i> <span class="hidden sm:inline">Gerenciar</span>
                 </button>
-                <button class="tab-btn flex-1 min-w-[100px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="dashboard">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                <button class="tab-btn flex-1 min-w-[80px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="consulta">
+                    <i class="fas fa-search"></i> <span class="hidden sm:inline">Consulta</span>
+                </button>
+                <button class="tab-btn flex-1 min-w-[80px] py-3 px-4 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i> <span class="hidden sm:inline">Dashboard</span>
+                </button>
+                <button id="admin-tab-btn" class="tab-btn hidden flex-1 min-w-[80px] py-3 px-4 font-bold text-sm rounded-xl transition-all items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white" data-tab="admin">
+                    <i class="fas fa-crown"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
             </nav>
         </div>
@@ -196,7 +265,7 @@
                                 <option value="">-- Escolha seu nome --</option>
                                 <option value="DIANA">Diana</option>
                                 <option value="IGOR">Igor</option>
-                                <option value="WELKER">Welker</option>
+                                <option value="WELKER">Welker (Supervisor)</option>
                                 <option value="TREINEE">Treinee</option>
                                 <option value="TATIANA">Tatiana</option>
                                 <option value="GABRIELA">Gabriela</option>
@@ -363,6 +432,118 @@
                 </div>
             </section>
 
+            <!-- SEÇÃO CONSULTA -->
+            <section id="consulta-section" class="tab-content hidden fade-in">
+                <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fas fa-search text-indigo-500"></i> Consulta de Agendamentos
+                            </h2>
+                            <p class="text-sm text-slate-500 mt-1">Pesquise por nome, data ou status</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500">Última atualização:</span>
+                            <span class="text-xs font-bold text-indigo-600" id="consulta-last-update">--:--</span>
+                            <button id="consulta-refresh-btn" class="py-2 px-4 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2">
+                                <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- BOTÕES DE DATA RÁPIDA -->
+                    <div class="mb-6">
+                        <p class="text-sm font-bold text-slate-700 mb-3">📅 Selecione a Data:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button id="btn-ontem" class="quick-date-btn py-3 px-6 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition-all flex items-center gap-2">
+                                <i class="fas fa-arrow-left"></i> Ontem
+                            </button>
+                            <button id="btn-hoje" class="quick-date-btn py-3 px-6 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 transition-all flex items-center gap-2">
+                                <i class="fas fa-calendar-day"></i> Hoje
+                            </button>
+                            <button id="btn-amanha" class="quick-date-btn py-3 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 active">
+                                <i class="fas fa-calendar-plus"></i> Amanhã
+                            </button>
+                            <div class="flex items-center gap-2">
+                                <input type="date" id="consulta-date" class="py-3 px-4 border-2 border-slate-200 rounded-xl font-semibold">
+                                <button id="btn-custom-date" class="py-3 px-4 bg-slate-600 text-white font-bold rounded-xl hover:bg-slate-700 transition-all">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- DATA SELECIONADA -->
+                    <div class="mb-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border-2 border-indigo-100">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div>
+                                <p class="text-sm text-slate-600">Mostrando agendamentos de:</p>
+                                <p class="text-2xl font-black text-indigo-600" id="consulta-data-display">--/--/----</p>
+                                <p class="text-sm font-semibold text-slate-500" id="consulta-dia-semana">---</p>
+                            </div>
+                            <div id="consulta-edit-badge" class="hidden">
+                                <span class="badge bg-green-100 text-green-800 text-sm px-4 py-2">
+                                    <i class="fas fa-edit"></i> Editável (Hoje)
+                                </span>
+                            </div>
+                            <div id="consulta-readonly-badge" class="hidden">
+                                <span class="badge bg-orange-100 text-orange-800 text-sm px-4 py-2">
+                                    <i class="fas fa-lock"></i> Só Visualização
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ESTATÍSTICAS DA CONSULTA -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                        <div class="bg-indigo-50 p-4 rounded-xl text-center">
+                            <div class="text-3xl font-black text-indigo-600" id="consulta-stat-total">0</div>
+                            <div class="text-xs font-semibold text-slate-600">Total</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl text-center">
+                            <div class="text-3xl font-black text-green-600" id="consulta-stat-confirmados">0</div>
+                            <div class="text-xs font-semibold text-slate-600">Confirmados</div>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl text-center">
+                            <div class="text-3xl font-black text-amber-600" id="consulta-stat-pendentes">0</div>
+                            <div class="text-xs font-semibold text-slate-600">Pendentes</div>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-xl text-center">
+                            <div class="text-3xl font-black text-red-600" id="consulta-stat-outros">0</div>
+                            <div class="text-xs font-semibold text-slate-600">Outros</div>
+                        </div>
+                    </div>
+                    
+                    <!-- FILTROS -->
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="consulta-filter-search" placeholder="🔍 Buscar por nome (jovem ou responsável)..." class="p-3 border-2 border-slate-200 rounded-xl">
+                        <select id="consulta-filter-status" class="p-3 border-2 border-slate-200 rounded-xl">
+                            <option value="">Todos os Status</option>
+                            <option value="PENDENTE">⏳ PENDENTE</option>
+                            <option value="CONFIRMADA">✅ CONFIRMADA</option>
+                            <option value="JÁ VEIO">✅ JÁ VEIO</option>
+                            <option value="CANCELADA">❌ CANCELADA</option>
+                            <option value="SI SEM INTERESSE">❌ SEM INTERESSE</option>
+                            <option value="REAGENDAR">📅 REAGENDAR</option>
+                            <option value="PUXADA">⚡ PUXADA</option>
+                            <option value="MATRICULA">🎓 MATRICULA</option>
+                        </select>
+                    </div>
+                    
+                    <!-- LISTA DE AGENDAMENTOS -->
+                    <div id="consulta-list" class="space-y-3">
+                        <div id="consulta-loader" class="text-center py-12 hidden">
+                            <div class="loader mx-auto"></div>
+                            <p class="mt-4 text-slate-500">Buscando agendamentos...</p>
+                        </div>
+                        <div id="consulta-empty" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
+                            <i class="fas fa-calendar-times text-5xl text-slate-300 mb-4"></i>
+                            <p class="text-slate-500 font-semibold">Selecione seu nome e uma data para consultar</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- SEÇÃO DASHBOARD -->
             <section id="dashboard-section" class="tab-content hidden fade-in">
                 <div class="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
@@ -375,6 +556,122 @@
                         <div class="bg-slate-50 p-4 rounded-xl">
                             <h3 class="font-bold text-slate-700 mb-4">Resumo</h3>
                             <div id="dashboard-stats" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO ADMIN (SUPERVISOR) -->
+            <section id="admin-section" class="tab-content hidden fade-in">
+                <div class="space-y-6">
+                    <!-- HEADER ADMIN -->
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-2xl shadow-xl text-white">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-crown text-4xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-black">Painel do Supervisor</h2>
+                                <p class="text-white/80">Visão completa da equipe Eldorado</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ESTATÍSTICAS GERAIS -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-black text-blue-600" id="admin-total-equipe">9</div>
+                                    <div class="text-xs text-slate-500">Membros</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-indigo-600 text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-black text-indigo-600" id="admin-total-hoje">0</div>
+                                    <div class="text-xs text-slate-500">Agend. Hoje</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-black text-green-600" id="admin-confirmados">0</div>
+                                    <div class="text-xs text-slate-500">Confirmados</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-percentage text-purple-600 text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-black text-purple-600" id="admin-taxa">0%</div>
+                                    <div class="text-xs text-slate-500">Taxa Sucesso</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RANKING E GRÁFICO -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- RANKING -->
+                        <div class="bg-white p-6 rounded-2xl shadow-lg">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i class="fas fa-trophy text-amber-500"></i> Ranking da Equipe
+                            </h3>
+                            <div id="admin-ranking" class="space-y-3">
+                                <div class="text-center py-8 text-slate-400">
+                                    <i class="fas fa-spinner fa-spin text-2xl"></i>
+                                    <p class="mt-2">Carregando...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GRÁFICO -->
+                        <div class="bg-white p-6 rounded-2xl shadow-lg">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i class="fas fa-chart-bar text-indigo-500"></i> Agendamentos por Operador
+                            </h3>
+                            <canvas id="adminChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- TODOS OS AGENDAMENTOS DA EQUIPE -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fas fa-list text-indigo-500"></i> Todos os Agendamentos de Hoje
+                            </h3>
+                            <div class="flex gap-2">
+                                <select id="admin-filter-operador" class="p-2 border-2 border-slate-200 rounded-lg text-sm">
+                                    <option value="">Todos Operadores</option>
+                                </select>
+                                <button id="admin-refresh" class="py-2 px-4 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all text-sm">
+                                    <i class="fas fa-sync-alt"></i> Atualizar
+                                </button>
+                                <button id="admin-export" class="py-2 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all text-sm">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        <div id="admin-all-appointments" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-center py-8 text-slate-400">
+                                <i class="fas fa-spinner fa-spin text-2xl"></i>
+                                <p class="mt-2">Carregando...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -443,6 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ==================== CONFIG ====================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
+    const SUPERVISOR_PASSWORD = 'vilavelha';
     
     // ==================== NOMES COMPLETOS ====================
     const nomeCompleto = {
@@ -457,10 +755,26 @@ document.addEventListener('DOMContentLoaded', function() {
         'LETICIA': 'Letícia Fernandes'
     };
     
+    const operadorCores = {
+        'DIANA': 'blue',
+        'IGOR': 'green',
+        'WELKER': 'purple',
+        'TATIANA': 'pink',
+        'GABRIELA': 'orange',
+        'MARCELO': 'red',
+        'KAMILLY': 'cyan',
+        'LETICIA': 'slate',
+        'TREINEE': 'gray'
+    };
+    
     // ==================== VARIÁVEIS ====================
     let recipients = [];
     let allAppointments = [];
+    let consultaAppointments = [];
+    let consultaSelectedDate = null;
     let chartInstance = null;
+    let adminChartInstance = null;
+    let isSupervisor = false;
     let localStorageOK = false;
     let memoryStorage = {};
     
@@ -490,6 +804,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const quickGenerateBtn = document.getElementById('quick-generate-btn');
     const refreshBtn = document.getElementById('refresh-btn');
     const clearMessagesBtn = document.getElementById('clear-messages-btn');
+    const passwordModal = document.getElementById('password-modal');
+    const passwordInput = document.getElementById('supervisor-password');
+    const passwordConfirmBtn = document.getElementById('password-confirm');
+    const passwordCancelBtn = document.getElementById('password-cancel');
+    const passwordError = document.getElementById('password-error');
+    const adminTabBtn = document.getElementById('admin-tab-btn');
+    const supervisorBadge = document.getElementById('supervisor-badge');
 
     // ==================== TOAST ====================
     function showToast(msg, type = 'info') {
@@ -524,12 +845,17 @@ document.addEventListener('DOMContentLoaded', function() {
         tabContents.forEach(c => c.classList.add('hidden'));
         
         const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
-        activeBtn.classList.remove('text-slate-600');
-        activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
-        document.getElementById(`${tabName}-section`).classList.remove('hidden');
+        if (activeBtn) {
+            activeBtn.classList.remove('text-slate-600');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
+        }
+        const section = document.getElementById(`${tabName}-section`);
+        if (section) section.classList.remove('hidden');
         
         if (tabName === 'gerenciar') fetchAppointments();
         if (tabName === 'dashboard') fetchDashboard();
+        if (tabName === 'consulta' && !consultaSelectedDate) setConsultaDate('amanha');
+        if (tabName === 'admin' && isSupervisor) fetchAdminData();
     }
     
     tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
@@ -547,6 +873,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (day === 6) d.setDate(d.getDate() + 2);
         else d.setDate(d.getDate() + 1);
         return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+    
+    function getYesterdayString() {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+    
+    function formatDateToAPI(dateStr) {
+        const [d, m, y] = dateStr.split('/');
+        return `${y}-${m}-${d}`;
     }
     
     function getDayOfWeek(dateStr) {
@@ -572,6 +909,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const words = nome.trim().split(' ').filter(w => w);
         const initials = words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
         return initials + Math.floor(100 + Math.random() * 900);
+    }
+    
+    function isToday(dateStr) {
+        return dateStr === getTodayString();
     }
 
     // ==================== ESTATÍSTICAS ====================
@@ -1121,6 +1462,251 @@ ${org}`;
         renderAppointments(filtered);
     });
 
+    // ==================== CONSULTA ====================
+    function setConsultaDate(type) {
+        let dateStr;
+        
+        document.querySelectorAll('.quick-date-btn').forEach(btn => btn.classList.remove('active'));
+        
+        if (type === 'ontem') {
+            dateStr = getYesterdayString();
+            document.getElementById('btn-ontem').classList.add('active');
+        } else if (type === 'hoje') {
+            dateStr = getTodayString();
+            document.getElementById('btn-hoje').classList.add('active');
+        } else if (type === 'amanha') {
+            dateStr = getTomorrowString();
+            document.getElementById('btn-amanha').classList.add('active');
+        } else {
+            const inputDate = document.getElementById('consulta-date').value;
+            if (!inputDate) {
+                showToast('Selecione uma data', 'warning');
+                return;
+            }
+            const [y, m, d] = inputDate.split('-');
+            dateStr = `${d}/${m}/${y}`;
+        }
+        
+        consultaSelectedDate = dateStr;
+        
+        document.getElementById('consulta-data-display').textContent = dateStr;
+        document.getElementById('consulta-dia-semana').textContent = getDayOfWeek(dateStr);
+        
+        const editBadge = document.getElementById('consulta-edit-badge');
+        const readonlyBadge = document.getElementById('consulta-readonly-badge');
+        
+        if (isToday(dateStr)) {
+            editBadge.classList.remove('hidden');
+            readonlyBadge.classList.add('hidden');
+        } else {
+            editBadge.classList.add('hidden');
+            readonlyBadge.classList.remove('hidden');
+        }
+        
+        fetchConsultaAppointments(dateStr);
+    }
+    
+    async function fetchConsultaAppointments(dateStr) {
+        const assistant = assistantSelect.value;
+        if (!assistant) {
+            document.getElementById('consulta-empty').innerHTML = '<p class="text-slate-500 font-semibold">Selecione seu nome para consultar</p>';
+            document.getElementById('consulta-empty').classList.remove('hidden');
+            return;
+        }
+        
+        const loader = document.getElementById('consulta-loader');
+        const list = document.getElementById('consulta-list');
+        const empty = document.getElementById('consulta-empty');
+        
+        loader.classList.remove('hidden');
+        empty.classList.add('hidden');
+        list.querySelectorAll('.consulta-card').forEach(el => el.remove());
+        
+        const dateAPI = formatDateToAPI(dateStr);
+        
+        try {
+            const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${assistant}&date=${dateAPI}`);
+            const result = await resp.json();
+            
+            if (result.status === 'success') {
+                consultaAppointments = result.data;
+                renderConsultaAppointments(consultaAppointments);
+                document.getElementById('consulta-last-update').textContent = new Date().toLocaleTimeString('pt-BR');
+            }
+        } catch(e) {
+            list.innerHTML = `<p class="text-red-500 text-center py-8">Erro: ${e.message}</p>`;
+        } finally {
+            loader.classList.add('hidden');
+        }
+    }
+    
+    function renderConsultaAppointments(appointments) {
+        const list = document.getElementById('consulta-list');
+        const empty = document.getElementById('consulta-empty');
+        
+        list.querySelectorAll('.consulta-card').forEach(el => el.remove());
+        
+        const total = appointments.length;
+        const confirmados = appointments.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+        const pendentes = appointments.filter(a => !a.situacao || a.situacao === '').length;
+        const outros = total - confirmados - pendentes;
+        
+        document.getElementById('consulta-stat-total').textContent = total;
+        document.getElementById('consulta-stat-confirmados').textContent = confirmados;
+        document.getElementById('consulta-stat-pendentes').textContent = pendentes;
+        document.getElementById('consulta-stat-outros').textContent = outros;
+        
+        if (appointments.length === 0) {
+            empty.classList.remove('hidden');
+            empty.innerHTML = '<i class="fas fa-calendar-times text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-semibold">Nenhum agendamento encontrado para esta data</p>';
+            return;
+        }
+        
+        empty.classList.add('hidden');
+        
+        appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
+        
+        const canEdit = isToday(consultaSelectedDate);
+        
+        appointments.forEach((appt, index) => {
+            const div = document.createElement('div');
+            
+            let borderColor = 'border-slate-200';
+            let bgColor = 'bg-white';
+            if (appt.situacao === 'CONFIRMADA' || appt.situacao === 'JÁ VEIO') {
+                borderColor = 'border-green-300';
+                bgColor = 'bg-green-50';
+            } else if (appt.situacao === 'CANCELADA' || appt.situacao === 'SI SEM INTERESSE') {
+                borderColor = 'border-red-300';
+                bgColor = 'bg-red-50';
+            } else if (appt.situacao === 'REAGENDAR') {
+                borderColor = 'border-blue-300';
+                bgColor = 'bg-blue-50';
+            } else if (appt.situacao === 'PUXADA') {
+                borderColor = 'border-amber-300';
+                bgColor = 'bg-amber-50';
+            } else if (!appt.situacao) {
+                borderColor = 'border-yellow-300';
+                bgColor = 'bg-yellow-50';
+            }
+            
+            div.className = `consulta-card p-5 border-2 ${borderColor} rounded-xl ${bgColor} fade-in`;
+            div.id = `consulta-${appt.rowId}`;
+            
+            let statusBadge = '<span class="badge bg-yellow-100 text-yellow-800">⏳ PENDENTE</span>';
+            if (appt.situacao === 'CONFIRMADA') statusBadge = '<span class="badge bg-green-100 text-green-800">✅ CONFIRMADA</span>';
+            else if (appt.situacao === 'JÁ VEIO') statusBadge = '<span class="badge bg-green-100 text-green-800">✅ JÁ VEIO</span>';
+            else if (appt.situacao === 'CANCELADA') statusBadge = '<span class="badge bg-red-100 text-red-800">❌ CANCELADA</span>';
+            else if (appt.situacao === 'SI SEM INTERESSE') statusBadge = '<span class="badge bg-red-100 text-red-800">❌ SEM INTERESSE</span>';
+            else if (appt.situacao === 'REAGENDAR') statusBadge = '<span class="badge bg-blue-100 text-blue-800">📅 REAGENDAR</span>';
+            else if (appt.situacao === 'PUXADA') statusBadge = '<span class="badge bg-amber-100 text-amber-800">⚡ PUXADA</span>';
+            else if (appt.situacao === 'MATRICULA') statusBadge = '<span class="badge bg-purple-100 text-purple-800">🎓 MATRICULA</span>';
+            
+            const options = ['PUXADA','SI SEM INTERESSE','CONFIRMADA','CANCELADA','REAGENDAR','JÁ VEIO','MATRICULA','CONFIRMOU E NÃO VEIO'];
+            const selectOpts = options.map(o => `<option value="${o}" ${appt.situacao === o ? 'selected' : ''}>${o}</option>`).join('');
+            
+            div.innerHTML = `
+                <div class="flex flex-col lg:flex-row justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">${index + 1}</span>
+                            <h3 class="font-bold text-lg text-slate-800">${appt.jovem}</h3>
+                            ${statusBadge}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                            <p class="text-slate-600"><i class="fas fa-user text-indigo-400 w-5"></i> <strong>Responsável:</strong> ${appt.responsavel}</p>
+                            <p class="text-slate-600"><i class="fas fa-clock text-purple-400 w-5"></i> <strong>Horário:</strong> ${appt.horario || 'N/D'}</p>
+                            <p class="text-slate-600"><i class="fas fa-phone text-green-400 w-5"></i> <strong>Tel. Resp:</strong> <a href="tel:${appt.telefone_resp}" class="text-indigo-600 hover:underline">${appt.telefone_resp || 'N/D'}</a></p>
+                            <p class="text-slate-600"><i class="fas fa-mobile-alt text-blue-400 w-5"></i> <strong>Tel. Jovem:</strong> ${appt.telefone_jovem || 'N/D'}</p>
+                            ${appt.codigo ? `<p class="text-slate-600"><i class="fas fa-barcode text-amber-400 w-5"></i> <strong>Código:</strong> ${appt.codigo}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 min-w-[200px]">
+                        ${canEdit ? `
+                            <select class="consulta-status-select p-3 border-2 border-slate-300 rounded-xl bg-white font-semibold" data-row-id="${appt.rowId}" data-sheet-name="${appt.sheetName}">
+                                <option value="">⏳ Pendente</option>
+                                ${selectOpts}
+                            </select>
+                        ` : `
+                            <div class="p-3 bg-slate-100 rounded-xl text-center">
+                                <p class="text-xs text-slate-500 mb-1">Status atual:</p>
+                                <p class="font-bold text-slate-700">${appt.situacao || 'Pendente'}</p>
+                            </div>
+                            <p class="text-xs text-orange-600 text-center"><i class="fas fa-lock"></i> Só edita no dia</p>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            list.appendChild(div);
+        });
+    }
+    
+    document.getElementById('btn-ontem').addEventListener('click', () => setConsultaDate('ontem'));
+    document.getElementById('btn-hoje').addEventListener('click', () => setConsultaDate('hoje'));
+    document.getElementById('btn-amanha').addEventListener('click', () => setConsultaDate('amanha'));
+    document.getElementById('btn-custom-date').addEventListener('click', () => setConsultaDate('custom'));
+    document.getElementById('consulta-refresh-btn').addEventListener('click', () => {
+        if (consultaSelectedDate) {
+            fetchConsultaAppointments(consultaSelectedDate);
+            showToast('Atualizando...', 'info');
+        }
+    });
+    
+    document.getElementById('consulta-filter-search').addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase();
+        const filtered = consultaAppointments.filter(a => 
+            a.jovem.toLowerCase().includes(term) || 
+            a.responsavel.toLowerCase().includes(term)
+        );
+        renderConsultaAppointments(filtered);
+    });
+    
+    document.getElementById('consulta-filter-status').addEventListener('change', function(e) {
+        const status = e.target.value;
+        let filtered;
+        if (status === 'PENDENTE') {
+            filtered = consultaAppointments.filter(a => !a.situacao || a.situacao === '');
+        } else if (status) {
+            filtered = consultaAppointments.filter(a => a.situacao === status);
+        } else {
+            filtered = consultaAppointments;
+        }
+        renderConsultaAppointments(filtered);
+    });
+    
+    document.getElementById('consulta-list').addEventListener('change', async function(e) {
+        if (!e.target.classList.contains('consulta-status-select')) return;
+        
+        const select = e.target;
+        const rowId = select.dataset.rowId;
+        const sheetName = select.dataset.sheetName;
+        const newStatus = select.value;
+        
+        select.disabled = true;
+        select.style.backgroundColor = '#fef3c7';
+        
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ action: 'updateStatus', rowId, sheetName, newStatus })
+            });
+            
+            const card = document.getElementById(`consulta-${rowId}`);
+            card.style.backgroundColor = '#dcfce7';
+            setTimeout(() => {
+                fetchConsultaAppointments(consultaSelectedDate);
+            }, 1000);
+            showToast('Status atualizado!', 'success');
+        } catch(e) {
+            showToast('Erro ao atualizar', 'error');
+        } finally {
+            select.disabled = false;
+            select.style.backgroundColor = '';
+        }
+    });
+
     // ==================== DASHBOARD ====================
     async function fetchDashboard() {
         const assistant = assistantSelect.value;
@@ -1178,6 +1764,212 @@ ${org}`;
         });
     }
 
+    // ==================== SUPERVISOR / ADMIN ====================
+    assistantSelect.addEventListener('change', function() {
+        const selected = this.value;
+        
+        if (selected === 'WELKER') {
+            passwordModal.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordError.classList.add('hidden');
+            passwordInput.focus();
+        } else {
+            isSupervisor = false;
+            adminTabBtn.classList.add('hidden');
+            supervisorBadge.classList.add('hidden');
+        }
+        
+        if (document.getElementById('gerenciar-section').classList.contains('hidden') === false) {
+            fetchAppointments();
+        }
+        if (document.getElementById('dashboard-section').classList.contains('hidden') === false) {
+            fetchDashboard();
+        }
+        if (document.getElementById('consulta-section').classList.contains('hidden') === false && consultaSelectedDate) {
+            fetchConsultaAppointments(consultaSelectedDate);
+        }
+        fetchTomorrowCount();
+    });
+    
+    passwordConfirmBtn.addEventListener('click', function() {
+        if (passwordInput.value === SUPERVISOR_PASSWORD) {
+            isSupervisor = true;
+            passwordModal.classList.add('hidden');
+            adminTabBtn.classList.remove('hidden');
+            adminTabBtn.classList.add('flex');
+            supervisorBadge.classList.remove('hidden');
+            supervisorBadge.classList.add('flex');
+            showToast('Bem-vindo, Supervisor! 👑', 'success');
+        } else {
+            passwordError.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    });
+    
+    passwordCancelBtn.addEventListener('click', function() {
+        passwordModal.classList.add('hidden');
+        assistantSelect.value = '';
+    });
+    
+    passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') passwordConfirmBtn.click();
+    });
+
+    // ==================== ADMIN DATA ====================
+    async function fetchAdminData() {
+        const today = new Date();
+        const dateFilter = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        
+        const operadores = ['DIANA', 'IGOR', 'WELKER', 'TREINEE', 'TATIANA', 'GABRIELA', 'MARCELO', 'KAMILLY', 'LETICIA'];
+        let allData = [];
+        let operadorStats = {};
+        
+        for (const op of operadores) {
+            try {
+                const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op}&date=${dateFilter}`);
+                const result = await resp.json();
+                
+                if (result.status === 'success') {
+                    const opData = result.data.map(a => ({ ...a, operador: op }));
+                    allData = allData.concat(opData);
+                    
+                    const confirmados = result.data.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+                    operadorStats[op] = {
+                        total: result.data.length,
+                        confirmados: confirmados,
+                        taxa: result.data.length > 0 ? Math.round((confirmados / result.data.length) * 100) : 0
+                    };
+                }
+            } catch(e) {
+                console.error(`Erro ao buscar ${op}:`, e);
+            }
+        }
+        
+        renderAdminData(allData, operadorStats, operadores);
+    }
+    
+    function renderAdminData(allData, operadorStats, operadores) {
+        // Estatísticas gerais
+        const totalHoje = allData.length;
+        const confirmadosTotal = allData.filter(a => a.situacao === 'CONFIRMADA' || a.situacao === 'JÁ VEIO').length;
+        const taxaGeral = totalHoje > 0 ? Math.round((confirmadosTotal / totalHoje) * 100) : 0;
+        
+        document.getElementById('admin-total-hoje').textContent = totalHoje;
+        document.getElementById('admin-confirmados').textContent = confirmadosTotal;
+        document.getElementById('admin-taxa').textContent = taxaGeral + '%';
+        
+        // Ranking
+        const ranking = Object.entries(operadorStats)
+            .map(([op, stats]) => ({ operador: op, ...stats }))
+            .sort((a, b) => b.total - a.total);
+        
+        const rankingHTML = ranking.map((r, i) => {
+            const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}º`;
+            const cor = operadorCores[r.operador] || 'slate';
+            return `
+                <div class="flex items-center gap-3 p-3 bg-${cor}-50 rounded-xl">
+                    <span class="text-2xl">${medal}</span>
+                    <div class="flex-1">
+                        <p class="font-bold text-slate-800">${r.operador}</p>
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-slate-600">${r.total} agend.</span>
+                            <span class="text-green-600">${r.confirmados} conf.</span>
+                            <span class="text-purple-600">${r.taxa}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        document.getElementById('admin-ranking').innerHTML = rankingHTML || '<p class="text-center text-slate-400">Nenhum dado</p>';
+        
+        // Gráfico
+        const ctx = document.getElementById('adminChart');
+        if (adminChartInstance) adminChartInstance.destroy();
+        
+        adminChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ranking.map(r => r.operador),
+                datasets: [{
+                    label: 'Agendamentos',
+                    data: ranking.map(r => r.total),
+                    backgroundColor: ['#3b82f6', '#22c55e', '#a855f7', '#ec4899', '#f97316', '#ef4444', '#06b6d4', '#64748b', '#6b7280'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+        
+        // Filtro de operadores
+        const filterSelect = document.getElementById('admin-filter-operador');
+        filterSelect.innerHTML = '<option value="">Todos Operadores</option>' + 
+            operadores.map(op => `<option value="${op}">${op}</option>`).join('');
+        
+        // Lista de agendamentos
+        renderAdminAppointments(allData);
+    }
+    
+    function renderAdminAppointments(appointments) {
+        const container = document.getElementById('admin-all-appointments');
+        
+        if (appointments.length === 0) {
+            container.innerHTML = '<p class="text-center text-slate-400 py-8">Nenhum agendamento encontrado</p>';
+            return;
+        }
+        
+        appointments.sort((a, b) => (a.horario > b.horario) ? 1 : -1);
+        
+        container.innerHTML = appointments.map(appt => {
+            const cor = operadorCores[appt.operador] || 'slate';
+            let statusBadge = '<span class="badge bg-yellow-100 text-yellow-800 text-xs">PENDENTE</span>';
+            if (appt.situacao === 'CONFIRMADA') statusBadge = '<span class="badge bg-green-100 text-green-800 text-xs">CONFIRMADA</span>';
+            else if (appt.situacao === 'JÁ VEIO') statusBadge = '<span class="badge bg-green-100 text-green-800 text-xs">JÁ VEIO</span>';
+            else if (appt.situacao === 'CANCELADA') statusBadge = '<span class="badge bg-red-100 text-red-800 text-xs">CANCELADA</span>';
+            else if (appt.situacao) statusBadge = `<span class="badge bg-slate-100 text-slate-800 text-xs">${appt.situacao}</span>`;
+            
+            return `
+                <div class="p-3 border-l-4 border-${cor}-500 bg-white rounded-lg shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="badge bg-${cor}-100 text-${cor}-800 text-xs">${appt.operador}</span>
+                            <span class="font-bold text-slate-800">${appt.jovem}</span>
+                            ${statusBadge}
+                        </div>
+                        <div class="text-sm text-slate-500">
+                            <i class="fas fa-clock"></i> ${appt.horario || 'N/D'}
+                            <i class="fas fa-phone ml-2"></i> ${appt.telefone_resp || 'N/D'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    document.getElementById('admin-filter-operador')?.addEventListener('change', function(e) {
+        const op = e.target.value;
+        // Re-fetch com filtro
+        if (op) {
+            // Filtrar apenas o operador selecionado
+            showToast(`Filtrando por ${op}...`, 'info');
+        }
+    });
+    
+    document.getElementById('admin-refresh')?.addEventListener('click', function() {
+        showToast('Atualizando dados...', 'info');
+        fetchAdminData();
+    });
+    
+    document.getElementById('admin-export')?.addEventListener('click', function() {
+        showToast('Exportando relatório...', 'info');
+        // Implementar exportação
+    });
+
     // ==================== AGENDAMENTOS DE AMANHÃ ====================
     async function fetchTomorrowCount() {
         const assistant = assistantSelect.value;
@@ -1210,17 +2002,6 @@ ${org}`;
     document.getElementById('next-day-card').addEventListener('click', function() {
         fetchTomorrowCount();
         showToast('Atualizando...', 'info');
-    });
-
-    // ==================== EVENTOS ====================
-    assistantSelect.addEventListener('change', function() {
-        if (document.getElementById('gerenciar-section').classList.contains('hidden') === false) {
-            fetchAppointments();
-        }
-        if (document.getElementById('dashboard-section').classList.contains('hidden') === false) {
-            fetchDashboard();
-        }
-        fetchTomorrowCount();
     });
 
     // ==================== INIT ====================
