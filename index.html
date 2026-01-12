@@ -426,6 +426,7 @@
 <script>
 /**
  * SISTEMA AGENDADOR PRO 3.0 (ELDORADO)
+ * VERSÃO CORRIGIDA - TODOS OS CAMPOS FUNCIONANDO
  */
 
 // ================= CONSTANTES E CONFIG =================
@@ -706,11 +707,13 @@ function addRecipient(daysOffset) {
     const r = {
         id: Date.now(),
         jovem: '',
+        data_nascimento: '',
         responsavel: '',
         telefone_resp: '',
         telefone_jovem: '',
         data: formatDateBR(date),
         horario: '',
+        irmaos: '',
         tipo: daysOffset === 0 ? 'PUXADA' : 'AMANHÃ'
     };
     
@@ -750,12 +753,14 @@ function renderRecipients() {
                 <span class="font-bold text-slate-400">#${idx + 1}</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input type="text" placeholder="Nome Jovem *" value="${r.jovem}" data-field="jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
-                <input type="text" placeholder="Nome Responsável *" value="${r.responsavel}" data-field="responsavel" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
-                <input type="text" placeholder="Tel. Responsável *" value="${r.telefone_resp}" data-field="telefone_resp" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
-                <input type="text" placeholder="Tel. Jovem" value="${r.telefone_jovem}" data-field="telefone_jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
-                <input type="text" placeholder="Data *" value="${r.data}" data-field="data" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
-                <input type="text" placeholder="Hora *" value="${r.horario}" data-field="horario" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none time-mask">
+                <input type="text" placeholder="Nome do Jovem *" value="${r.jovem}" data-field="jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
+                <input type="text" placeholder="Data Nascimento (DD/MM/AAAA)" value="${r.data_nascimento}" data-field="data_nascimento" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
+                <input type="text" placeholder="Nome do Responsável *" value="${r.responsavel}" data-field="responsavel" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
+                <input type="text" placeholder="Tel. Responsável * (5531...)" value="${r.telefone_resp}" data-field="telefone_resp" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
+                <input type="text" placeholder="Tel. Jovem (5531...)" value="${r.telefone_jovem}" data-field="telefone_jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
+                <input type="text" placeholder="Data Agendamento *" value="${r.data}" data-field="data" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
+                <input type="text" placeholder="Horário * (HH:MM)" value="${r.horario}" data-field="horario" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none time-mask">
+                <input type="text" placeholder="Irmãos (opcional)" value="${r.irmaos || ''}" data-field="irmaos" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
             </div>
         `;
         
@@ -814,9 +819,21 @@ function generateMessages(tipo) {
         const codigo = r.jovem.split(' ')[0].toUpperCase().substring(0,3) + Math.floor(Math.random()*900+100);
         const org = tipo === 'Projeto' ? 'Coordenação | Projeto Conecta Jovem' : 'Instituto Conecta Jovem';
         
+        // Calcula idade se tiver data de nascimento
+        let idadeStr = '';
+        if (r.data_nascimento && r.data_nascimento.length === 10) {
+            const parts = r.data_nascimento.split('/');
+            const nascimento = new Date(parts[2], parts[1] - 1, parts[0]);
+            const hoje = new Date();
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const m = hoje.getMonth() - nascimento.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+            if (idade > 0 && idade < 100) idadeStr = ` (${idade} anos)`;
+        }
+        
         const msg = `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*
 
-*Jovem Convocado:* ${r.jovem}
+*Jovem Convocado:* ${r.jovem}${idadeStr}
 *Responsável:* ${r.responsavel}
 
 *Dados do Agendamento:*
@@ -863,16 +880,37 @@ ${org}`;
             btn.textContent = 'Salvando...';
             
             try {
-                data.horario_lancamento = new Date().toLocaleString('pt-BR');
+                // DADOS COMPLETOS PARA PLANILHA
+                const payload = {
+                    data: data.data,
+                    assistente: data.assistente,
+                    jovem: data.jovem,
+                    data_nascimento: data.data_nascimento || '',
+                    responsavel: data.responsavel,
+                    numero_jovem: data.telefone_jovem || '',
+                    numero_responsavel: data.telefone_resp,
+                    local: data.local,
+                    horario: data.horario,
+                    codigo: data.codigo,
+                    irmaos: data.irmaos || '',
+                    isPuxada: data.tipo === 'PUXADA',
+                    horario_lancamento: new Date().toLocaleString('pt-BR')
+                };
+                
+                console.log('📤 Enviando para planilha:', payload);
+                
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: JSON.stringify(data)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
+                
                 btn.textContent = 'Salvo!';
                 btn.classList.replace('bg-blue-500', 'bg-green-600');
                 toast('Salvo na planilha!', 'success');
             } catch (e) {
+                console.error('Erro:', e);
                 btn.textContent = 'Erro';
                 btn.classList.replace('bg-blue-500', 'bg-red-600');
                 toast('Erro ao salvar', 'error');
