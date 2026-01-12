@@ -65,7 +65,7 @@
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
 
-    <!-- OVERLAY DE LOADING ROBUSTO -->
+    <!-- OVERLAY DE LOADING -->
     <div id="loading-overlay" class="loading-overlay hidden">
         <div class="text-white text-4xl mb-4"><i class="fas fa-satellite-dish fa-spin"></i></div>
         <h2 class="text-white text-2xl font-bold mb-2">Processando Dados...</h2>
@@ -167,7 +167,7 @@
                 </div>
                 <div>
                     <h1 class="text-2xl md:text-3xl font-black text-slate-800">Agendador PRO</h1>
-                    <p class="text-slate-500 font-medium">Unidade Eldorado • v3.0 (Correção Admin)</p>
+                    <p class="text-slate-500 font-medium">Unidade Eldorado • v3.0</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -186,7 +186,7 @@
                 <i class="fas fa-plus-circle"></i> Agendar
             </button>
             <button class="nav-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2" data-target="gerenciar">
-                <i class="fas fa-tasks"></i> Gerenciar (Hoje)
+                <i class="fas fa-tasks"></i> Gerenciar
             </button>
             <button class="nav-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2" data-target="consulta">
                 <i class="fas fa-search"></i> Consulta
@@ -210,7 +210,6 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Seu Nome</label>
                             <select id="select-assistente" class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold text-slate-700 focus:border-indigo-500 outline-none transition-colors">
                                 <option value="">-- Selecione --</option>
-                                <!-- Preenchido via JS -->
                             </select>
                         </div>
                         <div>
@@ -262,7 +261,6 @@
                     </div>
                     
                     <div id="lista-destinatarios" class="space-y-4">
-                        <!-- Itens adicionados aqui via JS -->
                         <div id="empty-state" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
                             <i class="fas fa-user-plus text-4xl text-slate-300 mb-3"></i>
                             <p class="text-slate-400 font-medium">Adicione um destinatário para começar</p>
@@ -293,7 +291,7 @@
                 </div>
             </section>
 
-            <!-- PÁGINA GERENCIAR (HOJE) -->
+            <!-- PÁGINA GERENCIAR -->
             <section id="page-gerenciar" class="page-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-6">
@@ -311,7 +309,7 @@
                 </div>
             </section>
 
-            <!-- PÁGINA CONSULTA (QUALQUER DATA) -->
+            <!-- PÁGINA CONSULTA -->
             <section id="page-consulta" class="page-content hidden fade-in">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex flex-wrap gap-2 mb-6">
@@ -346,14 +344,12 @@
                         <div>
                             <canvas id="chart-dashboard"></canvas>
                         </div>
-                        <div id="stats-dashboard" class="space-y-4">
-                            <!-- Preenchido via JS -->
-                        </div>
+                        <div id="stats-dashboard" class="space-y-4"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- PÁGINA ADMIN (SUPERVISOR) -->
+            <!-- PÁGINA ADMIN -->
             <section id="page-admin" class="page-content hidden fade-in space-y-6">
                 <!-- Toolbar Admin -->
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 items-center justify-between">
@@ -412,7 +408,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
                             <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
-                                tr>
+                                <tr>
                                     <th class="px-4 py-3">Data</th>
                                     <th class="px-4 py-3">Operador</th>
                                     <th class="px-4 py-3">Jovem</th>
@@ -430,7 +426,6 @@
 <script>
 /**
  * SISTEMA AGENDADOR PRO 3.0 (ELDORADO)
- * Reescrito para otimização de busca e correções do Admin
  */
 
 // ================= CONSTANTES E CONFIG =================
@@ -468,17 +463,6 @@ const formatDateAPI = (date) => {
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
 };
-const parseDateBR = (str) => {
-    const [d, m, y] = str.split('/');
-    return new Date(y, m - 1, d);
-};
-const getDaysDiff = (date) => {
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const target = new Date(date);
-    target.setHours(0,0,0,0);
-    return Math.floor((target - today) / (1000 * 60 * 60 * 24));
-};
 
 // Loader Overlay
 const loading = {
@@ -512,24 +496,29 @@ const toast = (msg, type = 'info') => {
 
 // ================= INICIALIZAÇÃO =================
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Iniciando Agendador PRO 3.0...');
     initSelectOperadores();
     loadLocalData();
     updateClock();
     setupEventListeners();
-    
-    // Auto-select tab Agendar
     switchTab('agendar');
-    
     setInterval(updateClock, 1000);
 });
 
 function initSelectOperadores() {
     const sel = $('select-assistente');
+    const selQuick = $('quick-assistente');
+    
     OPERADORES.forEach(op => {
         const opt = document.createElement('option');
         opt.value = op.id;
         opt.textContent = op.id === 'WELKER' ? 'Welker (Supervisor)' : op.id;
         sel.appendChild(opt);
+        
+        const opt2 = document.createElement('option');
+        opt2.value = op.id;
+        opt2.textContent = op.id;
+        selQuick.appendChild(opt2);
     });
 }
 
@@ -539,26 +528,20 @@ function updateClock() {
 
 // ================= NAVEGAÇÃO =================
 function switchTab(target) {
-    // Esconde todas as seções
     document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-    
-    // Remove active dos botões
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
         btn.classList.add('text-slate-600', 'hover:bg-slate-50');
     });
     
-    // Ativa seção alvo
     $(`page-${target}`).classList.remove('hidden');
     
-    // Ativa botão alvo
     const activeBtn = document.querySelector(`.nav-btn[data-target="${target}"]`);
     if(activeBtn) {
         activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
         activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
     }
 
-    // Ações específicas por aba
     if (target === 'gerenciar') fetchAppointmentsHoje();
     if (target === 'dashboard') updateDashboard();
     if (target === 'consulta') {
@@ -566,16 +549,19 @@ function switchTab(target) {
         $('consulta-date').value = formatDateAPI(today);
         fetchConsulta(today);
     }
+    if (target === 'admin' && state.isSupervisor) {
+        loadAdminData('hoje');
+    }
 }
 
 // ================= EVENT LISTENERS =================
 function setupEventListeners() {
-    // Tabs
+    // Navegação
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.target));
     });
     
-    // Auth Supervisor
+    // Seleção de usuário
     $('select-assistente').addEventListener('change', (e) => {
         state.user = e.target.value;
         if (state.user === 'WELKER') {
@@ -588,16 +574,27 @@ function setupEventListeners() {
         }
     });
 
+    // Modal de senha
     $('btn-confirm-auth').addEventListener('click', checkPassword);
     $('btn-cancel-auth').addEventListener('click', () => {
         $('password-modal').classList.add('hidden');
         $('select-assistente').value = '';
         state.user = '';
     });
+    $('supervisor-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkPassword();
+    });
 
-    // Rascunhos
-    $('btn-add-amanha').addEventListener('click', () => addRecipient(1));
-    $('btn-add-hoje').addEventListener('click', () => addRecipient(0));
+    // Botões de adicionar destinatário
+    $('btn-add-amanha').addEventListener('click', () => {
+        console.log('✅ Botão Amanhã clicado');
+        addRecipient(1);
+    });
+    
+    $('btn-add-hoje').addEventListener('click', () => {
+        console.log('✅ Botão Hoje clicado');
+        addRecipient(0);
+    });
     
     // Gerar Mensagens
     $('btn-gen-projeto').addEventListener('click', () => generateMessages('Projeto'));
@@ -630,17 +627,14 @@ function setupEventListeners() {
     // Admin
     $('nav-admin').addEventListener('click', () => {
         switchTab('admin');
-        // Auto-load hoje se vazio
         if(state.adminData.length === 0) loadAdminData('hoje');
     });
     
     document.querySelectorAll('.admin-period').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Visual active state
             document.querySelectorAll('.admin-period').forEach(b => b.classList.remove('bg-indigo-600', 'text-white'));
             btn.classList.add('bg-indigo-600', 'text-white');
             btn.classList.remove('bg-slate-100', 'text-slate-600');
-            
             loadAdminData(btn.dataset.period);
         });
     });
@@ -657,12 +651,12 @@ function setupEventListeners() {
     $('btn-cancel-metas').addEventListener('click', () => $('metas-modal').classList.add('hidden'));
     $('btn-save-metas').addEventListener('click', saveMetas);
 
-    // Refresh e Export
+    // Outros
     $('btn-refresh-hoje').addEventListener('click', fetchAppointmentsHoje);
     $('btn-update-ag-amanha').addEventListener('click', fetchAgendamentosAmanha);
     $('btn-export').addEventListener('click', exportAdminData);
 
-    // Inputs masks listeners (delegation)
+    // Máscaras de input
     document.body.addEventListener('input', (e) => {
         if (e.target.classList.contains('date-mask')) maskDate(e.target);
         if (e.target.classList.contains('phone-mask')) maskPhone(e.target);
@@ -670,16 +664,15 @@ function setupEventListeners() {
     });
 }
 
-// ================= LÓGICA DE NEGÓCIO =================
-
+// ================= AUTENTICAÇÃO =================
 function checkPassword() {
     const pwd = $('supervisor-password').value;
     if (pwd === SUPERVISOR_PASS) {
         setSupervisorMode(true);
         $('password-modal').classList.add('hidden');
         toast('Bem-vindo, Supervisor!', 'success');
-        updateStats(); // Atualiza stats com dados da equipe se possível
-        fetchAgendamentosAmanha(); // Já busca dados da equipe
+        updateStats();
+        fetchAgendamentosAmanha();
     } else {
         toast('Senha incorreta', 'error');
     }
@@ -695,18 +688,20 @@ function setSupervisorMode(active) {
         $('supervisor-badge').classList.add('hidden');
         $('nav-admin').classList.add('hidden');
         $('nav-admin').classList.remove('flex');
-        if(!document.getElementById('page-admin').classList.contains('hidden')) {
-            switchTab('agendar');
-        }
     }
 }
 
-// --- RASCUNHOS ---
+// ================= RASCUNHOS =================
 function addRecipient(daysOffset) {
+    console.log('📝 Adicionando destinatário, offset:', daysOffset);
+    
     const date = new Date();
     date.setDate(date.getDate() + daysOffset);
-    // Pula domingo se for adicionar amanhã no sábado
-    if(daysOffset === 1 && date.getDay() === 0) date.setDate(date.getDate() + 1);
+    
+    // Pula domingo se for sábado
+    if(daysOffset === 1 && date.getDay() === 0) {
+        date.setDate(date.getDate() + 1);
+    }
 
     const r = {
         id: Date.now(),
@@ -722,58 +717,88 @@ function addRecipient(daysOffset) {
     state.recipients.push(r);
     renderRecipients();
     saveLocalData();
+    toast(`Destinatário adicionado (${r.tipo})`, 'success');
 }
 
 function renderRecipients() {
     const list = $('lista-destinatarios');
-    list.innerHTML = '';
+    const empty = $('empty-state');
+    
+    // Remove todos exceto empty-state
+    Array.from(list.children).forEach(child => {
+        if (child.id !== 'empty-state') child.remove();
+    });
     
     if (state.recipients.length === 0) {
-        $('empty-state').classList.remove('hidden');
+        empty.classList.remove('hidden');
         return;
     }
-    $('empty-state').classList.add('hidden');
+    
+    empty.classList.add('hidden');
 
     state.recipients.forEach((r, idx) => {
-        const el = document.createElement('div');
-        el.className = 'p-4 border-2 border-slate-200 rounded-xl bg-slate-50 relative';
-        el.innerHTML = `
-            <button onclick="removeRecipient(${idx})" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fas fa-times"></i></button>
+        const div = document.createElement('div');
+        div.className = 'p-4 border-2 border-slate-200 rounded-xl bg-white relative fade-in';
+        div.dataset.id = r.id;
+        
+        div.innerHTML = `
+            <button class="btn-remove-recipient absolute top-2 right-2 text-red-400 hover:text-red-600 p-1" data-id="${r.id}">
+                <i class="fas fa-times"></i>
+            </button>
             <div class="flex items-center gap-2 mb-3">
                 <span class="badge ${r.tipo === 'PUXADA' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}">${r.tipo}</span>
                 <span class="font-bold text-slate-400">#${idx + 1}</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input type="text" placeholder="Nome Jovem" value="${r.jovem}" oninput="updateRecipient(${idx}, 'jovem', this.value)" class="p-2 rounded border">
-                <input type="text" placeholder="Nome Responsável" value="${r.responsavel}" oninput="updateRecipient(${idx}, 'responsavel', this.value)" class="p-2 rounded border">
-                <input type="text" placeholder="Tel. Responsável" value="${r.telefone_resp}" oninput="updateRecipient(${idx}, 'telefone_resp', this.value)" class="p-2 rounded border phone-mask">
-                <input type="text" placeholder="Tel. Jovem" value="${r.telefone_jovem}" oninput="updateRecipient(${idx}, 'telefone_jovem', this.value)" class="p-2 rounded border phone-mask">
-                <input type="text" placeholder="Data" value="${r.data}" oninput="updateRecipient(${idx}, 'data', this.value)" class="p-2 rounded border date-mask">
-                <input type="text" placeholder="Hora" value="${r.horario}" oninput="updateRecipient(${idx}, 'horario', this.value)" class="p-2 rounded border time-mask">
+                <input type="text" placeholder="Nome Jovem *" value="${r.jovem}" data-field="jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
+                <input type="text" placeholder="Nome Responsável *" value="${r.responsavel}" data-field="responsavel" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
+                <input type="text" placeholder="Tel. Responsável *" value="${r.telefone_resp}" data-field="telefone_resp" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
+                <input type="text" placeholder="Tel. Jovem" value="${r.telefone_jovem}" data-field="telefone_jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
+                <input type="text" placeholder="Data *" value="${r.data}" data-field="data" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
+                <input type="text" placeholder="Hora *" value="${r.horario}" data-field="horario" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none time-mask">
             </div>
         `;
-        list.appendChild(el);
+        
+        // Event listeners para os inputs
+        div.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const id = parseInt(div.dataset.id);
+                const field = e.target.dataset.field;
+                const recipient = state.recipients.find(r => r.id === id);
+                if (recipient) {
+                    recipient[field] = e.target.value;
+                    saveLocalData();
+                }
+            });
+        });
+        
+        // Botão remover
+        div.querySelector('.btn-remove-recipient').addEventListener('click', () => {
+            const id = parseInt(div.dataset.id);
+            state.recipients = state.recipients.filter(r => r.id !== id);
+            renderRecipients();
+            saveLocalData();
+            toast('Destinatário removido', 'info');
+        });
+        
+        list.appendChild(div);
     });
+    
     updateStats();
 }
 
-window.updateRecipient = (idx, field, val) => {
-    state.recipients[idx][field] = val;
-    saveLocalData();
-    updateStats();
-};
-
-window.removeRecipient = (idx) => {
-    state.recipients.splice(idx, 1);
-    renderRecipients();
-    saveLocalData();
-};
-
+// ================= GERAR MENSAGENS =================
 function generateMessages(tipo) {
-    if (!state.user) return toast('Selecione seu nome primeiro', 'warning');
+    if (!state.user) {
+        toast('Selecione seu nome primeiro', 'warning');
+        return;
+    }
     
-    const validos = state.recipients.filter(r => r.jovem && r.data && r.horario);
-    if (validos.length === 0) return toast('Preencha os dados dos destinatários', 'warning');
+    const validos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp);
+    if (validos.length === 0) {
+        toast('Preencha os campos obrigatórios', 'warning');
+        return;
+    }
 
     const lista = $('lista-mensagens');
     lista.innerHTML = '';
@@ -818,54 +843,79 @@ ${org}`;
         div.className = 'p-4 bg-slate-50 rounded-xl border border-slate-200';
         div.innerHTML = `
             <div class="mb-2 font-bold text-slate-700">${r.jovem}</div>
-            <textarea class="w-full h-32 text-xs p-2 rounded border mb-2 font-mono" readonly>${msg}</textarea>
-            <div class="flex gap-2">
-                <button onclick="copyText(this)" class="px-3 py-1 bg-slate-200 rounded text-xs font-bold hover:bg-slate-300">Copiar</button>
-                <a href="https://wa.me/55${r.telefone_resp.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-xs font-bold hover:bg-green-600">WhatsApp</a>
-                <button onclick='saveToSheet(${JSON.stringify({...r, codigo, assistente: state.user, local: unidade})}, this)' class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold hover:bg-blue-600">Salvar Planilha</button>
+            <textarea class="w-full h-40 text-xs p-2 rounded border mb-2 font-mono" readonly>${msg}</textarea>
+            <div class="flex flex-wrap gap-2">
+                <button class="btn-copy px-3 py-1 bg-slate-200 rounded text-xs font-bold hover:bg-slate-300">Copiar</button>
+                <a href="https://wa.me/55${r.telefone_resp.replace(/\D/g,'')}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-xs font-bold hover:bg-green-600">WhatsApp</a>
+                <button class="btn-save px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold hover:bg-blue-600" data-info='${JSON.stringify({...r, codigo, assistente: state.user, local: unidade})}'>Salvar Planilha</button>
             </div>
         `;
+        
+        div.querySelector('.btn-copy').addEventListener('click', () => {
+            navigator.clipboard.writeText(msg);
+            toast('Mensagem copiada!', 'success');
+        });
+        
+        div.querySelector('.btn-save').addEventListener('click', async (e) => {
+            const btn = e.target;
+            const data = JSON.parse(btn.dataset.info);
+            btn.disabled = true;
+            btn.textContent = 'Salvando...';
+            
+            try {
+                data.horario_lancamento = new Date().toLocaleString('pt-BR');
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+                btn.textContent = 'Salvo!';
+                btn.classList.replace('bg-blue-500', 'bg-green-600');
+                toast('Salvo na planilha!', 'success');
+            } catch (e) {
+                btn.textContent = 'Erro';
+                btn.classList.replace('bg-blue-500', 'bg-red-600');
+                toast('Erro ao salvar', 'error');
+            }
+        });
+        
         lista.appendChild(div);
     });
     
-    div.scrollIntoView({behavior: 'smooth'});
+    toast(`${validos.length} mensagem(ns) gerada(s)`, 'success');
 }
 
-// --- DATA FETCHING CORE ---
-
+// ================= BUSCAR DADOS =================
 async function fetchAppointmentsHoje() {
-    if (!state.user) return toast('Selecione um usuário', 'warning');
+    if (!state.user) {
+        toast('Selecione um usuário', 'warning');
+        return;
+    }
     
     const list = $('lista-hoje');
-    list.innerHTML = '<div class="loader mx-auto my-8"></div>';
+    list.innerHTML = '<div class="text-center py-8"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>';
     
     const todayStr = formatDateAPI(new Date());
     
     try {
         let data = [];
+        const targets = state.isSupervisor ? OPERADORES : [{id: state.user}];
         
-        if (state.isSupervisor) {
-            // Supervisor busca TODOS os operadores em paralelo para hoje (rápido)
-            const promises = OPERADORES.map(op => 
-                fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${todayStr}`)
-                    .then(r => r.json())
-                    .then(json => json.status === 'success' ? json.data.map(d => ({...d, operador: op.id})) : [])
-                    .catch(() => [])
-            );
-            const results = await Promise.all(promises);
-            data = results.flat();
-        } else {
-            // Operador normal busca só o dele
-            const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${state.user}&date=${todayStr}`);
-            const json = await resp.json();
-            if (json.status === 'success') data = json.data;
+        for (const op of targets) {
+            try {
+                const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${todayStr}`);
+                const json = await resp.json();
+                if (json.status === 'success') {
+                    const opData = json.data.map(d => ({...d, operador: op.id}));
+                    data = data.concat(opData);
+                }
+            } catch(e) { console.log('Erro buscando', op.id); }
         }
         
         state.appointmentsHoje = data;
         renderListHoje(data);
-        
     } catch (e) {
-        list.innerHTML = `<p class="text-red-500 text-center">Erro ao buscar: ${e.message}</p>`;
+        list.innerHTML = `<p class="text-red-500 text-center py-8">Erro: ${e.message}</p>`;
     }
 }
 
@@ -878,85 +928,98 @@ function renderListHoje(data) {
         return;
     }
 
+    data.sort((a,b) => (a.horario || '').localeCompare(b.horario || ''));
+
     data.forEach(item => {
         const div = document.createElement('div');
         const statusClass = getStatusColor(item.situacao);
-        const opInfo = state.isSupervisor ? `<span class="text-xs font-bold px-2 py-1 bg-slate-200 rounded mr-2">${item.operador}</span>` : '';
+        const opBadge = state.isSupervisor ? `<span class="text-xs font-bold px-2 py-1 bg-slate-200 rounded mr-2">${item.operador}</span>` : '';
         
-        div.className = `p-4 border-l-4 ${statusClass} bg-white rounded shadow-sm flex justify-between items-center`;
+        div.className = `p-4 border-l-4 ${statusClass} bg-white rounded shadow-sm`;
         div.innerHTML = `
-            <div>
-                <div class="flex items-center mb-1">
-                    ${opInfo}
-                    <span class="font-bold text-slate-800">${item.jovem}</span>
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="flex items-center mb-1">
+                        ${opBadge}
+                        <span class="font-bold text-slate-800">${item.jovem}</span>
+                    </div>
+                    <div class="text-xs text-slate-500">
+                        <i class="far fa-clock"></i> ${item.horario || 'N/D'} • Resp: ${item.responsavel}
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1">
+                        <i class="fas fa-phone"></i> ${item.telefone_resp || 'N/D'}
+                    </div>
                 </div>
-                <div class="text-xs text-slate-500">
-                    <i class="far fa-clock"></i> ${item.horario} • Resp: ${item.responsavel}
-                </div>
+                <select class="select-status text-xs p-1 border rounded bg-slate-50 font-bold" data-row="${item.rowId}" data-sheet="${item.sheetName}">
+                    <option value="">PENDENTE</option>
+                    <option value="CONFIRMADA" ${item.situacao === 'CONFIRMADA' ? 'selected' : ''}>CONFIRMADA</option>
+                    <option value="CANCELADA" ${item.situacao === 'CANCELADA' ? 'selected' : ''}>CANCELADA</option>
+                    <option value="REAGENDAR" ${item.situacao === 'REAGENDAR' ? 'selected' : ''}>REAGENDAR</option>
+                    <option value="JÁ VEIO" ${item.situacao === 'JÁ VEIO' ? 'selected' : ''}>JÁ VEIO</option>
+                    <option value="PUXADA" ${item.situacao === 'PUXADA' ? 'selected' : ''}>PUXADA</option>
+                </select>
             </div>
-            <select onchange="updateStatus(${item.rowId}, '${item.sheetName}', this.value)" class="text-xs p-1 border rounded bg-slate-50 font-bold">
-                <option value="">PENDENTE</option>
-                <option value="CONFIRMADA" ${item.situacao === 'CONFIRMADA' ? 'selected' : ''}>CONFIRMADA</option>
-                <option value="CANCELADA" ${item.situacao === 'CANCELADA' ? 'selected' : ''}>CANCELADA</option>
-                <option value="REAGENDAR" ${item.situacao === 'REAGENDAR' ? 'selected' : ''}>REAGENDAR</option>
-                <option value="JÁ VEIO" ${item.situacao === 'JÁ VEIO' ? 'selected' : ''}>JÁ VEIO</option>
-                <option value="PUXADA" ${item.situacao === 'PUXADA' ? 'selected' : ''}>PUXADA</option>
-            </select>
         `;
+        
+        div.querySelector('.select-status').addEventListener('change', async (e) => {
+            const sel = e.target;
+            sel.disabled = true;
+            
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        action: 'updateStatus',
+                        rowId: sel.dataset.row,
+                        sheetName: sel.dataset.sheet,
+                        newStatus: sel.value
+                    })
+                });
+                toast('Status atualizado!', 'success');
+            } catch (e) {
+                toast('Erro ao atualizar', 'error');
+            }
+            sel.disabled = false;
+        });
+        
         list.appendChild(div);
     });
 }
 
-async function updateStatus(rowId, sheetName, status) {
-    toast('Atualizando status...', 'info');
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify({ action: 'updateStatus', rowId, sheetName, newStatus: status })
-        });
-        toast('Status atualizado!', 'success');
-    } catch (e) {
-        toast('Erro ao atualizar', 'error');
-    }
-}
-
-// --- CONSULTA ---
+// ================= CONSULTA =================
 async function fetchConsulta(date) {
     const list = $('lista-consulta');
-    list.innerHTML = '<div class="loader mx-auto my-8"></div>';
+    list.innerHTML = '<div class="text-center py-8"><i class="fas fa-spinner fa-spin text-2xl text-indigo-500"></i></div>';
     
     const dateStr = formatDateAPI(date);
     const dateBR = formatDateBR(date);
     $('consulta-display-date').textContent = dateBR;
     
-    // Define se é editável (apenas HOJE)
     const isToday = formatDateAPI(new Date()) === dateStr;
-    const statusBadge = isToday 
-        ? '<span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✏️ Editável</span>'
-        : '<span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">🔒 Apenas Visualização</span>';
-    $('consulta-status-badge').innerHTML = statusBadge;
+    $('consulta-status-badge').innerHTML = isToday 
+        ? '<span class="badge bg-green-100 text-green-700">✏️ Editável</span>'
+        : '<span class="badge bg-orange-100 text-orange-700">🔒 Só Visualização</span>';
 
     try {
         let data = [];
-        // Se supervisor, busca todos. Se não, busca só o dele.
         const targets = state.isSupervisor ? OPERADORES : [{id: state.user}];
         
-        // Parallel fetch for speed
-        const promises = targets.map(op => 
-            fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id || op}&date=${dateStr}`)
-                .then(r => r.json())
-                .then(json => json.status === 'success' ? json.data.map(d => ({...d, operador: op.id || op.nome || op})) : [])
-                .catch(() => [])
-        );
+        for (const op of targets) {
+            try {
+                const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${dateStr}`);
+                const json = await resp.json();
+                if (json.status === 'success') {
+                    const opData = json.data.map(d => ({...d, operador: op.id}));
+                    data = data.concat(opData);
+                }
+            } catch(e) {}
+        }
         
-        const results = await Promise.all(promises);
-        data = results.flat().sort((a,b) => a.horario.localeCompare(b.horario));
-        
+        data.sort((a,b) => (a.horario || '').localeCompare(b.horario || ''));
         renderConsulta(data, isToday);
-        
     } catch (e) {
-        list.innerHTML = `<p class="text-red-500 text-center">Erro: ${e.message}</p>`;
+        list.innerHTML = `<p class="text-red-500 text-center py-8">Erro: ${e.message}</p>`;
     }
 }
 
@@ -971,104 +1034,120 @@ function renderConsulta(data, isEditable) {
 
     data.forEach(item => {
         const div = document.createElement('div');
-        const color = getStatusColor(item.situacao).replace('border-l-4', 'border-2');
-        const opBadge = state.isSupervisor ? `<span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded font-bold">${item.operador}</span>` : '';
+        const statusColor = getStatusColor(item.situacao);
+        const opBadge = state.isSupervisor ? `<span class="text-xs bg-slate-200 px-2 py-0.5 rounded font-bold">${item.operador}</span>` : '';
         
-        div.className = `p-4 rounded-xl bg-white ${color} relative`;
+        div.className = `p-4 rounded-xl bg-white border-2 ${statusColor.replace('border-l-4', '')}`;
         div.innerHTML = `
             <div class="flex justify-between items-start mb-2">
                 <div>
-                    <h4 class="font-black text-slate-800 text-lg">${item.jovem}</h4>
-                    <p class="text-xs text-slate-500 font-bold uppercase">${opBadge} ${item.responsavel}</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        ${opBadge}
+                        <h4 class="font-black text-slate-800 text-lg">${item.jovem}</h4>
+                    </div>
+                    <p class="text-xs text-slate-500">Resp: ${item.responsavel}</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-xl font-black text-slate-700">${item.horario}</div>
+                    <div class="text-xl font-black text-slate-700">${item.horario || 'N/D'}</div>
                     <span class="badge bg-slate-100 text-slate-600">${item.situacao || 'PENDENTE'}</span>
                 </div>
             </div>
-            <div class="flex gap-4 text-xs font-mono text-slate-500 mt-2 border-t pt-2">
-                <a href="tel:${item.telefone_resp}" class="hover:text-blue-600"><i class="fas fa-phone"></i> ${item.telefone_resp}</a>
+            <div class="flex gap-4 text-xs text-slate-500 mt-2 border-t pt-2">
+                <span><i class="fas fa-phone"></i> ${item.telefone_resp || 'N/D'}</span>
                 <span><i class="fas fa-barcode"></i> ${item.codigo || 'N/A'}</span>
             </div>
             ${isEditable ? `
-                <select onchange="updateStatus(${item.rowId}, '${item.sheetName}', this.value)" class="absolute bottom-2 right-2 text-xs border rounded p-1 bg-white shadow-sm">
-                    <option value="">Alterar Status...</option>
-                    <option value="CONFIRMADA">CONFIRMADA</option>
-                    <option value="CANCELADA">CANCELADA</option>
-                    <option value="REAGENDAR">REAGENDAR</option>
+                <select class="select-status mt-2 w-full text-xs border rounded p-1 bg-white" data-row="${item.rowId}" data-sheet="${item.sheetName}">
+                    <option value="">PENDENTE</option>
+                    <option value="CONFIRMADA" ${item.situacao === 'CONFIRMADA' ? 'selected' : ''}>CONFIRMADA</option>
+                    <option value="CANCELADA" ${item.situacao === 'CANCELADA' ? 'selected' : ''}>CANCELADA</option>
+                    <option value="REAGENDAR" ${item.situacao === 'REAGENDAR' ? 'selected' : ''}>REAGENDAR</option>
                 </select>
             ` : ''}
         `;
+        
+        if (isEditable) {
+            div.querySelector('.select-status').addEventListener('change', async (e) => {
+                const sel = e.target;
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        action: 'updateStatus',
+                        rowId: sel.dataset.row,
+                        sheetName: sel.dataset.sheet,
+                        newStatus: sel.value
+                    })
+                });
+                toast('Status atualizado!', 'success');
+            });
+        }
+        
         list.appendChild(div);
     });
 }
 
-// --- ADMIN FETCHING (CORRIGIDO) ---
+// ================= ADMIN =================
 async function loadAdminData(period, customStart, customEnd) {
     if (!state.isSupervisor) return;
     
-    let dates = [];
-    const today = new Date();
+    let startDate = new Date();
+    let endDate = new Date();
     
-    // Definir range de datas
     if (period === 'hoje') {
-        dates = [new Date()];
+        // Apenas hoje
     } else if (period === 'semana') {
-        const day = today.getDay() || 7; // Seg=1, Dom=7
-        const start = new Date(today);
-        start.setDate(today.getDate() - day + 1);
-        while (start <= today) {
-            dates.push(new Date(start));
-            start.setDate(start.getDate() + 1);
-        }
+        const day = startDate.getDay() || 7;
+        startDate.setDate(startDate.getDate() - day + 1);
     } else if (period === 'mes') {
-        const start = new Date(today.getFullYear(), today.getMonth(), 1);
-        while (start <= today) {
-            dates.push(new Date(start));
-            start.setDate(start.getDate() + 1);
-        }
+        startDate.setDate(1);
     } else if (period === 'custom' && customStart && customEnd) {
-        let curr = new Date(customStart + 'T12:00:00');
-        const end = new Date(customEnd + 'T12:00:00');
-        while (curr <= end) {
-            dates.push(new Date(curr));
-            curr.setDate(curr.getDate() + 1);
-        }
+        startDate = new Date(customStart + 'T12:00:00');
+        endDate = new Date(customEnd + 'T12:00:00');
     }
 
-    loading.show(`Preparando busca de ${dates.length} dias...`);
-    let allData = [];
-    let totalRequests = dates.length * OPERADORES.length;
-    let completed = 0;
+    // Gera array de datas
+    const dates = [];
+    let curr = new Date(startDate);
+    while (curr <= endDate) {
+        dates.push(new Date(curr));
+        curr.setDate(curr.getDate() + 1);
+    }
 
-    // Busca Sequencial Otimizada (Dia a dia, mas operadores em paralelo por dia)
+    loading.show(`Buscando ${dates.length} dia(s)...`);
+    
+    let allData = [];
+    let completed = 0;
+    const total = dates.length * OPERADORES.length;
+
     for (const date of dates) {
         const dateStr = formatDateAPI(date);
-        loading.progress((completed / totalRequests) * 100, `Buscando dados de ${formatDateBR(date)}...`);
         
-        // Busca todos operadores deste dia em paralelo
-        const dayPromises = OPERADORES.map(op => 
-            fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${dateStr}`)
-                .then(r => r.json())
-                .then(json => json.status === 'success' ? json.data.map(d => ({...d, operador: op.id})) : [])
-                .catch(() => [])
-        );
-        
-        const dayResults = await Promise.all(dayPromises);
-        allData = allData.concat(dayResults.flat());
-        completed += OPERADORES.length;
+        for (const op of OPERADORES) {
+            try {
+                const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${dateStr}`);
+                const json = await resp.json();
+                if (json.status === 'success') {
+                    const opData = json.data.map(d => ({...d, operador: op.id}));
+                    allData = allData.concat(opData);
+                }
+            } catch(e) {}
+            
+            completed++;
+            loading.progress((completed / total) * 100, `Buscando ${op.id} - ${formatDateBR(date)}...`);
+        }
     }
 
     loading.hide();
     state.adminData = allData;
-    renderAdminStats();
-    toast(`Busca concluída! ${allData.length} registros encontrados.`, 'success');
+    renderAdmin();
+    toast(`${allData.length} registros encontrados`, 'success');
 }
 
-function renderAdminStats() {
+function renderAdmin() {
     const data = state.adminData;
     
-    // Cards Topo
+    // Cards
     const total = data.length;
     const confirmados = data.filter(i => ['CONFIRMADA', 'JÁ VEIO'].includes(i.situacao)).length;
     const taxa = total ? Math.round((confirmados / total) * 100) : 0;
@@ -1084,7 +1163,9 @@ function renderAdminStats() {
         const opTotal = opData.length;
         const opConf = opData.filter(d => ['CONFIRMADA', 'JÁ VEIO'].includes(d.situacao)).length;
         return {
+            id: op.id,
             nome: op.nome.split(' ')[0],
+            cor: op.cor,
             total: opTotal,
             conf: opConf,
             rate: opTotal ? Math.round((opConf / opTotal) * 100) : 0
@@ -1097,42 +1178,39 @@ function renderAdminStats() {
         const medals = ['🥇','🥈','🥉'];
         const medal = i < 3 ? medals[i] : `<span class="font-bold text-slate-400">#${i+1}</span>`;
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100';
+        div.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-lg';
         div.innerHTML = `
             <div class="text-xl w-8 text-center">${medal}</div>
             <div class="flex-1">
                 <div class="flex justify-between mb-1">
-                    <span class="font-bold text-slate-700">${r.nome}</span>
+                    <span class="font-bold" style="color: ${r.cor}">${r.nome}</span>
                     <span class="text-xs font-bold text-slate-500">${r.conf}/${r.total}</span>
                 </div>
                 <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-indigo-500" style="width: ${r.rate}%"></div>
+                    <div class="h-full rounded-full" style="width: ${r.rate}%; background: ${r.cor}"></div>
                 </div>
             </div>
-            <div class="text-xs font-bold text-indigo-600 w-10 text-right">${r.rate}%</div>
+            <div class="text-xs font-bold w-10 text-right">${r.rate}%</div>
         `;
         rankList.appendChild(div);
     });
 
-    // Tabela Detalhada
+    // Tabela
     const tbody = $('admin-table-body');
     tbody.innerHTML = '';
-    data.slice(0, 100).forEach(row => { // Limita exibição a 100 pra não travar
+    data.slice(0, 100).forEach(row => {
         const tr = document.createElement('tr');
-        tr.className = 'bg-white border-b hover:bg-slate-50';
+        tr.className = 'hover:bg-slate-50';
         tr.innerHTML = `
-            <td class="px-4 py-2 font-mono text-xs">${row.data}</td>
-            <td class="px-4 py-2 font-bold text-xs text-indigo-600">${row.operador}</td>
-            <td class="px-4 py-2 text-xs truncate max-w-[150px]" title="${row.jovem}">${row.jovem}</td>
-            <td class="px-4 py-2"><span class="badge ${getStatusColor(row.situacao).replace('border-l-4', 'bg-slate-100')} text-[10px]">${row.situacao || 'PENDENTE'}</span></td>
+            <td class="px-4 py-2 text-xs">${row.data}</td>
+            <td class="px-4 py-2 text-xs font-bold">${row.operador}</td>
+            <td class="px-4 py-2 text-xs">${row.jovem}</td>
+            <td class="px-4 py-2"><span class="badge bg-slate-100 text-xs">${row.situacao || 'PENDENTE'}</span></td>
         `;
         tbody.appendChild(tr);
     });
 
-    renderChart(ranking);
-}
-
-function renderChart(ranking) {
+    // Gráfico
     const ctx = $('admin-chart').getContext('2d');
     if (state.charts.admin) state.charts.admin.destroy();
     
@@ -1143,25 +1221,81 @@ function renderChart(ranking) {
             datasets: [{
                 label: 'Agendamentos',
                 data: ranking.map(r => r.total),
-                backgroundColor: '#6366f1',
-                borderRadius: 4
-            }, {
-                label: 'Confirmados',
-                data: ranking.map(r => r.conf),
-                backgroundColor: '#10b981',
+                backgroundColor: ranking.map(r => r.cor),
                 borderRadius: 4
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { position: 'bottom' } },
+            plugins: { legend: { display: false } },
             scales: { y: { beginAtZero: true } }
         }
     });
 }
 
-// ================= OUTROS =================
+// ================= DASHBOARD =================
+function updateDashboard() {
+    // Implementação básica - usa dados de hoje
+    fetchAppointmentsHoje().then(() => {
+        const data = state.appointmentsHoje;
+        
+        const confirmadas = data.filter(a => ['CONFIRMADA', 'JÁ VEIO'].includes(a.situacao)).length;
+        const canceladas = data.filter(a => ['CANCELADA', 'SI SEM INTERESSE'].includes(a.situacao)).length;
+        const puxadas = data.filter(a => a.situacao === 'PUXADA').length;
+        const pendentes = data.filter(a => !a.situacao).length;
+        const reagendar = data.filter(a => a.situacao === 'REAGENDAR').length;
 
+        $('stats-dashboard').innerHTML = `
+            <div class="p-3 bg-slate-50 rounded-lg flex justify-between">
+                <span class="font-medium">Total:</span>
+                <span class="font-bold">${data.length}</span>
+            </div>
+            <div class="p-3 bg-green-50 rounded-lg flex justify-between">
+                <span class="font-medium text-green-800">Confirmados:</span>
+                <span class="font-bold text-green-600">${confirmadas}</span>
+            </div>
+            <div class="p-3 bg-red-50 rounded-lg flex justify-between">
+                <span class="font-medium text-red-800">Cancelados:</span>
+                <span class="font-bold text-red-600">${canceladas}</span>
+            </div>
+            <div class="p-3 bg-amber-50 rounded-lg flex justify-between">
+                <span class="font-medium text-amber-800">Puxadas:</span>
+                <span class="font-bold text-amber-600">${puxadas}</span>
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg flex justify-between">
+                <span class="font-medium text-blue-800">Reagendar:</span>
+                <span class="font-bold text-blue-600">${reagendar}</span>
+            </div>
+            <div class="p-3 bg-slate-100 rounded-lg flex justify-between">
+                <span class="font-medium">Pendentes:</span>
+                <span class="font-bold text-slate-600">${pendentes}</span>
+            </div>
+        `;
+
+        // Gráfico
+        const ctx = $('chart-dashboard').getContext('2d');
+        if (state.charts.dashboard) state.charts.dashboard.destroy();
+        
+        state.charts.dashboard = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Confirmados', 'Cancelados', 'Puxadas', 'Reagendar', 'Pendentes'],
+                datasets: [{
+                    data: [confirmadas, canceladas, puxadas, reagendar, pendentes],
+                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#cbd5e1'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    });
+}
+
+// ================= UTILITÁRIOS =================
 function getStatusColor(status) {
     if(status === 'CONFIRMADA' || status === 'JÁ VEIO') return 'border-green-500';
     if(status === 'CANCELADA') return 'border-red-500';
@@ -1171,103 +1305,83 @@ function getStatusColor(status) {
 }
 
 function saveLocalData() {
-    localStorage.setItem('agendadorEldorado', JSON.stringify({
-        recipients: state.recipients,
-        timestamp: Date.now()
-    }));
+    try {
+        localStorage.setItem('agendadorEldorado', JSON.stringify({
+            recipients: state.recipients,
+            timestamp: Date.now()
+        }));
+    } catch(e) {}
 }
 
 function loadLocalData() {
-    const raw = localStorage.getItem('agendadorEldorado');
-    if (raw) {
-        const data = JSON.parse(raw);
-        if (Date.now() - data.timestamp < 24*60*60*1000) {
-            state.recipients = data.recipients || [];
-            renderRecipients();
+    try {
+        const raw = localStorage.getItem('agendadorEldorado');
+        if (raw) {
+            const data = JSON.parse(raw);
+            if (Date.now() - data.timestamp < 24*60*60*1000) {
+                state.recipients = data.recipients || [];
+                renderRecipients();
+            }
         }
-    }
+    } catch(e) {}
 }
 
-// Masks
 function maskDate(el) {
     let v = el.value.replace(/\D/g, '');
     if(v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
     if(v.length > 5) v = v.slice(0,5) + '/' + v.slice(5,9);
     el.value = v.slice(0,10);
 }
+
 function maskPhone(el) {
     let v = el.value.replace(/\D/g, '');
     if(v.length > 0 && !v.startsWith('55')) v = '55' + v;
     el.value = v.slice(0,15);
 }
+
 function maskTime(el) {
     let v = el.value.replace(/\D/g, '');
     if(v.length > 2) v = v.slice(0,2) + ':' + v.slice(2,4);
     el.value = v.slice(0,5);
 }
 
-// Helper copy
-window.copyText = (btn) => {
-    const text = btn.parentElement.parentElement.querySelector('textarea').value;
-    navigator.clipboard.writeText(text);
-    const original = btn.innerText;
-    btn.innerText = 'Copiado!';
-    setTimeout(() => btn.innerText = original, 1000);
-};
-
-// Helper save sheet
-window.saveToSheet = async (data, btn) => {
-    btn.disabled = true;
-    btn.innerText = 'Salvando...';
-    try {
-        const resp = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({...data, horario_lancamento: new Date().toLocaleString('pt-BR')})
-        });
-        btn.innerText = 'Salvo!';
-        btn.classList.replace('bg-blue-500', 'bg-green-600');
-        toast('Salvo na planilha!', 'success');
-    } catch (e) {
-        btn.innerText = 'Erro';
-        btn.classList.replace('bg-blue-500', 'bg-red-600');
-        btn.disabled = false;
-        toast('Erro ao salvar', 'error');
-    }
-};
-
-// Agendamentos Amanhã
 async function fetchAgendamentosAmanha() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const dateStr = formatDateAPI(tomorrow);
+    if (tomorrow.getDay() === 0) tomorrow.setDate(tomorrow.getDate() + 1);
     
-    $('stat-next-day').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    const dateStr = formatDateAPI(tomorrow);
+    $('stat-ag-amanha').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     
     try {
         let total = 0;
-        // Se supervisor, soma tudo. Se não, só dele.
         const targets = state.isSupervisor ? OPERADORES : [{id: state.user}];
         
-        const promises = targets.map(op => 
-            fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id || op}&date=${dateStr}`)
-                .then(r => r.json())
-                .then(json => json.status === 'success' ? json.data.length : 0)
-                .catch(() => 0)
-        );
-        
-        const counts = await Promise.all(promises);
-        total = counts.reduce((a,b) => a+b, 0);
+        for (const op of targets) {
+            try {
+                const r = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${dateStr}`);
+                const j = await r.json();
+                if(j.status === 'success') total += j.data.length;
+            } catch(e){}
+        }
         
         $('stat-ag-amanha').textContent = total;
-        $('stat-amanha').textContent = total; // Atualiza card estatística também
+        $('stat-amanha').textContent = total;
     } catch (e) {
         $('stat-ag-amanha').textContent = '?';
     }
 }
 
-// Metas LocalStorage
+function updateStats() {
+    const total = state.recipients.length;
+    const completos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp).length;
+    const puxadas = state.recipients.filter(r => r.tipo === 'PUXADA').length;
+    
+    $('stat-total').textContent = total;
+    $('stat-completo').textContent = completos;
+    $('stat-puxada').textContent = puxadas;
+}
+
 function saveMetas() {
     const metas = {
         diaria: $('meta-diaria').value,
@@ -1280,32 +1394,27 @@ function saveMetas() {
     toast('Metas salvas!', 'success');
 }
 
-// Export Admin
 function exportAdminData() {
-    if (state.adminData.length === 0) return toast('Sem dados para exportar', 'warning');
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.adminData));
+    if (state.adminData.length === 0) {
+        toast('Sem dados para exportar', 'warning');
+        return;
+    }
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.adminData, null, 2));
     const el = document.createElement('a');
     el.setAttribute("href", dataStr);
-    el.setAttribute("download", "relatorio_equipe.json");
+    el.setAttribute("download", `relatorio_equipe_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(el);
     el.click();
     el.remove();
+    toast('Relatório exportado!', 'success');
 }
 
-function updateStats() {
-    const total = state.recipients.length;
-    const completos = state.recipients.filter(r => r.jovem && r.data && r.horario).length;
-    const puxadas = state.recipients.filter(r => r.tipo === 'PUXADA').length;
-    
-    $('stat-total').textContent = total;
-    $('stat-completo').textContent = completos;
-    $('stat-puxada').textContent = puxadas;
-}
-
-// Mensagem Rápida Envio
 function sendQuickMessage() {
     const num = $('quick-telefone').value.replace(/\D/g, '');
-    if (num.length < 10) return toast('Telefone inválido', 'warning');
+    if (num.length < 10) {
+        toast('Telefone inválido', 'warning');
+        return;
+    }
     
     const jovem = $('quick-jovem').value;
     const data = $('quick-data').value;
@@ -1313,11 +1422,13 @@ function sendQuickMessage() {
     const local = $('quick-local').value;
     const assist = $('quick-assistente').value;
     
-    const endereco = local === 'Eldorado' ? 'Av. João César de Oliveira, 953' : 'Rua Curitiba, 656';
+    const assistNome = OPERADORES.find(o => o.id === assist)?.nome || assist;
+    const endereco = local === 'Eldorado' ? 'Av. João César de Oliveira, 953 no 2° andar' : 'Rua Curitiba, 656, 11° andar';
     
-    const msg = `*${data}, às ${hora}*, ${jovem} e responsável devem comparecer à *${endereco}*, para o *Teste Vocacional*. Procurem por *${assist}*.`;
+    const msg = `*${data}, às ${hora}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${assistNome}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.`;
     
     window.open(`https://wa.me/55${num}?text=${encodeURIComponent(msg)}`, '_blank');
+    $('quick-modal').classList.add('hidden');
 }
 </script>
 </body>
