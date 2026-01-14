@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendador PRO 3.0 - Unidade Eldorado</title>
+    <title>Agendamentos - Unidade Eldorado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -439,10 +439,10 @@ const OPERADORES = [
     { id: 'WELKER', nome: 'Welker Pablo Zanetti', cor: '#8b5cf6' },
     { id: 'TREINEE', nome: 'Coordenação', cor: '#64748b' },
     { id: 'TATIANA', nome: 'Tatiana F. Moretti', cor: '#ec4899' },
-    { id: 'GABRIELA', nome: 'Gabriela Silva', cor: '#f97316' },
+    { id: 'GABRIELA', nome: 'Inácia Martins', cor: '#f97316' },
     { id: 'MARCELO', nome: 'Marcelo Eduardo', cor: '#ef4444' },
-    { id: 'KAMILLY', nome: 'Kamilly Rodrigues', cor: '#06b6d4' },
-    { id: 'LETICIA', nome: 'Letícia Fernandes', cor: '#6366f1' }
+    { id: 'LUNA', nome: 'Luna Ferreira', cor: '#06b6d4' },
+    { id: 'ESTELA', nome: 'Estela Rodrigues', cor: '#6366f1' }
 ];
 
 let state = {
@@ -499,6 +499,7 @@ const toast = (msg, type = 'info') => {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Iniciando Agendador PRO 3.0...');
     initSelectOperadores();
+    loadSavedUser(); // Carrega usuário salvo
     loadLocalData();
     updateClock();
     setupEventListeners();
@@ -521,6 +522,39 @@ function initSelectOperadores() {
         opt2.textContent = op.id;
         selQuick.appendChild(opt2);
     });
+}
+
+// NOVO: Carregar usuário salvo
+function loadSavedUser() {
+    try {
+        const savedUser = localStorage.getItem('agendadorUser');
+        const savedIsSupervisor = localStorage.getItem('agendadorIsSupervisor') === 'true';
+        
+        if (savedUser) {
+            state.user = savedUser;
+            $('select-assistente').value = savedUser;
+            
+            if (savedUser === 'WELKER' && savedIsSupervisor) {
+                state.isSupervisor = true;
+                setSupervisorMode(true);
+            }
+            
+            console.log('✅ Usuário restaurado:', savedUser);
+            updateStats();
+        }
+    } catch(e) {
+        console.log('Erro ao carregar usuário salvo:', e);
+    }
+}
+
+// NOVO: Salvar usuário
+function saveUser() {
+    try {
+        localStorage.setItem('agendadorUser', state.user);
+        localStorage.setItem('agendadorIsSupervisor', state.isSupervisor.toString());
+    } catch(e) {
+        console.log('Erro ao salvar usuário:', e);
+    }
 }
 
 function updateClock() {
@@ -565,12 +599,14 @@ function setupEventListeners() {
     // Seleção de usuário
     $('select-assistente').addEventListener('change', (e) => {
         state.user = e.target.value;
+        
         if (state.user === 'WELKER') {
             $('password-modal').classList.remove('hidden');
             $('supervisor-password').value = '';
             $('supervisor-password').focus();
         } else {
             setSupervisorMode(false);
+            saveUser(); // Salva usuário selecionado
             updateStats();
         }
     });
@@ -672,6 +708,7 @@ function checkPassword() {
         setSupervisorMode(true);
         $('password-modal').classList.add('hidden');
         toast('Bem-vindo, Supervisor!', 'success');
+        saveUser(); // Salva usuário e modo supervisor
         updateStats();
         fetchAgendamentosAmanha();
     } else {
@@ -814,10 +851,22 @@ function generateMessages(tipo) {
     const endereco = unidade === 'Eldorado' 
         ? 'Av. João César de Oliveira, Nº 953, 2º andar – Eldorado' 
         : 'Rua Curitiba, 656, 11° andar - Centro';
+    const referencia = unidade === 'Eldorado'
+        ? '(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)'
+        : '(Próximo à Praça Sete)';
 
     validos.forEach(r => {
         const codigo = r.jovem.split(' ')[0].toUpperCase().substring(0,3) + Math.floor(Math.random()*900+100);
         const org = tipo === 'Projeto' ? 'Coordenação | Projeto Conecta Jovem' : 'Instituto Conecta Jovem';
+        
+        // Calcula o dia da semana
+        let diaSemana = '';
+        if (r.data && r.data.length === 10) {
+            const parts = r.data.split('/');
+            const dataAgend = new Date(parts[2], parts[1] - 1, parts[0]);
+            const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            diaSemana = diasSemana[dataAgend.getDay()];
+        }
         
         // Calcula idade se tiver data de nascimento
         let idadeStr = '';
@@ -831,16 +880,23 @@ function generateMessages(tipo) {
             if (idade > 0 && idade < 100) idadeStr = ` (${idade} anos)`;
         }
         
+        // Adiciona irmãos se existir
+        let irmaosStr = '';
+        if (r.irmaos && r.irmaos.trim() !== '') {
+            irmaosStr = `\n*Irmãos:* ${r.irmaos}`;
+        }
+        
         const msg = `*CONVOCAÇÃO PARA TESTE VOCACIONAL E CADASTRAMENTO GRATUITO AO MERCADO DE TRABALHO*
 
 *Jovem Convocado:* ${r.jovem}${idadeStr}
-*Responsável:* ${r.responsavel}
+*Responsável:* ${r.responsavel}${irmaosStr}
 
 *Dados do Agendamento:*
-*Data:* ${r.data}
+*Data:* ${diaSemana}, ${r.data}
 *Horário:* ${r.horario} (chegar 10min antes)
 
 *Local:* ${endereco}
+${referencia}
 
 *Documentos Necessários:*
 • RG, CPF ou Certidão de Nascimento do jovem.
@@ -856,6 +912,15 @@ Atenciosamente,
 *${assistenteNome}*
 ${org}`;
 
+        // Limpa telefone - remove 55 duplicado
+        let telefoneClean = r.telefone_resp.replace(/\D/g, '');
+        if (telefoneClean.startsWith('5555')) {
+            telefoneClean = telefoneClean.substring(2);
+        }
+        if (!telefoneClean.startsWith('55')) {
+            telefoneClean = '55' + telefoneClean;
+        }
+
         const div = document.createElement('div');
         div.className = 'p-4 bg-slate-50 rounded-xl border border-slate-200';
         div.innerHTML = `
@@ -863,7 +928,7 @@ ${org}`;
             <textarea class="w-full h-40 text-xs p-2 rounded border mb-2 font-mono" readonly>${msg}</textarea>
             <div class="flex flex-wrap gap-2">
                 <button class="btn-copy px-3 py-1 bg-slate-200 rounded text-xs font-bold hover:bg-slate-300">Copiar</button>
-                <a href="https://wa.me/55${r.telefone_resp.replace(/\D/g,'')}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-xs font-bold hover:bg-green-600">WhatsApp</a>
+                <a href="https://wa.me/${telefoneClean}?text=${encodeURIComponent(msg)}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-xs font-bold hover:bg-green-600">WhatsApp</a>
                 <button class="btn-save px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold hover:bg-blue-600" data-info='${JSON.stringify({...r, codigo, assistente: state.user, local: unidade})}'>Salvar Planilha</button>
             </div>
         `;
@@ -1373,8 +1438,11 @@ function maskDate(el) {
 
 function maskPhone(el) {
     let v = el.value.replace(/\D/g, '');
+    // Remove 55 duplicado
+    if(v.startsWith('5555')) v = v.substring(2);
+    // Adiciona 55 se não tiver
     if(v.length > 0 && !v.startsWith('55')) v = '55' + v;
-    el.value = v.slice(0,15);
+    el.value = v.slice(0,13);
 }
 
 function maskTime(el) {
@@ -1463,9 +1531,14 @@ function sendQuickMessage() {
     const assistNome = OPERADORES.find(o => o.id === assist)?.nome || assist;
     const endereco = local === 'Eldorado' ? 'Av. João César de Oliveira, 953 no 2° andar' : 'Rua Curitiba, 656, 11° andar';
     
+    // Limpa telefone
+    let telClean = num;
+    if(telClean.startsWith('5555')) telClean = telClean.substring(2);
+    if(!telClean.startsWith('55')) telClean = '55' + telClean;
+    
     const msg = `*${data}, às ${hora}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${assistNome}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.`;
     
-    window.open(`https://wa.me/55${num}?text=${encodeURIComponent(msg)}`, '_blank');
+    window.open(`https://wa.me/${telClean}?text=${encodeURIComponent(msg)}`, '_blank');
     $('quick-modal').classList.add('hidden');
 }
 </script>
