@@ -477,7 +477,13 @@ let state = {
     appointmentsHoje: [],
     appointmentsConsulta: [],
     adminData: [],
-    charts: {}
+    charts: {},
+    meta: {
+        diaria: 0,
+        semanal: 0,
+        mensal: 0,
+        taxa: 0
+    }
 };
 
 // ================= UTILITÁRIOS =================
@@ -488,6 +494,11 @@ const formatDateAPI = (date) => {
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
+};
+
+const parseDateFromInput = (value) => {
+    if (!value) return null;
+    return new Date(`${value}T12:00:00`);
 };
 
 // Toast
@@ -509,6 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSavedUser(); // Carrega usuário salvo
     loadLocalData();
     loadTheme();
+    loadMetas();
     updateClock();
     setupEventListeners();
     switchTab('agendar');
@@ -666,7 +678,11 @@ function setupEventListeners() {
     
     // Consulta
     $('btn-consulta-go').addEventListener('click', () => {
-        const date = new Date($('consulta-date').value + 'T12:00:00');
+        if (!$('consulta-date').value) {
+            toast('Selecione uma data válida', 'warning');
+            return;
+        }
+        const date = parseDateFromInput($('consulta-date').value);
         fetchConsulta(date);
     });
     document.querySelectorAll('.date-preset').forEach(btn => {
@@ -816,7 +832,7 @@ function renderRecipients() {
                 <input type="text" placeholder="Data Nascimento (DD/MM/AAAA)" value="${r.data_nascimento}" data-field="data_nascimento" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
                 <input type="text" placeholder="Nome do Responsável *" value="${r.responsavel}" data-field="responsavel" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
                 <input type="text" placeholder="Tel. Responsável * (5531...)" value="${r.telefone_resp}" data-field="telefone_resp" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
-                <input type="text" placeholder="Tel. Jovem * (5531...)" value="${r.telefone_jovem}" data-field="telefone_jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
+                <input type="text" placeholder="Tel. Jovem (5531...)" value="${r.telefone_jovem}" data-field="telefone_jovem" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none phone-mask">
                 <input type="text" placeholder="Data Agendamento *" value="${r.data}" data-field="data" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none date-mask">
                 <input type="text" placeholder="Horário * (HH:MM)" value="${r.horario}" data-field="horario" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none time-mask">
                 <input type="text" placeholder="Irmãos (opcional)" value="${r.irmaos || ''}" data-field="irmaos" class="input-field p-2 rounded-lg border-2 border-slate-200 focus:border-indigo-500 outline-none">
@@ -858,7 +874,7 @@ function generateMessages(tipo) {
         return;
     }
     
-    const validos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp && r.telefone_jovem);
+    const validos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp);
     if (validos.length === 0) {
         toast('Preencha os campos obrigatórios', 'warning');
         return;
@@ -1251,7 +1267,7 @@ async function loadAdminData(period, customStart, customEnd) {
     
     let startDate = new Date();
     let endDate = new Date();
-    
+
     if (period === 'hoje') {
         // Apenas hoje
     } else if (period === 'semana') {
@@ -1260,40 +1276,45 @@ async function loadAdminData(period, customStart, customEnd) {
     } else if (period === 'mes') {
         startDate.setDate(1);
     } else if (period === 'custom' && customStart && customEnd) {
-        startDate = new Date(customStart + 'T12:00:00');
-        endDate = new Date(customEnd + 'T12:00:00');
+        startDate = parseDateFromInput(customStart) || startDate;
+        endDate = parseDateFromInput(customEnd) || endDate;
     }
 
-    // Gera array de datas
     const dates = [];
-    let curr = new Date(startDate);
-    while (curr <= endDate) {
-        dates.push(new Date(curr));
-        curr.setDate(curr.getDate() + 1);
+    const cursor = new Date(startDate);
+    while (cursor <= endDate) {
+        dates.push(new Date(cursor));
+        cursor.setDate(cursor.getDate() + 1);
     }
 
     loading.show(`Buscando ${dates.length} dia(s)...`);
-    
+
     let allData = [];
     let completed = 0;
     const total = dates.length * OPERADORES.length;
 
     for (const date of dates) {
         const dateStr = formatDateAPI(date);
-        
-        for (const op of OPERADORES) {
-            try {
+
+        const responses = await Promise.allSettled(
+            OPERADORES.map(async (op) => {
                 const resp = await fetch(`${SCRIPT_URL}?action=getAppointments&assistant=${op.id}&date=${dateStr}`);
                 const json = await resp.json();
                 if (json.status === 'success') {
-                    const opData = json.data.map(d => ({...d, operador: op.id}));
-                    allData = allData.concat(opData);
+                    return json.data.map(d => ({...d, operador: op.id}));
                 }
-            } catch(e) {}
-            
-            completed++;
-            loading.progress((completed / total) * 100, `Buscando ${op.id} - ${formatDateBR(date)}...`);
-        }
+                return [];
+            })
+        );
+
+        responses.forEach(result => {
+            if (result.status === 'fulfilled') {
+                allData = allData.concat(result.value);
+            }
+        });
+
+        completed += OPERADORES.length;
+        loading.progress((completed / total) * 100, `Buscando ${formatDateBR(date)}...`);
     }
 
     loading.hide();
@@ -1304,22 +1325,20 @@ async function loadAdminData(period, customStart, customEnd) {
 
 function renderAdmin() {
     const data = state.adminData;
-    
-    // Cards
+
     const total = data.length;
-    const confirmados = data.filter(i => ['CONFIRMADA', 'JÁ VEIO', 'MATRICULA'].includes(i.situacao)).length;
+    const confirmados = data.filter(i => ['CONFIRMADA', 'JÁ VEIO', 'MATRICULA'].includes((i.situacao || '').trim())).length;
     const taxa = total ? Math.round((confirmados / total) * 100) : 0;
-    
+
     $('admin-total').textContent = total;
     $('admin-confirmados').textContent = confirmados;
     $('admin-taxa').textContent = `${taxa}%`;
     $('admin-equipe').textContent = OPERADORES.length;
 
-    // Ranking
     const ranking = OPERADORES.map(op => {
         const opData = data.filter(d => d.operador === op.id);
         const opTotal = opData.length;
-        const opConf = opData.filter(d => ['CONFIRMADA', 'JÁ VEIO', 'MATRICULA'].includes(d.situacao)).length;
+        const opConf = opData.filter(d => ['CONFIRMADA', 'JÁ VEIO', 'MATRICULA'].includes((d.situacao || '').trim())).length;
         return {
             id: op.id,
             nome: op.nome.split(' ')[0],
@@ -1335,28 +1354,38 @@ function renderAdmin() {
     ranking.forEach((r, i) => {
         const medals = ['🥇','🥈','🥉'];
         const medal = i < 3 ? medals[i] : `<span class="font-bold text-slate-400">#${i+1}</span>`;
+        const metaStatus = state.meta.diaria > 0 ? Math.min(Math.round((r.total / state.meta.diaria) * 100), 100) : 0;
+        const metaLabel = state.meta.diaria > 0 ? `${r.total}/${state.meta.diaria}` : 'Meta não definida';
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-lg';
+        div.className = 'flex flex-col gap-2 p-3 bg-slate-50 rounded-lg';
         div.innerHTML = `
-            <div class="text-xl w-8 text-center">${medal}</div>
-            <div class="flex-1">
-                <div class="flex justify-between mb-1">
-                    <span class="font-bold" style="color: ${r.cor}">${r.nome}</span>
-                    <span class="text-xs font-bold text-slate-500">${r.conf}/${r.total}</span>
+            <div class="flex items-center gap-3">
+                <div class="text-xl w-8 text-center">${medal}</div>
+                <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                        <span class="font-bold" style="color: ${r.cor}">${r.nome}</span>
+                        <span class="text-xs font-bold text-slate-500">${r.conf}/${r.total}</span>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full" style="width: ${r.rate}%; background: ${r.cor}"></div>
+                    </div>
                 </div>
-                <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
-                    <div class="h-full rounded-full" style="width: ${r.rate}%; background: ${r.cor}"></div>
-                </div>
+                <div class="text-xs font-bold w-10 text-right">${r.rate}%</div>
             </div>
-            <div class="text-xs font-bold w-10 text-right">${r.rate}%</div>
+            <div class="text-xs text-slate-500 flex items-center justify-between">
+                <span>Meta diária</span>
+                <span class="font-bold text-slate-600">${metaLabel}</span>
+            </div>
+            <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: ${metaStatus}%"></div>
+            </div>
         `;
         rankList.appendChild(div);
     });
 
-    // Tabela
     const tbody = $('admin-table-body');
     tbody.innerHTML = '';
-    data.slice(0, 100).forEach(row => {
+    data.slice(0, 200).forEach(row => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50';
         tr.innerHTML = `
@@ -1368,7 +1397,6 @@ function renderAdmin() {
         tbody.appendChild(tr);
     });
 
-    // Gráfico
     const ctx = $('admin-chart').getContext('2d');
     if (state.charts.admin) state.charts.admin.destroy();
     
@@ -1389,6 +1417,11 @@ function renderAdmin() {
             scales: { y: { beginAtZero: true } }
         }
     });
+
+    if (state.meta.taxa > 0) {
+        const alertMsg = taxa >= state.meta.taxa ? 'Meta de taxa atingida' : 'Meta de taxa abaixo do esperado';
+        toast(alertMsg, taxa >= state.meta.taxa ? 'success' : 'warning');
+    }
 }
 
 // ================= DASHBOARD =================
@@ -1535,7 +1568,7 @@ async function fetchAgendamentosAmanha() {
 
 function updateStats() {
     const total = state.recipients.length;
-    const completos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp && r.telefone_jovem).length;
+    const completos = state.recipients.filter(r => r.jovem && r.data && r.horario && r.telefone_resp).length;
     const puxadas = state.recipients.filter(r => r.tipo === 'PUXADA').length;
     
     $('stat-total').textContent = total;
@@ -1543,15 +1576,34 @@ function updateStats() {
     $('stat-puxada').textContent = puxadas;
 }
 
+function loadMetas() {
+    try {
+        const saved = localStorage.getItem('agendadorMetas');
+        if (saved) {
+            const metas = JSON.parse(saved);
+            state.meta = {
+                diaria: Number(metas.diaria || 0),
+                semanal: Number(metas.semanal || 0),
+                mensal: Number(metas.mensal || 0),
+                taxa: Number(metas.taxa || 0)
+            };
+        }
+    } catch (e) {
+        console.log('Erro ao carregar metas:', e);
+    }
+}
+
 function saveMetas() {
     const metas = {
-        diaria: $('meta-diaria').value,
-        semanal: $('meta-semanal').value,
-        mensal: $('meta-mensal').value,
-        taxa: $('meta-taxa').value
+        diaria: Number($('meta-diaria').value || 0),
+        semanal: Number($('meta-semanal').value || 0),
+        mensal: Number($('meta-mensal').value || 0),
+        taxa: Number($('meta-taxa').value || 0)
     };
+    state.meta = metas;
     localStorage.setItem('agendadorMetas', JSON.stringify(metas));
     $('metas-modal').classList.add('hidden');
+    renderAdmin();
     toast('Metas salvas!', 'success');
 }
 
