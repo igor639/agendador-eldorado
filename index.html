@@ -909,7 +909,7 @@ function setupEventListeners() {
     if ($('btn-fast-tomorrow')) $('btn-fast-tomorrow').addEventListener('click', () => setFastDate(1));
     if ($('btn-fast-clear')) $('btn-fast-clear').addEventListener('click', clearFastForm);
     if ($('btn-fast-launch')) $('btn-fast-launch').addEventListener('click', launchFastAppointment);
-    if ($('fast-puxada')) $('fast-puxada').addEventListener('change', (e) => { if (e.target.checked) setFastDate(0); });
+    if ($('fast-puxada')) $('fast-puxada').addEventListener('change', (e) => { setFastDate(e.target.checked ? 0 : 1); });
     setFastDate(1);
 
     // Consulta
