@@ -131,43 +131,6 @@
         </div>
     </div>
 
-    <!-- MODAL MENSAGEM RÁPIDA -->
-    <div id="quick-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl m-4">
-            <h3 class="text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
-                <i class="fas fa-paper-plane text-blue-500"></i> Mensagem Rápida
-            </h3>
-            <div class="space-y-3">
-                <input type="text" id="quick-jovem" placeholder="Nome do Jovem" class="w-full p-3 border-2 border-slate-200 rounded-xl">
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="quick-data" placeholder="Data (DD/MM/AAAA)" class="w-full p-3 border-2 border-slate-200 rounded-xl date-mask">
-                    <input type="text" id="quick-horario" placeholder="Hora (HH:MM)" class="w-full p-3 border-2 border-slate-200 rounded-xl time-mask">
-                </div>
-                <select id="quick-local" class="w-full p-3 border-2 border-slate-200 rounded-xl bg-white">
-                    <option value="Eldorado">Eldorado</option>
-                    <option value="Centro">Centro</option>
-                </select>
-                <select id="quick-assistente" class="w-full p-3 border-2 border-slate-200 rounded-xl bg-white">
-                    <option value="DIANA">DIANA</option>
-                    <option value="WELKER">WELKER</option>
-                    <option value="TREINEE">TREINEE</option>
-                    <option value="TATIANA">TATIANA</option>
-                    <option value="GABRIELA">GABRIELA</option>
-                    <option value="BARBARA">BARBARA</option>
-                    <option value="MAISA">MAISA</option>
-                </select>
-                <input type="text" id="quick-telefone" placeholder="Telefone (com DDD)" class="w-full p-3 border-2 border-slate-200 rounded-xl phone-mask">
-            </div>
-            <div id="quick-preview" class="hidden mt-4 p-3 bg-slate-100 rounded-lg text-xs text-slate-600 whitespace-pre-wrap font-mono"></div>
-            <div class="flex gap-3 mt-6">
-                <button id="btn-cancel-quick" class="flex-1 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl">Fechar</button>
-                <button id="btn-send-quick" class="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg">
-                    <i class="fab fa-whatsapp"></i> Enviar
-                </button>
-            </div>
-        </div>
-    </div>
-
     <div class="container mx-auto p-4 max-w-7xl">
         
         <!-- HEADER -->
@@ -189,7 +152,7 @@
                     <i class="far fa-clock"></i> <span id="live-clock">00:00:00</span>
                 </div>
                 <div id="supervisor-badge" class="hidden px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-bold text-sm border border-purple-200">
-                    <i class="fas fa-crown"></i> Modo Supervisor
+                    <i class="fas fa-crown"></i> Modo Supervisora
                 </div>
             </div>
         </header>
@@ -208,10 +171,7 @@
             <button class="nav-btn flex-1 py-3 px-4 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2" data-target="dashboard">
                 <i class="fas fa-chart-pie"></i> Dashboard
             </button>
-            <button id="nav-admin" class="hidden flex-1 py-3 px-4 rounded-xl font-bold text-sm text-purple-600 bg-purple-50 hover:bg-purple-100 transition-all flex items-center justify-center gap-2" data-target="admin">
-                <i class="fas fa-crown"></i> Admin
-            </button>
-            <button id="nav-admin" class="hidden flex-1 py-3 px-4 rounded-xl font-bold text-sm text-purple-600 bg-purple-50 hover:bg-purple-100 transition-all flex items-center justify-center gap-2" data-target="admin">
+            <button id="nav-admin" class="hidden flex-1 py-3 px-4 rounded-xl font-bold text-sm text-purple-600 bg-purple-50 hover:bg-purple-100 transition-all items-center justify-center gap-2" data-target="admin">
                 <i class="fas fa-crown"></i> Admin
             </button>
         </nav>
@@ -228,7 +188,7 @@
                             <select id="select-assistente" class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold text-slate-700 focus:border-indigo-500 outline-none transition-colors">
                                 <option value="">-- Selecione --</option>
                                 <option value="DIANA">DIANA</option>
-                                <option value="WELKER">WELKER</option>
+                                <option value="THAYMARA">THAYMARA</option>
                                 <option value="TREINEE">TREINEE</option>
                                 <option value="TATIANA">TATIANA</option>
                                 <option value="GABRIELA">GABRIELA</option>
@@ -270,6 +230,72 @@
                     </div>
                 </div>
 
+
+                <!-- Lançamento Rápido na Planilha -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-5">
+                        <div>
+                            <h2 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                                <i class="fas fa-bolt text-amber-500"></i> Lançamento Rápido
+                            </h2>
+                            <p class="text-xs text-slate-400 font-bold uppercase">Salva direto na planilha, sem gerar mensagem</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="btn-fast-today" class="px-3 py-2 bg-amber-100 text-amber-700 rounded-lg font-bold text-sm hover:bg-amber-200">Hoje</button>
+                            <button id="btn-fast-tomorrow" class="px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg font-bold text-sm hover:bg-indigo-200">Amanhã</button>
+                            <button id="btn-fast-clear" class="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg font-bold text-sm hover:bg-slate-200">Limpar</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Jovem</label>
+                            <input type="text" id="fast-jovem" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Nome completo do jovem">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Data</label>
+                            <input type="date" id="fast-data" class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Horário</label>
+                            <input type="text" id="fast-horario" class="w-full p-3 border-2 border-slate-200 rounded-xl time-mask font-bold" placeholder="HH:MM">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Responsável</label>
+                            <input type="text" id="fast-responsavel" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Nome do responsável">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Telefone responsável</label>
+                            <input type="text" id="fast-tel-resp" class="w-full p-3 border-2 border-slate-200 rounded-xl phone-mask" placeholder="(31) 99999-9999">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Telefone jovem</label>
+                            <input type="text" id="fast-tel-jovem" class="w-full p-3 border-2 border-slate-200 rounded-xl phone-mask" placeholder="Opcional">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Idade</label>
+                            <input type="number" id="fast-idade" min="10" max="30" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Opcional">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Irmãos</label>
+                            <input type="text" id="fast-irmaos" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Opcional">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <label class="w-full flex items-center gap-2 p-3 border-2 border-amber-200 bg-amber-50 rounded-xl font-bold text-amber-700 cursor-pointer">
+                                <input type="checkbox" id="fast-puxada" class="w-5 h-5 accent-amber-500">
+                                Puxada hoje
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                        <div id="fast-last" class="hidden text-sm font-bold text-green-700 bg-green-50 border border-green-200 rounded-xl px-4 py-3"></div>
+                        <button id="btn-fast-launch" class="md:ml-auto py-3 px-8 bg-green-600 text-white font-black rounded-xl hover:bg-green-700 shadow-lg shadow-green-200 active:scale-95 transition-all">
+                            <i class="fas fa-check-circle"></i> Lançar na Planilha
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Lista de Destinatários -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
@@ -294,14 +320,11 @@
 
                 <!-- Ações Gerais -->
                 <div class="flex flex-wrap gap-3 justify-end">
-                    <button id="btn-open-quick" class="py-3 px-6 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-800">
-                        <i class="fas fa-paper-plane"></i> Msg Rápida
-                    </button>
                     <button id="btn-gen-projeto" class="py-3 px-6 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200">
                         Projeto Conecta Jovem
                     </button>
-                    <button id="btn-gen-instituto" class="py-3 px-6 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-200">
-                        Instituto Conecta Jovem
+                    <button id="btn-gen-empresa" class="py-3 px-6 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-200">
+                        Empresa Conecta Jovem
                     </button>
                 </div>
 
@@ -414,6 +437,22 @@
                     </div>
                 </div>
 
+
+                <!-- Equipe / Operadores -->
+                <div class="admin-card">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-700 flex items-center gap-2"><i class="fas fa-users text-indigo-500"></i> Equipe / Troca de Nomes</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase">Edite o apelido, nome e cor dos operadores</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-sync-operadores" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-900"><i class="fas fa-sync-alt"></i> Sincronizar</button>
+                            <button id="btn-add-operador" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700"><i class="fas fa-user-plus"></i> Novo</button>
+                        </div>
+                    </div>
+                    <div id="lista-operadores" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+
                 <!-- Ranking e Gráfico -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="admin-card">
@@ -447,6 +486,40 @@
         </main>
     </div>
 
+
+
+    <!-- MODAL OPERADOR -->
+    <div id="operador-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl m-4 max-h-[90vh] overflow-y-auto">
+            <h3 id="operador-modal-title" class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fas fa-user-plus text-blue-600"></i> Novo Operador</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Apelido/Login</label><input type="text" id="op-apelido" class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold uppercase" placeholder="EX: ANA"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Nome completo</label><input type="text" id="op-nome" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Nome que sai na mensagem"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Telefone</label><input type="text" id="op-telefone" class="w-full p-3 border-2 border-slate-200 rounded-xl phone-mask" placeholder="(31) 99999-9999"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Nascimento</label><input type="text" id="op-nascimento" class="w-full p-3 border-2 border-slate-200 rounded-xl date-mask" placeholder="DD/MM/AAAA"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">E-mail</label><input type="email" id="op-email" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="email@exemplo.com"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Cargo</label><input type="text" id="op-cargo" class="w-full p-3 border-2 border-slate-200 rounded-xl" value="Operador"></div>
+                <div class="md:col-span-2"><label class="block font-bold text-sm text-slate-600 mb-1">Endereço</label><input type="text" id="op-endereco" class="w-full p-3 border-2 border-slate-200 rounded-xl" placeholder="Opcional"></div>
+                <div><label class="block font-bold text-sm text-slate-600 mb-1">Cor</label><input type="color" id="op-cor" class="w-full h-12 p-1 border-2 border-slate-200 rounded-xl" value="#2563eb"></div>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button id="btn-cancel-operador" class="flex-1 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl">Cancelar</button>
+                <button id="btn-save-operador" class="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700"><i class="fas fa-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETALHE OPERADOR -->
+    <div id="operador-detalhe-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl m-4">
+            <div id="operador-detalhe-content"></div>
+            <div class="flex gap-3 mt-6">
+                <button id="btn-close-detalhe" class="flex-1 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl">Fechar</button>
+                <button id="btn-edit-from-detalhe" class="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl">Editar</button>
+                <button id="btn-delete-from-detalhe" class="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl">Excluir</button>
+            </div>
+        </div>
+    </div>
 <script>
 /**
  * SISTEMA AGENDADOR PRO 3.0 (ELDORADO)
@@ -455,17 +528,19 @@
 
 // ================= CONSTANTES E CONFIG =================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5p93oojhuDCgPpTII9E6jTSoO3L_2X_CxQSEWlYYoa4WTLW9TvXBs_4LDvFPS9qFp0Q/exec';
-const SUPERVISOR_PASS = 'vilavelha';
+const SUPERVISOR_ID = 'THAYMARA';
+const SUPERVISOR_PASS = 'eldorado953';
 
-const OPERADORES = [
-    { id: 'DIANA', nome: 'Diana D´Ávila Fagundes', cor: '#3b82f6' },
-    { id: 'WELKER', nome: 'Welker Pablo Zanetti', cor: '#8b5cf6' },
-    { id: 'TREINEE', nome: 'Coordenação', cor: '#64748b' },
-    { id: 'TATIANA', nome: 'Tatiana F. Moretti', cor: '#ec4899' },
-    { id: 'GABRIELA', nome: 'Gabriela Silva', cor: '#f97316' },
-    { id: 'BARBARA', nome: 'Barbara Cardoso', cor: '#22c55e' },
-    { id: 'MAISA', nome: 'Maisa Almeida', cor: '#f59e0b' }
+const OPERADORES_DEFAULT = [
+    { id: 'THAYMARA', nome: 'Thaymara', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Supervisora', cor: '#8b5cf6' },
+    { id: 'DIANA', nome: 'Diana D´Ávila Fagundes', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#3b82f6' },
+    { id: 'TREINEE', nome: 'Coordenação', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#64748b' },
+    { id: 'TATIANA', nome: 'Tatiana F. Moretti', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#ec4899' },
+    { id: 'GABRIELA', nome: 'Gabriela Silva', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#f97316' },
+    { id: 'BARBARA', nome: 'Barbara Cardoso', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#22c55e' },
+    { id: 'MAISA', nome: 'Maisa Almeida', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Operador', cor: '#f59e0b' }
 ];
+let OPERADORES = [];
 
 let state = {
     user: '',
@@ -475,6 +550,7 @@ let state = {
     appointmentsConsulta: [],
     adminData: [],
     charts: {},
+    editingOperador: null,
     meta: {
         diaria: 0,
         semanal: 0,
@@ -521,7 +597,9 @@ const loading = {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Iniciando Agendador PRO 3.0...');
+    loadOperadores();
     initSelectOperadores();
+    autoSyncOperadoresFromSheet();
     loadSavedUser(); // Carrega usuário salvo
     loadLocalData();
     loadTheme();
@@ -533,9 +611,157 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initSelectOperadores() {
-    // Opções já estão no HTML para evitar duplicidade
+    populateSelects();
 }
 
+function normalizeOperadores() {
+    const supervisorDefault = { id: SUPERVISOR_ID, nome: 'Thaymara', telefone: '', nascimento: '', email: '', endereco: '', cargo: 'Supervisora', cor: '#8b5cf6' };
+    const seen = new Set();
+    OPERADORES = (OPERADORES || [])
+        .map(op => ({
+            id: (op.id || op.apelido || '').toString().trim().toUpperCase(),
+            nome: op.nome || op.id || op.apelido || '',
+            telefone: op.telefone || '',
+            nascimento: op.nascimento || '',
+            email: op.email || '',
+            endereco: op.endereco || '',
+            cargo: op.cargo || 'Operador',
+            cor: op.cor || '#2563eb'
+        }))
+        .filter(op => op.id && op.id !== 'WELKER' && !seen.has(op.id) && seen.add(op.id));
+
+    const sup = OPERADORES.find(op => op.id === SUPERVISOR_ID);
+    if (sup) {
+        sup.nome = sup.nome || 'Thaymara';
+        sup.cargo = 'Supervisora';
+        sup.cor = sup.cor || '#8b5cf6';
+    } else {
+        OPERADORES.unshift(supervisorDefault);
+    }
+}
+
+function loadOperadores() {
+    try {
+        const saved = localStorage.getItem('agEldoradoOperadores');
+        OPERADORES = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(OPERADORES_DEFAULT));
+        if (!Array.isArray(OPERADORES) || OPERADORES.length === 0) OPERADORES = JSON.parse(JSON.stringify(OPERADORES_DEFAULT));
+    } catch(e) {
+        OPERADORES = JSON.parse(JSON.stringify(OPERADORES_DEFAULT));
+    }
+    normalizeOperadores();
+    saveOperadores();
+}
+
+function saveOperadores() {
+    try { localStorage.setItem('agEldoradoOperadores', JSON.stringify(OPERADORES)); } catch(e) {}
+}
+
+function populateSelects() {
+    const selected = $('select-assistente')?.value || state.user || '';
+    const options = '<option value="">-- Selecione --</option>' + OPERADORES.map(op => `<option value="${op.id}">${op.id}</option>`).join('');
+    if ($('select-assistente')) {
+        $('select-assistente').innerHTML = options;
+        if (selected && OPERADORES.some(op => op.id === selected)) $('select-assistente').value = selected;
+    }
+}
+
+
+
+// ================= OPERADORES / TROCA DE NOMES =================
+async function autoSyncOperadoresFromSheet() {
+    try {
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 6000);
+        const r = await fetch(`${SCRIPT_URL}?action=getOperadores&unidade=Eldorado`, { signal: controller.signal });
+        clearTimeout(t);
+        const j = await r.json();
+        if (j.status === 'success' && Array.isArray(j.data) && j.data.length > 0) {
+            OPERADORES = j.data.map(op => ({
+                id: (op.apelido || '').toUpperCase(), nome: op.nome || op.apelido,
+                telefone: op.telefone || '', nascimento: op.nascimento || '', email: op.email || '',
+                endereco: op.endereco || '', cargo: op.cargo || 'Operador', cor: op.cor || '#2563eb'
+            })).filter(op => op.id);
+            normalizeOperadores();
+            saveOperadores(); populateSelects(); renderOperadores();
+        }
+    } catch(e) { console.log('Auto-sync operadores ignorado:', e.message); }
+}
+
+function openAddOperador() {
+    state.editingOperador = null;
+    $('operador-modal-title').innerHTML = '<i class="fas fa-user-plus text-blue-600"></i> Novo Operador';
+    ['apelido','nome','telefone','nascimento','email','endereco'].forEach(f => $('op-'+f).value = '');
+    $('op-cargo').value = 'Operador'; $('op-cor').value = '#2563eb'; $('op-apelido').disabled = false;
+    $('operador-modal').classList.remove('hidden');
+}
+
+function openEditOperador(opId) {
+    const op = OPERADORES.find(o => o.id === opId); if (!op) return;
+    state.editingOperador = opId;
+    $('operador-modal-title').innerHTML = '<i class="fas fa-user-edit text-blue-600"></i> Editar Operador';
+    $('op-apelido').value = op.id; $('op-apelido').disabled = true;
+    $('op-nome').value = op.nome || ''; $('op-telefone').value = op.telefone || '';
+    $('op-nascimento').value = op.nascimento || ''; $('op-email').value = op.email || '';
+    $('op-endereco').value = op.endereco || ''; $('op-cargo').value = op.cargo || 'Operador';
+    $('op-cor').value = op.cor || '#2563eb';
+    $('operador-modal').classList.remove('hidden');
+}
+
+function saveOperadorForm() {
+    const apelido = $('op-apelido').value.trim().toUpperCase();
+    const nome = $('op-nome').value.trim();
+    if (!apelido || !nome) return toast('Preencha apelido e nome', 'warning');
+    const data = { id: apelido, nome, telefone: $('op-telefone').value.trim(), nascimento: $('op-nascimento').value.trim(), email: $('op-email').value.trim(), endereco: $('op-endereco').value.trim(), cargo: $('op-cargo').value.trim() || 'Operador', cor: $('op-cor').value || '#2563eb' };
+    if (state.editingOperador) {
+        const idx = OPERADORES.findIndex(o => o.id === state.editingOperador);
+        if (idx >= 0) OPERADORES[idx] = { ...OPERADORES[idx], ...data, id: state.editingOperador };
+    } else {
+        if (OPERADORES.find(o => o.id === apelido)) return toast('Já existe operador com esse apelido', 'error');
+        OPERADORES.push(data);
+    }
+    saveOperadores(); populateSelects(); renderOperadores(); $('operador-modal').classList.add('hidden');
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'saveOperador', apelido: data.id, nome: data.nome, telefone: data.telefone, nascimento: data.nascimento, email: data.email, endereco: data.endereco, cargo: data.cargo, cor: data.cor, unidade: 'Eldorado', horario_cadastro: new Date().toLocaleString('pt-BR') }) }).catch(()=>{});
+    toast('Operador salvo!', 'success');
+}
+
+function deleteOperadorLocal(opId) {
+    if (!confirm(`Excluir o operador ${opId}? Ele será marcado como inativo na planilha.`)) return;
+    OPERADORES = OPERADORES.filter(o => o.id !== opId);
+    saveOperadores(); populateSelects(); renderOperadores(); $('operador-detalhe-modal').classList.add('hidden');
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteOperador', apelido: opId, unidade: 'Eldorado' }) }).catch(()=>{});
+    toast('Operador removido', 'info');
+}
+
+async function syncOperadoresFromSheet() {
+    toast('Sincronizando operadores...', 'info');
+    try {
+        const r = await fetch(`${SCRIPT_URL}?action=getOperadores&unidade=Eldorado`);
+        const j = await r.json();
+        if (j.status === 'success' && Array.isArray(j.data) && j.data.length > 0) {
+            OPERADORES = j.data.map(op => ({ id: (op.apelido || '').toUpperCase(), nome: op.nome || op.apelido, telefone: op.telefone || '', nascimento: op.nascimento || '', email: op.email || '', endereco: op.endereco || '', cargo: op.cargo || 'Operador', cor: op.cor || '#2563eb' })).filter(op => op.id);
+            normalizeOperadores();
+            saveOperadores(); populateSelects(); renderOperadores(); toast(`Sincronizado: ${OPERADORES.length} operadores`, 'success');
+        } else {
+            for (const op of OPERADORES) {
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'saveOperador', apelido: op.id, nome: op.nome, telefone: op.telefone || '', nascimento: op.nascimento || '', email: op.email || '', endereco: op.endereco || '', cargo: op.cargo || 'Operador', cor: op.cor || '#2563eb', unidade: 'Eldorado', horario_cadastro: new Date().toLocaleString('pt-BR') }) });
+            }
+            toast('Planilha vazia: operadores locais enviados', 'success');
+        }
+    } catch(e) { toast('Erro ao sincronizar operadores', 'error'); }
+}
+
+function showOperadorDetalhe(opId) {
+    const op = OPERADORES.find(o => o.id === opId); if (!op) return;
+    state.editingOperador = opId;
+    $('operador-detalhe-content').innerHTML = `<div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-xl" style="background:${op.cor||'#2563eb'}">${op.id.substring(0,2)}</div><div><h3 class="text-2xl font-black text-slate-800">${op.nome}</h3><p class="text-slate-500 font-bold">${op.id} • ${op.cargo||'Operador'}</p></div></div><div class="space-y-2 text-sm"><p><b>Telefone:</b> ${op.telefone||'Não informado'}</p><p><b>Nascimento:</b> ${op.nascimento||'Não informado'}</p><p><b>E-mail:</b> ${op.email||'Não informado'}</p><p><b>Endereço:</b> ${op.endereco||'Não informado'}</p></div>`;
+    $('operador-detalhe-modal').classList.remove('hidden');
+}
+
+function renderOperadores() {
+    const container = $('lista-operadores'); if (!container) return;
+    $('admin-equipe').textContent = OPERADORES.length;
+    container.innerHTML = OPERADORES.map(op => `<div class="p-4 bg-slate-50 border border-slate-200 rounded-xl hover:shadow-md transition cursor-pointer" onclick="showOperadorDetalhe('${op.id}')"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black" style="background:${op.cor||'#2563eb'}">${op.id.substring(0,2)}</div><div class="min-w-0"><div class="font-black text-slate-800 truncate">${op.nome}</div><div class="text-xs font-bold text-slate-400 uppercase">${op.id} • ${op.cargo||'Operador'}</div></div></div></div>`).join('') || '<p class="text-center text-slate-400 py-6">Nenhum operador cadastrado.</p>';
+}
 // NOVO: Carregar usuário salvo
 function loadSavedUser() {
     try {
@@ -546,7 +772,7 @@ function loadSavedUser() {
             state.user = savedUser;
             $('select-assistente').value = savedUser;
             
-            if (savedUser === 'WELKER' && savedIsSupervisor) {
+            if (savedUser === SUPERVISOR_ID && savedIsSupervisor) {
                 state.isSupervisor = true;
                 setSupervisorMode(true);
             }
@@ -620,6 +846,7 @@ function switchTab(target) {
         fetchConsulta(today);
     }
     if (target === 'admin' && state.isSupervisor) {
+        renderOperadores();
         loadAdminData('hoje');
     }
 }
@@ -635,7 +862,7 @@ function setupEventListeners() {
     $('select-assistente').addEventListener('change', (e) => {
         state.user = e.target.value;
         
-        if (state.user === 'WELKER') {
+        if (state.user === SUPERVISOR_ID) {
             $('password-modal').classList.remove('hidden');
             $('supervisor-password').value = '';
             $('supervisor-password').focus();
@@ -670,17 +897,21 @@ function setupEventListeners() {
     
     // Gerar Mensagens
     $('btn-gen-projeto').addEventListener('click', () => generateMessages('Projeto'));
-    $('btn-gen-instituto').addEventListener('click', () => generateMessages('Instituto'));
+    $('btn-gen-empresa').addEventListener('click', () => generateMessages('Empresa'));
     $('btn-clear-msgs').addEventListener('click', () => {
         $('area-mensagens').classList.add('hidden');
         $('lista-mensagens').innerHTML = '';
     });
 
-    // Mensagem Rápida
-    $('btn-open-quick').addEventListener('click', () => $('quick-modal').classList.remove('hidden'));
-    $('btn-cancel-quick').addEventListener('click', () => $('quick-modal').classList.add('hidden'));
-    $('btn-send-quick').addEventListener('click', sendQuickMessage);
-    
+
+    // Lançamento rápido
+    if ($('btn-fast-today')) $('btn-fast-today').addEventListener('click', () => setFastDate(0));
+    if ($('btn-fast-tomorrow')) $('btn-fast-tomorrow').addEventListener('click', () => setFastDate(1));
+    if ($('btn-fast-clear')) $('btn-fast-clear').addEventListener('click', clearFastForm);
+    if ($('btn-fast-launch')) $('btn-fast-launch').addEventListener('click', launchFastAppointment);
+    if ($('fast-puxada')) $('fast-puxada').addEventListener('change', (e) => { if (e.target.checked) setFastDate(0); });
+    setFastDate(1);
+
     // Consulta
     $('btn-consulta-go').addEventListener('click', () => {
         if (!$('consulta-date').value) {
@@ -723,6 +954,14 @@ function setupEventListeners() {
     });
 
     // Metas
+    if ($('btn-add-operador')) $('btn-add-operador').addEventListener('click', openAddOperador);
+    if ($('btn-sync-operadores')) $('btn-sync-operadores').addEventListener('click', syncOperadoresFromSheet);
+    if ($('btn-cancel-operador')) $('btn-cancel-operador').addEventListener('click', () => $('operador-modal').classList.add('hidden'));
+    if ($('btn-save-operador')) $('btn-save-operador').addEventListener('click', saveOperadorForm);
+    if ($('btn-close-detalhe')) $('btn-close-detalhe').addEventListener('click', () => $('operador-detalhe-modal').classList.add('hidden'));
+    if ($('btn-edit-from-detalhe')) $('btn-edit-from-detalhe').addEventListener('click', () => { $('operador-detalhe-modal').classList.add('hidden'); openEditOperador(state.editingOperador); });
+    if ($('btn-delete-from-detalhe')) $('btn-delete-from-detalhe').addEventListener('click', () => deleteOperadorLocal(state.editingOperador));
+
     $('btn-metas').addEventListener('click', () => $('metas-modal').classList.remove('hidden'));
     $('btn-cancel-metas').addEventListener('click', () => $('metas-modal').classList.add('hidden'));
     $('btn-save-metas').addEventListener('click', saveMetas);
@@ -750,7 +989,7 @@ function checkPassword() {
     if (pwd === SUPERVISOR_PASS) {
         setSupervisorMode(true);
         $('password-modal').classList.add('hidden');
-        toast('Bem-vindo, Supervisor!', 'success');
+        toast('Bem-vinda, Supervisora!', 'success');
         saveUser(); // Salva usuário e modo supervisor
         updateStats();
         fetchAgendamentosAmanha();
@@ -872,6 +1111,110 @@ function renderRecipients() {
     updateStats();
 }
 
+// ================= LANÇAMENTO RÁPIDO =================
+function getFastDate(offsetDays) {
+    const date = new Date();
+    date.setDate(date.getDate() + offsetDays);
+    if (offsetDays === 1 && date.getDay() === 0) date.setDate(date.getDate() + 1); // amanhã caindo domingo -> segunda
+    return date;
+}
+
+function setFastDate(offsetDays) {
+    if (!$('fast-data')) return;
+    $('fast-data').value = formatDateAPI(getFastDate(offsetDays));
+    if ($('fast-puxada')) $('fast-puxada').checked = offsetDays === 0;
+}
+
+function formatISOToBR(value) {
+    if (!value) return '';
+    const [y, m, d] = value.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+function clearFastForm() {
+    ['fast-jovem', 'fast-responsavel', 'fast-tel-resp', 'fast-tel-jovem', 'fast-horario', 'fast-idade', 'fast-irmaos'].forEach(id => {
+        if ($(id)) $(id).value = '';
+    });
+    setFastDate(1);
+    if ($('fast-last')) $('fast-last').classList.add('hidden');
+}
+
+async function launchFastAppointment() {
+    if (!state.user) {
+        toast('Selecione seu nome primeiro', 'warning');
+        return;
+    }
+
+    const jovem = $('fast-jovem').value.trim();
+    const responsavel = $('fast-responsavel').value.trim();
+    const telResp = $('fast-tel-resp').value.trim();
+    const telJovem = $('fast-tel-jovem').value.trim();
+    const dataISO = $('fast-data').value;
+    const horario = $('fast-horario').value.trim();
+    const local = $('select-local').value;
+    const idade = $('fast-idade').value.trim();
+    const irmaos = $('fast-irmaos').value.trim();
+    const isPuxada = $('fast-puxada').checked;
+
+    if (!jovem || !responsavel || !telResp || !dataISO || !horario) {
+        toast('Preencha jovem, responsável, telefone, data e horário', 'warning');
+        return;
+    }
+    if (!/^\d{2}:\d{2}$/.test(horario)) {
+        toast('Horário inválido. Use HH:MM', 'warning');
+        return;
+    }
+
+    const dataBR = formatISOToBR(dataISO);
+    const codigoBase = jovem.replace(/[^a-zA-ZÀ-ÿ]/g, '').toUpperCase().substring(0, 3) || 'JOV';
+    const codigo = codigoBase + Math.floor(Math.random() * 900 + 100);
+    const payload = {
+        data: dataBR,
+        assistente: state.user,
+        jovem,
+        idade,
+        responsavel,
+        numero_jovem: telJovem,
+        numero_responsavel: telResp,
+        local,
+        horario,
+        codigo,
+        irmaos,
+        isPuxada,
+        horario_lancamento: new Date().toLocaleString('pt-BR')
+    };
+
+    const btn = $('btn-fast-launch');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lançando...';
+
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if ($('fast-last')) {
+            $('fast-last').textContent = `Lançado: ${jovem} • ${dataBR} às ${horario} • ${state.user}`;
+            $('fast-last').classList.remove('hidden');
+        }
+        toast('Agendamento lançado na planilha!', 'success');
+        ['fast-jovem', 'fast-responsavel', 'fast-tel-resp', 'fast-tel-jovem', 'fast-horario', 'fast-idade', 'fast-irmaos'].forEach(id => { if ($(id)) $(id).value = ''; });
+        if (isPuxada) setFastDate(0); else setFastDate(1);
+        updateStats();
+        if (state.isSupervisor) fetchAgendamentosAmanha();
+    } catch (e) {
+        console.error('Erro no lançamento rápido:', e);
+        toast('Erro ao lançar. Confira internet e implantação do Apps Script.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
 // ================= GERAR MENSAGENS =================
 function generateMessages(tipo) {
     if (!state.user) {
@@ -903,7 +1246,7 @@ function generateMessages(tipo) {
 
     validos.forEach(r => {
         const codigo = r.jovem.split(' ')[0].toUpperCase().substring(0,3) + Math.floor(Math.random()*900+100);
-        const org = tipo === 'Projeto' ? 'Coordenação | Projeto Conecta Jovem' : 'Instituto Conecta Jovem';
+        const org = tipo === 'Projeto' ? 'Coordenação | Projeto Conecta Jovem' : 'Empresa Conecta Jovem';
         
         // Calcula o dia da semana
         let diaSemana = '';
@@ -1625,47 +1968,6 @@ function exportAdminData() {
     el.click();
     el.remove();
     toast('Relatório exportado!', 'success');
-}
-
-function sendQuickMessage() {
-    const num = $('quick-telefone').value.replace(/\D/g, '');
-    if (num.length < 10) {
-        toast('Telefone inválido', 'warning');
-        return;
-    }
-    
-    const jovem = $('quick-jovem').value;
-    const data = $('quick-data').value;
-    const hora = $('quick-horario').value;
-    const local = $('quick-local').value;
-    const assist = $('quick-assistente').value;
-    
-    const assistNome = assist === 'GABRIELA'
-        ? (local === 'Centro' ? 'Sara Gabriela Silva' : 'Gabriela Silva')
-        : (OPERADORES.find(o => o.id === assist)?.nome || assist);
-    const endereco = local === 'Eldorado' ? 'Av. João César de Oliveira, 953 no 2° andar' : 'Rua Curitiba, 656, 11° andar';
-    const referencia = local === 'Eldorado' ? '(Em frente a Caixa Econômica Federal, ao lado da Oral Centter, próximo ao Big Shopping)' : '(Próximo à Praça Sete)';
-    
-    // Calcula dia da semana
-    let diaSemana = '';
-    if (data && data.length === 10) {
-        const parts = data.split('/');
-        const dataAgend = new Date(parts[2], parts[1] - 1, parts[0]);
-        const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-        diaSemana = diasSemana[dataAgend.getDay()];
-    }
-    
-    // Limpa telefone
-    let telClean = num;
-    if(telClean.startsWith('5555')) telClean = telClean.substring(2);
-    if(!telClean.startsWith('55')) telClean = '55' + telClean;
-    
-    const msg = `*${diaSemana}, ${data}, às ${hora}*, ${jovem} e responsável devem comparecer à *${endereco}* ${local}, para o *Teste Vocacional e Cadastramento Gratuito* ao Mercado De Trabalho. Apresentem *RG, comprovante de residência* e procurem por *${assistNome}*. A presença de ambos é indispensável: o não comparecimento implica no bloqueio de futuras oportunidades no projeto.
-
-${referencia}`;
-    
-    window.open(`https://wa.me/${telClean}?text=${encodeURIComponent(msg)}`, '_blank');
-    $('quick-modal').classList.add('hidden');
 }
 </script>
 </body>
